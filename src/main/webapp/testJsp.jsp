@@ -7,7 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-너만함? 나도할꺼임 ㄹㅇㅋㅋ
-난 나만의 인덱스를 쓸꺼야.
+난 나만의 인덱스를 쓸꺼야. 더러운 따라쟁이 쉑
 </body>
 </html>
