@@ -15,7 +15,7 @@
     <h2 class="notice_title">공지사항</h2>
     <div class="notice_actions">
       <input type="text" class="notice_search" placeholder="검색어를 입력하세요">
-      <button class="notice_write_btn">글쓰기</button>
+      <button class="notice_write_btn">검색</button>
     </div>
   </div>
 
@@ -64,7 +64,9 @@
     <button>2</button>
     <button>3</button>
     <button>&gt;</button>
+    
   </div>
+  <button class="notice_write_btn">글쓰기</button>
 </div>
 
 

@@ -11,13 +11,13 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class FreeComu
  */
 @WebServlet("/FreeComu")
-public class FreeComu extends HttpServlet {
+public class Community extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FreeComu() {
+    public Community() {
         super();
         // TODO Auto-generated constructor stub
     }

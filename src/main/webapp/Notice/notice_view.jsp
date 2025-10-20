@@ -43,7 +43,7 @@
   <div class="notice_divider"></div>
 
   <div class="notice_related">
-    <h4>공지사항</h4>
+    <h4>공지사항</h4>   
     <ul>
       <li><a href="#">[공지] 친구 매칭 기능 업데이트 안내</a></li>
       <li><a href="#">[FAQ] 회원가입 관련 자주 묻는 질문</a></li>
