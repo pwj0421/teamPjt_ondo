@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>게시글 보기</title>
-<link rel="stylesheet" href="CSS/free_view.css">
+<link rel="stylesheet" href="CSS/sub.css">
 <script src="https://kit.fontawesome.com/2d323a629b.js" crossorigin="anonymous"></script>
 </head>
 <body>
