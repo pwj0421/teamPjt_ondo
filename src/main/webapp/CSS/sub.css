@@ -1531,6 +1531,120 @@ body {
   border-left: 4px solid #c89f6d;
 }
 
+/* 자유게시판 글쓰기 전용 스타일 */
+
+.write_container {
+  width: 85%;
+  max-width: 1100px;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 40px;
+  border-left: 4px solid #c89f6d;
+}
+
+.write_header {
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.write_form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
+}
+
+.write_form input[type="text"],
+.write_form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  margin-bottom: 20px;
+  resize: vertical;
+}
+
+.write_form textarea {
+  height: 250px;
+}
+
+.write_btn_group {
+  display: flex;
+  gap: 10px;
+}
+
+.submit_btn, .cancel_btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.submit_btn {
+  background: #c89f6d;
+  color: #fff;
+}
+
+.submit_btn:hover {
+  background: #d8bb98;
+}
+
+.cancel_btn {
+  background: #eee;
+  color: #333;
+}
+
+.cancel_btn:hover {
+  background: #ddd;
+}
+
+/* 버튼 간격 조절 */
+.write_btn_group {
+  display: flex;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+/* 파일 첨부 버튼 색상 자유게시판 테마에 맞춤 */
+.file_upload_group input[type="file"]::-webkit-file-upload-button {
+  background-color: #c89f6d;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.file_upload_group input[type="file"]::-webkit-file-upload-button:hover {
+  background-color: #d8bb98;
+}
+
+
+/* 반응형 (모바일 대응) */
+@media (max-width: 768px) {
+  .write_container {
+    width: 95%;
+    padding: 25px;
+  }
+
+  .submit_btn, .cancel_btn {
+    flex: 1;
+  }
+
+  .write_btn_group {
+    flex-direction: column;
+  }
+}
+
+
 /* 헤더 */
 .board_header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .board_title { font-size: 26px; font-weight: 600; color: #333; }
