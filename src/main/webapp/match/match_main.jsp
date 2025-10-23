@@ -2,14 +2,34 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../common_header.jsp" %>	
 <%@ include file="../quickMenu.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>    
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>검색</title>
 <link rel="stylesheet" href="../CSS/sub.css">
+
+<script type="text/javascript">
+
+	function goMatchList() {
+		work.t_gubun.value="list";
+		
+		work.method="post";
+		work.action="Match";
+		work.submit();
+	}
+	
+</script>
+
 </head>
 <body>
+
+<form name="work">
+	<input type="hidden" name="t_gubun">
+</form>
 	
 <div class="match_main_container">
 
@@ -124,47 +144,22 @@
     				<p>선택한 카테고리:</p>
     				<div class="selected_categories"></div>
   				</div>
-  				<button class="search_btn">검색!</button>
+  				<button onclick="goMatchList()" class="search_btn">검색</button>
 			</div>
 
     	</div>
 
 	    <div class="match_list">
-	  		<div class="match_item">
-	    		<img src="../image/basic_image.png" alt="프로필" class="profile_img">
-	    		<div class="profile_info">
-			      <p class="nickname">Sakura</p>
-			      <p class="intro">한국 친구랑 교류하고 싶어요!</p>
+	    	<c:forEach items="${MatchDtos}" var="dto">
+		  		<div class="match_item">
+		    		<img src="../image/basic_image.png" alt="프로필" class="profile_img">
+		    		<div class="profile_info">
+				      <p class="nickname">${dto.getMatch_nickname()}</p>
+				      <p class="intro">${dto.getMatch_tagline()}</p>
+					</div>
+		    		<button class="message_btn">메세지 보내기</button>
 				</div>
-	    		<button class="message_btn">메세지 보내기</button>
-			</div>
-	
-			<div class="match_item">
-		    	<img src="https://via.placeholder.com/80" alt="프로필" class="profile_img">
-		    	<div class="profile_info">
-			      	<p class="nickname">민수</p>
-			      	<p class="intro">일본 문화를 배우고 싶어요.</p>
-		    	</div>
-		    	<button class="message_btn">메세지 보내기</button>
-			</div>
-		
-			<div class="match_item">
-		    	<img src="https://via.placeholder.com/80" alt="프로필" class="profile_img">
-		    	<div class="profile_info">
-		      		<p class="nickname">Yuna</p>
-		      		<p class="intro">같이 카페 탐방할 친구 찾아요 ☕</p>
-		    	</div>
-		    	<button class="message_btn">메세지 보내기</button>
-			</div>
-		
-			<div class="match_item">
-		    	<img src="https://via.placeholder.com/80" alt="프로필" class="profile_img">
-		    	<div class="profile_info">
-		      		<p class="nickname">Tomo</p>
-		      		<p class="intro">게임 좋아하는 친구 환영!</p>
-		    	</div>
-		    	<button class="message_btn">메세지 보내기</button>
-		  	</div>
+			</c:forEach>
 		</div>
 	</div>
 </div>
