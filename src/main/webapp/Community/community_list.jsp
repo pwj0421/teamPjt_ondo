@@ -7,7 +7,6 @@
 <head>
 <meta charset="UTF-8">
 <title>자유게시판</title>
-<link rel="stylesheet" href="CSS/free_list.css">
 <script src="https://kit.fontawesome.com/2d323a629b.js" crossorigin="anonymous"></script>
 </head>
 <script>

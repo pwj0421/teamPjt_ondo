@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../common_header.jsp" %>	
 <%@ include file="../quickMenu.jsp" %>
-<%@ include file="myPageMenu.jsp" %>
+
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -51,7 +51,7 @@ function showMoreCategories(button) {
 </head>
 <body>
 <main class="mypage_container">
-
+<%@ include file="myPageMenu.jsp" %>
   <!-- 콘텐츠 -->
   <section class="mypage_content">
 
@@ -61,7 +61,7 @@ function showMoreCategories(button) {
 
       <div class="request_card" id="request_hong">
         <div class="request_card_header">
-          <img src="images/hong_profile.jpg" alt="홍길동">
+          <img src="image/basic_profile.png" alt="김철수">
           <div>
             <div class="request_card_name">홍길동</div>
             <div class="request_card_gender">남</div>
@@ -83,7 +83,7 @@ function showMoreCategories(button) {
 
       <div class="request_card" id="request_kim">
         <div class="request_card_header">
-          <img src="images/kim_profile.jpg" alt="김철수">
+          <img src="image/basic_profile.png" alt="김철수">
           <div>
             <div class="request_card_name">김철수</div>
             <div class="request_card_gender">남</div>
