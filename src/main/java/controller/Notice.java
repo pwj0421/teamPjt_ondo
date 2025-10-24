@@ -9,6 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.notice.NoticeList;
+import command.notice.NoticeSave;
+import common.CommonExecute;
+
 /**
  * Servlet implementation class Notice
  */
@@ -28,9 +32,37 @@ public class Notice extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		String gubun = request.getParameter("t_gubun");
 		
+		if(gubun == null) gubun = "list";
+		String viewPage ="";
 		
-		RequestDispatcher rd = request.getRequestDispatcher("Notice/notice_list.jsp");
+		//목록
+		if(gubun.equals("list")) {
+			CommonExecute noti = new NoticeList();
+			noti.execute(request);
+			viewPage = "Notice/notice_list.jsp";
+			
+		//글쓰기
+		} else if(gubun.equals("writeForm")) {
+		
+			viewPage="Notice/notice_write.jsp";
+
+		//저장
+		} else if(gubun.equals("save")) {
+			CommonExecute noti = new NoticeSave();
+			noti.execute(request);
+			viewPage = "common_alert.jsp";
+	
+		//상세보기	
+		} else if(gubun.equals("view")) {
+//			CommonExecute noti = new NoticeView();
+//			noti.execute(request);
+			viewPage = "Notice/notice_view.jsp";
+		}
+		
+		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
 		rd.forward(request, response);
 	}
 
