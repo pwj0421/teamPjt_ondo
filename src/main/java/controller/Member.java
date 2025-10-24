@@ -41,8 +41,11 @@ public class Member extends HttpServlet {
 			viewPage = "member/member_login.jsp";
 		
 		
-		}else if(gubun.equals("myPage")) {
-			viewPage = "member/myPage.jsp";
+		}else if(gubun.equals("myInfo")) {
+			viewPage = "member/member_myInfo.jsp";
+			
+		}else if(gubun.equals("matchInfo")) {
+			viewPage = "member/member_matchInfo.jsp";
 		}
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
