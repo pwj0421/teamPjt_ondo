@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import common.CommonExecute;
 import dao.MatchDao;
-import dto.InterestDto;
 
 public class InterestList implements CommonExecute {
 
@@ -14,9 +13,11 @@ public class InterestList implements CommonExecute {
 	public void execute(HttpServletRequest request) {
 		MatchDao dao = new MatchDao();
 		
-		ArrayList<InterestDto> dtos = dao.getInterestList();
+		String id = "user001";
 		
-		request.setAttribute("interest_dtos", dtos);
+		ArrayList<Integer> interestList = dao.getInterestList(id);
+		
+		request.setAttribute("interestList", interestList);
 	}
 
 }

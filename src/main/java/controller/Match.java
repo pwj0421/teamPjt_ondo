@@ -40,13 +40,16 @@ public class Match extends HttpServlet {
 		String viewPage = "";
 		// MATCH MAIN
 		if(gubun.equals("main")) {
-			CommonExecute match = new InterestList();
-			match.execute(request);
+			CommonExecute interest = new InterestList();
+			interest.execute(request);
 			
 			viewPage = "match/match_main.jsp";
 			
 		// MATCH LIST
 		} else if(gubun.equals("list")) {
+			CommonExecute interest = new InterestList();
+			interest.execute(request);
+			
 			CommonExecute match = new MatchList();
 			match.execute(request);
 			
