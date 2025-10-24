@@ -5,8 +5,6 @@ import java.util.ArrayList;
 public class MatchDto {
 
 	private String memberId, image, nickname, tagline;
-	
-	//private ArrayList<String> interests;
 
 	private ArrayList<InterestDto> interestDto;
 	
@@ -14,16 +12,6 @@ public class MatchDto {
 	// MatchDao.java
 	// getMatchList()
 	// MatchList.java
-	
-//	public MatchDto(String memberId, String image, String nickname, String tagline, ArrayList<String> interests) {
-//		super();
-//		this.memberId = memberId;
-//		this.image = image;
-//		this.nickname = nickname;
-//		this.tagline = tagline;
-//		this.interests = interests;
-//	}
-	
 	public MatchDto(String memberId, String image, String nickname, String tagline,
 			ArrayList<InterestDto> interestDto) {
 		super();
@@ -50,10 +38,6 @@ public class MatchDto {
 		return tagline;
 	}
 
-//	public ArrayList<String> getInterests() {
-//		return interests;
-//	}
-	
 	public ArrayList<InterestDto> getInterestDto() {
 		return interestDto;
 	}
