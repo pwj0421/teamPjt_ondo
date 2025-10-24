@@ -3,6 +3,29 @@
 <%@ include file="../common_header.jsp" %>	
 <%@ include file="../menu/quickMenu.jsp" %>
 <!DOCTYPE html>
+<script type="text/javascript">
+
+	function goView(no) {
+		noti.t_gubun.value = "view";
+		noti.t_no.value = no;
+		noti.method="post";
+		noti.action="Notice";
+		noti.submit();
+	}
+	
+	function goWriteForm(){
+		noti.t_gubun.value="writeForm";
+		noti.method="post";
+		noti.action="Notice";
+		noti.submit();
+	}
+
+</script>
+
+<form name="noti">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="t_no">
+</form>
 
 <html>
 <head>
@@ -18,45 +41,41 @@
       <button class="notice_write_btn">검색</button>
     </div>
   </div>
-
+  
   <div class="notice_list">
-    <div class="notice_item">
-      <div class="notice_badge">공지</div>
+  <c:forEach items="${dtos}" var="dto">
+    <div class="notice_item" onclick="goView('view')">
+      <c:if test="${dto.getType() eq 'notice'}">
+      	<div class="notice_badge notice">공지</div>
+      </c:if>
+      <c:if test="${dto.getType() eq 'update'}">
+      	<div class="notice_badge update">업데이트</div>
+      </c:if>
+      <c:if test="${dto.getType() eq 'info'}">
+      	<div class="notice_badge info">안내</div>
+      </c:if>
       <div class="notice_content">
-        <h3 class="notice_item_title">[안내] 사이트 이용약관 개정 공지</h3>
-        <p class="notice_item_sub">관리자 · 2025-10-10 · 조회수 123</p>
+        <h3 class="notice_item_title" >${dto.getTitle()}</h3>
+        <p class="notice_item_sub">${dto.getReg_name()} · ${dto.getReg_date()} · 조회수 ${dto.getHit()}</p>
       </div>
-       <span class="notice_attach">📎</span> <!-- 첨부파일 있음 -->
+      <c:if test="${not empty dto.getAttach_1()}">
+       	<span class="notice_attach">📎</span> <!-- 첨부파일 있음 -->
+       </c:if>
     </div>
-
-    <div class="notice_item">
-      <div class="notice_badge update">업데이트</div>
-      <div class="notice_content">
-        <h3 class="notice_item_title">[공지] 친구 매칭 기능 업데이트 안내</h3>
-        <p class="notice_item_sub">관리자 · 2025-09-22 · 조회수 214</p>
-      </div>
-       <span class="notice_attach">📎</span> <!-- 첨부파일 있음 -->
-    </div>
-
-    <div class="notice_item">
-      <div class="notice_badge info">안내</div>
-      <div class="notice_content">
-        <h3 class="notice_item_title">[FAQ] 회원가입 관련 자주 묻는 질문</h3>
-        <p class="notice_item_sub">관리자 · 2025-08-15 · 조회수 340</p>
-
-      </div>
-              <span class="notice_attach">-</span> <!-- 첨부파일 없음 -->
-    </div>
-    
+   </c:forEach>
+   
+<!--  
     <div class="notice_item">
       <div class="notice_badge update">업데이트</div>
       <div class="notice_content">
         <h3 class="notice_item_title">[공지] 친구 매칭 기능 업데이트 안내</h3>
         <p class="notice_item_sub">관리자 · 2025-09-22 · 조회수 214</p>
       </div>
-       <span class="notice_attach">📎</span> <!-- 첨부파일 있음 -->
+       <span class="notice_attach">📎</span> 
     </div>
+    -->
   </div>
+
 
   <div class="notice_pagination">
     <button>&lt;</button>
@@ -66,7 +85,7 @@
     <button>&gt;</button>
     
   </div>
-  <button class="notice_write_btn">글쓰기</button>
+  <button class="notice_write_btn" onclick="goWriteForm()">글쓰기</button>
 </div>
 
 

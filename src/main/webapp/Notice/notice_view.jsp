@@ -54,7 +54,7 @@
   <div class="notice_view_buttons">
     <button>수정</button>
     <button>삭제</button>
-    <a href="notice_list.jsp">목록으로 돌아가기</a>
+    <a href="Notice">목록으로 돌아가기</a>
   </div>
 </div>
 

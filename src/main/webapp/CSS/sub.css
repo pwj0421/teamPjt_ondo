@@ -686,6 +686,7 @@ body {
   border-bottom: 1px solid #ddd;
   align-items: center;
   gap: 15px;
+  cursor: pointer;
 }
 
 .notice_badge {
