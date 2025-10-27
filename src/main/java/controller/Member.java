@@ -28,8 +28,30 @@ public class Member extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("member/member_join.jsp");
+		String gubun = request.getParameter("t_gubun");
+		if(gubun == null) gubun = "join";
+		
+		String msg="";
+		String viewPage="";
+		
+		if(gubun.equals("join")) {
+			viewPage = "member/member_join.jsp";
+			
+		}else if(gubun.equals("login")){
+			viewPage = "member/member_login.jsp";
+		
+		
+		}else if(gubun.equals("myInfo")) {
+			viewPage = "member/member_myInfo.jsp";
+			
+		}else if(gubun.equals("matchInfo")) {
+			viewPage = "member/member_matchInfo.jsp";
+		}
+		
+		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
 		rd.forward(request, response);
+		
+	
 	}
 
 	/**
