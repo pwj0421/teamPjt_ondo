@@ -73,7 +73,7 @@
     </div>
   </div>
 <!-- 4단계 -->
-  <div class="form_box" id="step3">
+  <div class="form_box" id="step4">
     <h2>추천인 입력</h2>
     <input type="text" placeholder="추천인 아이디 입력">
     
@@ -83,7 +83,7 @@
     </div>
   </div>
   <!-- 5단계 -->
-  <div class="form_box" id="step4">
+  <div class="form_box" id="step5">
   	<h2>가입 정보 확인</h2>
     <p>입력한 정보를 확인해주세요.</p>
     
