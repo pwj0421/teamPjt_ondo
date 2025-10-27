@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -38,7 +39,17 @@
   </div>
 
   <div class="h_buttons">
-      <button onclick="goPage('Member','')">JOIN</button>
+  	  <!-- 로그인 전 -->
+  	<c:if test="${empty sessionId}">
+        <button onclick="goPage('Member', 'login')">LOGIN</button>
+        <button onclick="goPage('Member','join')">JOIN</button>
+    </c:if>
+    <!-- 로그인 후 -->
+    <c:if test="${not empty sessionId}">
+        <li><a>${sessionName}님</a></li>
+        <button onclick="goPage('Member','myInfo')">MYINFO</button>
+        <button onclick="goPage('Member','logout')">LOGOUT</button>
+    </c:if>
       <button>LANG</button>
   </div>
 </header>
