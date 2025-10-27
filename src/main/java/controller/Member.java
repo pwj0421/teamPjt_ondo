@@ -69,6 +69,8 @@ public class Member extends HttpServlet {
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
 		rd.forward(request, response);
+		
+	
 	}
 
 	/**

@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-난 나만의 인덱스를 쓸꺼야. 더러운 따라쟁이 쉑
+	난 나만의 인덱스를 쓸꺼야. 더러운 따라쟁이 쉑
 </body>
 </html>
