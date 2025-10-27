@@ -59,9 +59,9 @@ public class ComuPostDao {
         try {
         	con = DBConnection.getConnection();
 			pstmt  = con.prepareStatement(sql);
-			pstmt.setInt(1, postId);
 			rs  = pstmt.executeQuery();
-        	
+            pstmt.setInt(1, postId);
+
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                 //  dto = new ComuPostDto(sql, sql, sql, sql, sql, postId, postId);
