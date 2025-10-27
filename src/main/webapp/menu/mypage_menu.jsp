@@ -88,8 +88,8 @@ function toggleSubMenu(id){
   <div class="menu-item">
     <button onclick="toggleSubMenu('msgMenu')">메시지</button>
     <div class="sub-menu" id="msgMenu">
-      <a href="javascript:goPage('Member','requestList')">요청목록</a>
-      <a href="javascript:goPage('Member','messageBox')">쪽지함</a>
+      <a href="javascript:goPage('Message','requestlist')">요청목록</a>
+      <a href="javascript:goPage('Message','Messagelist')">쪽지함</a>
     </div>
   </div>
 </div>

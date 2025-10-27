@@ -32,12 +32,6 @@ body {
       <label>프로필 사진</label>
       <input type="file" accept="image/*">
     </div>
-
-    <div class="info-row">
-      <label>닉네임</label>
-      <input type="text" placeholder="닉네임 입력">
-    </div>
-
     <div class="info-row">
       <label>이름</label>
       <input type="text" placeholder="이름 입력">
