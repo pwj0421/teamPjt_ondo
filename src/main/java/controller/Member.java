@@ -67,6 +67,16 @@ public class Member extends HttpServlet {
 			CommonExecute member = new MemberLogout();
 			member.execute(request);
 			viewPage ="common_alert.jsp";
+			
+		}else if(gubun.equals("myInfo")) {
+			
+			viewPage ="member/member_myInfo.jsp";
+		}else if(gubun.equals("matchInfo")) {
+			
+			viewPage ="member/member_matchInfo.jsp";
+		}else if(gubun.equals("newPAssword")) {
+			
+			viewPage ="member/member_newPassword.jsp";
 		}
 		
 		
