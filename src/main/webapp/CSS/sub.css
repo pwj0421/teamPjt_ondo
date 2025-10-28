@@ -168,7 +168,7 @@ body {
   margin-bottom: 20px;
 }
 
-.form_box input {
+.form_box input:not(.m_id_result) {
   width: 100%;
   padding: 12px;
   margin-bottom: 15px;
@@ -177,6 +177,71 @@ body {
   font-size: 15px;
   font-family: "Gothic A1";
 }
+/* ===== ID 중복확인 그룹 (디자인 통일 버전) ===== */
+.id-check-group {
+  display: grid;
+  grid-template-columns: 1.8fr auto 1fr; /* 입력칸 넓게, 결과창 짧게 */
+  gap: 8px;
+}
+
+/* ===== 아이디 입력칸 ===== */
+.id-check-group input[name="m_id"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: "Gothic A1", sans-serif;
+  background-color: #fff;
+  color: #333;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+.id-check-group input[name="m_id"]:focus {
+  border-color: #5c7cfa;
+  box-shadow: 0 0 4px rgba(92, 124, 250, 0.3);
+  outline: none;
+}
+
+/* ===== ID중복확인 버튼 (폼 버튼 디자인과 통일) ===== */
+.btn-idcheck {
+  height: 47px;
+  padding: 0 12px;
+  background-color: #c89f6d; /* 기존 메인 포인트 컬러 */
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "Gothic A1", sans-serif;
+  transition: all 0.2s ease;
+}
+
+.btn-idcheck:active {
+  transform: scale(0.98);
+}
+
+/* ===== 결과 표시 텍스트 (깔끔하게 글자만 남김) ===== */
+.m_id_result {
+  border: none;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  color: #555;
+  font-size: 14px;
+  font-family: "Gothic A1", sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+  display: inline-block;     /* 추가 */
+  vertical-align: middle;    /* 추가 */
+}
+
+
+
+
+
+
 
 /* ✅ 성별 라디오 버튼 정렬 */
 .gender-group {
@@ -398,88 +463,6 @@ body {
 .nav_buttons button:hover {
   background-color: #b68c5a;
 }
-/* 가입목적 체크박스 */
-.purpose-group {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  justify-items: center;
-  gap: 14px 20px;
-  margin-top: 20px;
-}
-
-.purpose-item {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 4px; /* ✅ 체크박스-텍스트 간격 */
-  padding-left: 10px;
-
-  width: 150px;
-  height: 42px;
-  background-color: #f8f6f2;
-  border: 1.5px solid #d4a373;
-  border-radius: 22px;
-  font-size: 15px;
-  color: #6d523e;
-  font-family: 'Gothic A1', sans-serif;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-sizing: border-box;
-  white-space: nowrap;
-  line-height: 1;
-}
-
-/* ✅ 체크박스 직접 커스텀 */
-.purpose-item input[type="checkbox"] {
-  appearance: none;
-  width: 14px;  /* ✅ 기본보다 작게 */
-  height: 14px;
-  border: 1.5px solid #d4a373;
-  border-radius: 3px;
-  background-color: #fff;
-  cursor: pointer;
-  position: relative;
-  top: -1px;
-  margin: 0;
-}
-
-/* 체크 시 표시 */
-.purpose-item input[type="checkbox"]:checked {
-  background-color: #d4a373;
-  border-color: #d4a373;
-}
-
-/* 체크 시 내부 체크 표시 (간단한 네모) */
-.purpose-item input[type="checkbox"]:checked::after {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 7px;
-  height: 7px;
-  background: white;
-  border-radius: 1px;
-}
-
-.purpose-item:hover {
-  background-color: #d4a373;
-  color: #fff;
-}
-
-.purpose-item:has(input:checked) {
-  background-color: #d4a373;
-  color: #fff;
-  border-color: #d4a373;
-}
-
-
-
-
-
-
-
-
-
 
 /*매칭페이지*/
 .match_main_container{
