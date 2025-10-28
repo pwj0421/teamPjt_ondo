@@ -4,11 +4,43 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="CSS/interest-tag.css">
+
 <meta charset="UTF-8">
 <title>회원가입</title>
 
 </head>
 <script type="text/javascript">
+	function checkId() {
+	    if (checkValue(mem.m_id, "ID입력 후 검사")) return;
+	
+	    var id = mem.m_id.value;
+	
+	    $.ajax({
+	      type: "POST",
+	      url: "MemberCheckId",
+	      data: { m_id: id },
+	      dataType: "text",
+	      error: function () {
+	        alert("통신 실패!");
+	      },
+	      
+	      success: function (data) {
+	        var result = $.trim(data); // 앞뒤 공백 제거
+	
+	        // 결과 텍스트 반영
+	        mem.m_id_result.value = result;
+	
+	        // 간단한 시각 피드백 (선택)
+	        var $idInput = $(mem.m_id);
+	        if (result === "사용가능") {
+	          $idInput.removeClass("error").addClass("ok");
+	        } else {
+	          $idInput.removeClass("ok").addClass("error");
+	        }
+	      }
+	    });
+	  }
 	function validateStep(step) {
 		if(step == 1) {
 			if(checkValue(mem.m_country, "국적을 선택해주세요!")) return false;
@@ -62,6 +94,7 @@
 		mem.action="Member";
 		mem.submit();
 	}
+	
 </script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
@@ -96,7 +129,12 @@
 		       <option value="US">미국</option>
 		     </select>
 		    
-		    <input type="text" name="m_id" placeholder="아이디">
+		    <div class="id-check-group">
+			  <input type="text" name="m_id" placeholder="아이디">
+			  <button type="button" class="btn-idcheck" onclick="checkId()">중복확인</button>
+			  <input type="text" name="m_id_result" class="m_id_result" disabled>
+			</div>
+
 		    <input type="text" name="m_nickname" placeholder="닉네임">
 		    <input type="password" name="m_password" placeholder="비밀번호">
 		    <input type="password" name="m_password_confirm" placeholder="비밀번호 확인">
@@ -154,40 +192,86 @@
 
 		
 		  <!-- 3단계 -->
-		  <div class="form_box" id="step3">
-		    <h2>가입 목적 선택</h2>
-		    <div class="purpose-group">
-			  <c:forEach var="dto" items="${purposeList}">
-			    <label class="purpose-item"><input type="checkbox" name="m_purpose_code" value="${dto.purpose_code}"><span>${dto.purpose_name}</span></label>
-			  </c:forEach>
+			<div class="form_box" id="step3"
+			     oninput="if(this.querySelectorAll('input[name=m_purpose_code]:checked').length>3){
+			       alert('가입 목적은 최대 3개까지만 선택할 수 있습니다.');
+			       event.target.checked=false;
+			     }">
+			  <h2>가입 목적 선택</h2>
+			  <h5 class="sub-info">최대 3개 선택 가능</h5>
+			
+			  <div class="purpose-container">
+			    <div class="purpose-grid">
+			      <div class="purpose-group">
+			        <c:forEach var="dto" items="${purposeList}">
+			          <label class="purpose-tag">
+			            <input type="checkbox" name="m_purpose_code" value="${dto.purpose_code}">
+			            <span>${dto.purpose_name}</span>
+			          </label>
+			        </c:forEach>
+			      </div>
+			    </div>
+			  </div>
+			
+			  <div class="nav_buttons">
+			    <button type="button" onclick="changeStep(2)">이전</button>
+			    <button type="button" onclick="changeStep(4)">다음</button>
+			  </div>
 			</div>
 
-		    
-		    <div class="nav_buttons">
-		      <button type="button" onclick="changeStep(2)">이전</button>
-		      <button type="button" onclick="changeStep(4)">다음</button>
-		    </div>
-		  </div>
-		  
-		  
+
 		  
 		<!-- 4단계 -->
-		  <div class="form_box" id="step4">
+		  <div class="form_box" id="step4"
+		     oninput="if(this.querySelectorAll('input[name=m_interest]:checked').length>8){
+		       alert('관심사는 최대 8개까지만 선택할 수 있습니다.');
+		       event.target.checked=false;
+		     }">
+			  <h2>관심사 선택</h2>
+			  <h5 class="sub-info">최대 8개 선택 가능</h5>
+			  <div class="interest-container">
+			    <div class="interest-grid">
+					<c:forEach var="category" items="${interestMap}">
+						<div class="interest-group">
+							<p class="interest-title">
+								${category.value[0].category_icon} ${category.key}
+							</p>
+							<c:forEach var="item" items="${category.value}">
+								<label class="tag">
+									<input type="checkbox" name="m_interest" value="${item.item_id}">
+									<span>${item.item_name}</span>
+								</label>
+							</c:forEach>
+						</div>
+					</c:forEach>
+					
+			    </div>
+			  </div>
+			
+			  <div class="nav_buttons">
+			    <button type="button" onclick="changeStep(3)">이전</button>
+			    <button type="button" onclick="changeStep(5)">다음</button>
+			  </div>
+			</div>
+
+		  
+		<!-- 5단계 -->
+		  <div class="form_box" id="step5">
 		    <h2>추천인 입력</h2>
 		    <input type="text" name="m_recommender" placeholder="추천인 아이디 입력">
 		    
 		    <div class="nav_buttons">
-		      <button type="button" onclick="changeStep(3)">이전</button>
-		      <button type="button" onclick="changeStep(5)">다음</button>
+		      <button type="button" onclick="changeStep(4)">이전</button>
+		      <button type="button" onclick="changeStep(6)">다음</button>
 		    </div>
 		  </div>
-		  <!-- 5단계 -->
-		  <div class="form_box" id="step5">
+		  <!-- 6단계 -->
+		  <div class="form_box" id="step6">
 		     <h2>가입 정보 확인</h2>
 		    <p>입력한 정보를 확인해주세요.</p>
 		    
 		    <div class="nav_buttons">
-		      <button type="button" onclick="changeStep(4)">이전</button>
+		      <button type="button" onclick="changeStep(5)">이전</button>
 		      <button type="button" onclick="memberSave()">회원가입 완료</button>
 		    </div>
 		  </div>
@@ -228,6 +312,9 @@ function changeStep(to) {
     currentStep = to;
  // ✅ 2단계로 이동할 때 자동 적용
     if (to === 2) setTimeout(applyAddressMode, 100);
+ 
+ // ✅ 새 단계로 전환 후 자동 스크롤 위로 이동
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, 300);
 }
 //주소 검색 API (카카오 우편번호)
