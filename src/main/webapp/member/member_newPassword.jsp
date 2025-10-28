@@ -11,7 +11,7 @@
 body {
   background: #fff;
   font-family: 'Pretendard', sans-serif;
-  color: #333;
+  color: #333; 
   margin: 0;
   padding: 0;
 }
