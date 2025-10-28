@@ -7,8 +7,9 @@ import javax.servlet.http.HttpSession;
 
 import common.CommonExecute;
 import dao.MatchDao;
+import dto.MatchDto;
 
-public class InterestList implements CommonExecute {
+public class MatchMyInfo implements CommonExecute {
 
 	@Override
 	public void execute(HttpServletRequest request) {
@@ -18,9 +19,9 @@ public class InterestList implements CommonExecute {
 		
 		String id = (String)session.getAttribute("sessionId");
 		
-		ArrayList<Integer> interestList = dao.getInterestList(id);
+		MatchDto dto = dao.getMatchMyInfo(id);
 		
-		request.setAttribute("interestList", interestList);
+		request.setAttribute("myInfoDto", dto);
 	}
 
 }

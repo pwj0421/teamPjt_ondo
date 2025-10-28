@@ -36,16 +36,25 @@ public class Message extends HttpServlet {
 		String gubun = request.getParameter("t_gubun");
 		
 		if(gubun == null) gubun = "requestlist";
-		String viewPage ="";
+		String viewPage = "";
 		
-		//목록
+		// 메세지 요청목록
 		if(gubun.equals("requestlist")) {
 	
 			viewPage = "Message/request_list.jsp";
+		
+		// 메세지 요청
+		} else if(gubun.equals("messageRequest")) {
 			
-		}else if(gubun.equals("Messagelist")) {
+			
+			viewPage = "common_alert.jsp";
+		
+		// 메세지 목록
+		} else if(gubun.equals("Messagelist")) {
+			
 			viewPage = "Message/message_list.jsp";
-		}
+			
+		} 
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
 		rd.forward(request, response);

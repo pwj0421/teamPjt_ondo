@@ -47,13 +47,12 @@
     <div class="profile_image">
         <img src="image/basic_profile.png" alt="프로필 사진">
     </div>
-    <div class="profile_nickname">밍땅</div>
-    <div class="profile_intro">게임과 소통을 좋아하는 20대 한국인</div>
+    <div class="profile_nickname">${myInfoDto.getNickname()}</div>
+    <div class="profile_intro">${myInfoDto.getTagline()}</div>
     <div class="profile_tags">
-        <span>#20대</span>
-        <span>#한국인</span>
-        <span>#게임</span>
-        <span>#소통</span>
+    	<c:forEach items="${myInfoDto.getInterestDto()}" var="dto">
+    		<span>${dto.getItem_name()}</span>
+    	</c:forEach>
     </div>
     <div class="profile_edit_btn">
         <button type="button" onclick="goPage('Member','matchInfo')">내 정보 수정하기</button>
@@ -329,8 +328,28 @@ document.querySelectorAll('.message_btn').forEach(btn => {
 
     sendBtn.addEventListener('click', () => {
       const text = input.value.trim();
-      if (!text) return;
-      alert(`${item.querySelector('.nickname').textContent}님에게 메세지 전송: ${text}`);
+      if (!text) {
+    	  alert("인사 메세지를 입력해주세요!");
+    	  return;
+      }
+      
+      var id = mem.t_id.value;
+		$.ajax({
+			type :"POST",
+			url : "MemberCheckId",
+			data: "t_id="+id,
+			dataType : "text",
+			error : function(){
+				alert('통신실패!');
+			},
+			success : function(data){
+				var result = $.trim(data);
+//				alert("==="+result+"===");
+				mem.t_id_result.value = result;
+			}
+		});	
+      
+      alert("메세지 요청 완료!");
       input.value = randomGreeting;
     });
 

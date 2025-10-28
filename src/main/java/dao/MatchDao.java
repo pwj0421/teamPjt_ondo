@@ -107,6 +107,59 @@ public class MatchDao {
 
 	    return dtos;
 	}
+
+	// 매치 메인 페이지 나의 정보
+	// MatchMyInfo.java
+	public MatchDto getMatchMyInfo(String id) {
+		MatchDto dto = null;
+		String sql = "SELECT m_image, m_nickname, m_tagline\r\n"
+				   + "FROM ondo_member\r\n"
+				   + "WHERE m_id = '"+id+"'";
+		
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				String image = rs.getString("m_image");
+				String nickname = rs.getString("m_nickname");
+				String tagline = rs.getString("m_tagline");
+				
+				ArrayList<InterestDto> interests = new ArrayList<>();
+	            String sql2 = "SELECT m.item_id, i.item_name\r\n"
+	            			+ "FROM ondo_member_interest m\r\n"
+	            			+ "JOIN ondo_interest_item i\r\n"
+	            			+ "  ON m.item_id = i.item_id\r\n"
+	            			+ "WHERE member_id = ? ";
+	            
+	            try (PreparedStatement ps2 = con.prepareStatement(sql2)) {
+	                ps2.setString(1, id);
+	                try (ResultSet rs2 = ps2.executeQuery()) {
+	                    while(rs2.next()) {
+	                    	int item_id = rs2.getInt("item_id");
+	                    	String item_name = rs2.getString("item_name");
+	                    	
+	                    	InterestDto interest = new InterestDto(item_id, item_name);
+	                    	interests.add(interest);
+	                    } 
+	                    
+	                } catch(Exception e) {
+	        	        e.printStackTrace();
+	        	        System.out.println("getMatchMyInfo() 오류2 : " + sql2);
+	        	    }
+	            }
+	            
+	            dto = new MatchDto(id, image, nickname, tagline, interests);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("getMatchMyInfo() 오류 : "+ sql);
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		
+		return dto;
+	}
 	
 	
 	
