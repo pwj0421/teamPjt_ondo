@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.member.InterestList;
 import command.member.MemberLogin;
 import command.member.MemberLogout;
 import command.member.MemberSave;
@@ -48,7 +49,9 @@ public class Member extends HttpServlet {
 		//가입목적 리스트	
 		}else if(gubun.equals("join")) {
 			CommonExecute purpose = new PurposeList();
+			CommonExecute interest = new InterestList();
 			purpose.execute(request);
+			interest.execute(request);
 			viewPage = "member/member_join.jsp";
 		//회원가입
 		}else if(gubun.equals("save")) {

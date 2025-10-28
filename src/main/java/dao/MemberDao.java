@@ -101,4 +101,26 @@ public class MemberDao {
 		   }
 		   return name;
 	   }
+
+	   public int memberCheckId(String id) {
+		   int count = 0;
+		   String sql = "select count(*) as count\n"
+		   		+ "from ondo_member\n"
+		   		+ "where m_id = ?";
+		   try {
+			   conn = DBConnection.getConnection();
+			   pstmt = conn.prepareStatement(sql);
+			   pstmt.setString(1, id);
+			   rs = pstmt.executeQuery();
+			   if(rs.next()) {
+				   count = rs.getInt("count");
+			   }
+		   } catch(Exception e) {
+			   e.printStackTrace();
+			   System.out.println("memberCheckId() 오류 : " + sql);
+		   } finally {
+			   DBConnection.closeDB(conn, pstmt, rs);
+		   }
+		   return count;
+	   }
 }

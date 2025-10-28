@@ -1,6 +1,5 @@
 package command.member;
 
-import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.http.HttpServletRequest;
 
