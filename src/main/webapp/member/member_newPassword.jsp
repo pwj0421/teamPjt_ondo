@@ -29,19 +29,23 @@ body {
     <h3>비밀번호 변경</h3>
 
     
-    <div class="info-row">
-      <label>기존 비밀번호</label>
+    <div class="info-row" style="margin-top: 50px;"> 
+      <label style="margin-left: 270px;">기존 비밀번호</label>
       <input type="text" placeholder="기존 비밀번호 입력">
     </div>
     <div class="info-row">
-      <label>새 비밀번호</label>
+      <label style="margin-left: 270px;">새 비밀번호</label>
       <input type="text" placeholder="새 비밀번호 입력">
     </div>
-
-    <div class="button-box">
+	<div class="info-row">
+      <label style="margin-left: 270px;">새 비밀번호 확인</label>
+      <input type="text" placeholder="새 비밀번호 확인 입력">
+    </div>
+    <div class="button-box" style="margin-top:50px;">
       <button type="button">비밀번호 변경하기</button>
     </div>
   </div>
 </div>
+<%@ include file="../common_footer.jsp" %>
 </body>
 </html>

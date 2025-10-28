@@ -8,7 +8,370 @@
 
 <meta charset="UTF-8">
 <title>회원가입</title>
+<style>
 
+/*회원가입*/
+.signup_container {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Gothic A1";
+}
+
+/* 단계 표시 */
+.step_indicator {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-bottom: 40px;
+}
+.step {
+  font-size: 18px;
+  color: #aaa;
+  position: relative;
+  transition: color 0.3s ease;
+}
+.step.active {
+  color: #c89f6d;
+  font-weight: bold;
+}
+.step::after {
+  content: "";
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  width: 30px;
+  height: 2px;
+  background: #ddd;
+  transform: translateY(-50%);
+}
+.step:last-child::after { display: none; }
+
+/* 폼 박스 */
+.form_box {
+  width: 400px;
+  padding: 30px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(20px);
+}
+.form_box.active {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+  position: relative;
+}
+
+.form_box h2 {
+  font-family: "Jua";
+  color: #c89f6d;
+  margin-bottom: 20px;
+}
+
+.form_box input:not(.m_id_result) {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: "Gothic A1";
+}
+/* ===== ID 중복확인 그룹 (디자인 통일 버전) ===== */
+.id-check-group {
+  display: grid;
+  grid-template-columns: 1.8fr auto 1fr; /* 입력칸 넓게, 결과창 짧게 */
+  gap: 8px;
+}
+
+/* ===== 아이디 입력칸 ===== */
+.id-check-group input[name="m_id"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: "Gothic A1", sans-serif;
+  background-color: #fff;
+  color: #333;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+.id-check-group input[name="m_id"]:focus {
+  border-color: #5c7cfa;
+  box-shadow: 0 0 4px rgba(92, 124, 250, 0.3);
+  outline: none;
+}
+
+/* ===== ID중복확인 버튼 (폼 버튼 디자인과 통일) ===== */
+.btn-idcheck {
+  height: 47px;
+  padding: 0 12px;
+  background-color: #c89f6d; /* 기존 메인 포인트 컬러 */
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "Gothic A1", sans-serif;
+  transition: all 0.2s ease;
+}
+
+.btn-idcheck:active {
+  transform: scale(0.98);
+}
+
+/* ===== 결과 표시 텍스트 (깔끔하게 글자만 남김) ===== */
+.m_id_result {
+  border: none;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  color: #555;
+  font-size: 14px;
+  font-family: "Gothic A1", sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+  display: inline-block;     /* 추가 */
+  vertical-align: middle;    /* 추가 */
+}
+
+
+
+
+
+
+
+/* ✅ 성별 라디오 버튼 정렬 */
+.gender-group {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* 남/여 간격 조정 */
+}
+
+.gender-group label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.gender-group input[type="radio"] {
+  margin-right: 5px;
+}
+
+/* 프로필 이미지 영역 */
+.profile_upload {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.profile_upload img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #c89f6d;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.profile_upload img:hover {
+  transform: scale(1.05);
+}
+.profile_upload input[type="file"] {
+  display: none;
+}
+
+/* 네비 버튼 */
+.nav_buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+.nav_buttons button {
+  width: 48%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #c89f6d;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.nav_buttons button:hover {
+  background: #b0804c;
+}
+
+/* 2단계 국적 선택 select 박스 */
+.custom-select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: "Gothic A1";
+    background: #fff;
+    cursor: pointer;
+    appearance: none; /* 기본 화살표 제거 */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: relative;
+}
+/* 바로가기 아이콘 */
+.sub_bar {
+	display: flex;
+  	justify-content: center;
+  	gap: 70px;
+}
+
+.shortcut {
+	width: 80px;
+	height: 80px;
+	border-radius: 12px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+.shortcut:hover {
+	background: #d0d0d0;
+}
+
+.shortcut_icon {
+  font-size: 28px; /* 아이콘 크기 */
+  margin-bottom: 6px;
+}
+
+.shortcut_label {
+  font-size: 14px;
+  color: #333;
+}
+
+/* 주소 입력 전체 컨테이너 */
+#step2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 라벨 아래 간격 */
+#step2 h2 {
+  margin-bottom: 20px;
+  color: #7b5c3f;
+  font-weight: 700;
+}
+
+/* 주소 입력 한 줄 (우편번호 + 버튼) */
+.address-row {
+  display: flex;
+  
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: -9px;
+}
+/* ✅ 주소검색 버튼이 사라져도 레이아웃이 깨지지 않게 */
+.address-row .btn-postcode {
+  width: 110px; /* 고정 폭 유지 */
+}
+
+.address-row .btn-postcode.hidden {
+  visibility: hidden; /* display:none 대신 visibility로 공간 유지 */
+}
+
+/* 우편번호 input */
+#postcode {
+  width: 190px;
+  height: 44px;
+  border: 1.5px solid #dcd2c4;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 14px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+#postcode:focus {
+  border-color: #d4a373;
+}
+
+/* 주소검색 버튼 */
+.btn-postcode {
+  height: 44px;
+  background-color: #d4a373;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.btn-postcode:hover {
+  background-color: #b68c5a;
+}
+
+/* 나머지 주소 입력칸 */
+#address,
+#detailAddress {
+  width: 310px;
+  height: 44px;
+  border: 1.5px solid #dcd2c4;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 14px;
+  box-sizing: border-box;
+  display: block;
+  margin: 8px auto;
+  outline: none;
+}
+
+#address:focus,
+#detailAddress:focus {
+  border-color: #d4a373;
+}
+
+/* 네비게이션 버튼 */
+.nav_buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.nav_buttons button {
+  background-color: #d4a373;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 36px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.nav_buttons button:hover {
+  background-color: #b68c5a;
+}
+
+</style>
 </head>
 <script type="text/javascript">
 	function checkId() {
