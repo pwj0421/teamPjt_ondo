@@ -177,16 +177,17 @@ body {
   font-size: 15px;
   font-family: "Gothic A1";
 }
-/* ===== ID 중복확인 그룹 (디자인 통일 버전) ===== */
+/* ===== ID 중복확인 그룹 (폼 전체) ===== */
 .id-check-group {
   display: grid;
-  grid-template-columns: 1.8fr auto 1fr; /* 입력칸 넓게, 결과창 짧게 */
+  grid-template-columns: 3fr 0.9fr 0.7fr; /* ✅ 입력칸 훨씬 넓게, 버튼 적당히, 결과 짧게 */
   gap: 8px;
+  width: 100%;
+  max-width: 600px; /* 필요하면 전체 폭 제한 */
 }
 
 /* ===== 아이디 입력칸 ===== */
 .id-check-group input[name="m_id"] {
-  width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -196,18 +197,19 @@ body {
   color: #333;
   box-sizing: border-box;
   transition: all 0.2s ease;
+  width: 100%; /* ✅ grid 안에서만 100%, 바깥 width 제거 */
 }
+
 .id-check-group input[name="m_id"]:focus {
   border-color: #5c7cfa;
   box-shadow: 0 0 4px rgba(92, 124, 250, 0.3);
   outline: none;
 }
 
-/* ===== ID중복확인 버튼 (폼 버튼 디자인과 통일) ===== */
+/* ===== ID중복확인 버튼 ===== */
 .btn-idcheck {
   height: 47px;
-  padding: 0 12px;
-  background-color: #c89f6d; /* 기존 메인 포인트 컬러 */
+  background-color: #c89f6d;
   color: #fff;
   font-size: 15px;
   font-weight: 500;
@@ -222,7 +224,7 @@ body {
   transform: scale(0.98);
 }
 
-/* ===== 결과 표시 텍스트 (깔끔하게 글자만 남김) ===== */
+/* ===== 결과 표시 텍스트 ===== */
 .m_id_result {
   border: none;
   background: transparent;
@@ -233,9 +235,8 @@ body {
   font-family: "Gothic A1", sans-serif;
   font-weight: 500;
   line-height: 1.5;
-  display: inline-block;     /* 추가 */
-  vertical-align: middle;    /* 추가 */
 }
+
 
 
 

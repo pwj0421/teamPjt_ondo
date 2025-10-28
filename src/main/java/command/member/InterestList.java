@@ -17,7 +17,7 @@ public class InterestList implements CommonExecute {
 		
 		Map<String, List<InterestDto>> interestMap = dao.getInterestMap();
 		
-//		 콘솔에 Map 전체 구조 확인
+//		 //콘솔에 Map 전체 구조 확인
 //	    for (String category : interestMap.keySet()) {
 //	        System.out.println("카테고리: " + category);
 //	        for (InterestDto dto : interestMap.get(category)) {
