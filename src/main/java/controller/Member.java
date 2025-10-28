@@ -74,7 +74,7 @@ public class Member extends HttpServlet {
 		}else if(gubun.equals("matchInfo")) {
 			
 			viewPage ="member/member_matchInfo.jsp";
-		}else if(gubun.equals("newPAssword")) {
+		}else if(gubun.equals("newPassword")) {
 			
 			viewPage ="member/member_newPassword.jsp";
 		}

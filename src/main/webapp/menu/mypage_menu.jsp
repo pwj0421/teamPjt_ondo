@@ -82,7 +82,7 @@ function toggleSubMenu(id){
     <div class="sub-menu" id="infoMenu">
       <a href="javascript:goPage('Member','myInfo')">개인정보</a>
       <a href="javascript:goPage('Member','matchInfo')">매칭정보</a>
-      <a href="javascript:goPage('Member','newPAssword')">비밀번호 변경</a>
+      <a href="javascript:goPage('Member','newPassword')">비밀번호 변경</a>
     </div>
   </div>
 
