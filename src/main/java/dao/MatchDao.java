@@ -47,61 +47,6 @@ public class MatchDao {
 	
 	// MATCH LIST
 	// MatchList.java
-//	public ArrayList<MatchDto> getMatchList(String id, ArrayList<String> searches) {
-//	    ArrayList<MatchDto> dtos = new ArrayList<>();
-//	    String sql = "SELECT * FROM ( " +
-//	                 "SELECT DISTINCT i.member_id, m.m_image, m.m_nickname, m.m_tagline " +
-//	                 "FROM ondo_member_interest i " +
-//	                 "JOIN ondo_member m ON i.member_id = m.m_id " +
-//	                 "WHERE i.item_id IN (" + String.join(",", searches) + ") " +
-//	                 "AND i.member_id <> ? " +
-//	                 "ORDER BY dbms_random.value ) " +
-//	                 "WHERE rownum <= 4";
-//
-//	    try {
-//	        con = DBConnection.getConnection();
-//	        ps = con.prepareStatement(sql);
-//	        ps.setString(1, id);
-//	        rs = ps.executeQuery();
-//
-//	        while(rs.next()) {
-//	            String matchId = rs.getString("member_id");
-//	            String image = rs.getString("m_image");
-//	            String nickname = rs.getString("m_nickname");
-//	            String tagline = rs.getString("m_tagline");
-//
-//	            // 관심사 가져오기
-//	            ArrayList<String> interests = new ArrayList<>();
-//	            String sql2 = "SELECT m.item_id, i.item_name\r\n"
-//	            			+ "FROM ondo_member_interest m\r\n"
-//	            			+ "JOIN ondo_interest_item i\r\n"
-//	            			+ "  ON m.item_id = i.item_id\r\n"
-//	            			+ "WHERE member_id = ? ";
-//	            
-//	            try (PreparedStatement ps2 = con.prepareStatement(sql2)) {
-//	                ps2.setString(1, matchId);
-//	                try (ResultSet rs2 = ps2.executeQuery()) {
-//	                    while(rs2.next()) {
-//	                        interests.add(rs2.getString("item_name"));
-//	                    }
-//	                }
-//	            }
-//
-//	            MatchDto dto = new MatchDto(matchId, image, nickname, tagline, interests);
-//	            dtos.add(dto);
-//	        }
-//
-//	    } catch(Exception e) {
-//	        e.printStackTrace();
-//	        System.out.println("getMatchList() 오류 : " + sql);
-//	    } finally {
-//	        DBConnection.closeDB(con, ps, rs);
-//	    }
-//
-//	    return dtos;
-//	}
-	
-
 	public ArrayList<MatchDto> getMatchList(String id, ArrayList<String> searches) {
 	    ArrayList<MatchDto> dtos = new ArrayList<>();
 	    String sql = "SELECT * FROM ( " +
