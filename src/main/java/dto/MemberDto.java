@@ -7,11 +7,17 @@ public class MemberDto {
 					m_tel3, m_email1, m_email2, m_type, m_purpose, 
 					m_recommender, m_reg, m_updated, m_quit;
 	private int m_age;
+	private String m_tagline, m_introduction;
 	
 	
+	//매칭내정보
+	public MemberDto(String m_nickname, String m_tagline, String m_introduction) {
+		this.m_nickname = m_nickname;
+		this.m_tagline = m_tagline;
+		this.m_introduction = m_introduction;
+	}
 	
-	
-	
+	//회원가입
 	public MemberDto(String m_id, String m_password, String m_name, String m_nickname, String m_image, String m_gender,
 			String m_country, String m_zipcode, String m_address, String m_address_detail, String m_tel1, String m_tel2,
 			String m_tel3, String m_email1, String m_email2, String m_type, String m_purpose, String m_recommender,
@@ -39,6 +45,26 @@ public class MemberDto {
 		this.m_quit = m_quit;
 		this.m_age = m_age;
 	}
+
+
+
+
+	public String getM_tagline() {
+		return m_tagline;
+	}
+
+	public void setM_tagline(String m_tagline) {
+		this.m_tagline = m_tagline;
+	}
+
+	public String getM_introduction() {
+		return m_introduction;
+	}
+
+	public void setM_introduction(String m_introduction) {
+		this.m_introduction = m_introduction;
+	}
+
 	public String getM_nickname() {
 		return m_nickname;
 	}

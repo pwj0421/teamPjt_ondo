@@ -14,7 +14,7 @@
 <body>
 
 <!-- 로그인 폼 상단 고정 (헤더 아래) -->
-<div class="login-container" style="padding-top: 80px; display:flex; justify-content:center;">
+<div class="login-container" style="display:flex; justify-content:center;">
   <div class="login-box">
     <h2>로그인</h2>
     <form name="loginForm">

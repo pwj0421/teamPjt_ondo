@@ -29,7 +29,7 @@ public class InterestDao {
 	        iconMap.put("C006", "❤️");
 	        iconMap.put("C007", "📍");
 	        iconMap.put("C008", "🧩");
-		
+	        
 		String sql = "select c.category_code, c.category_name, i.item_id, i.item_name\n"
 				+ "from ondo_interest_category c\n"
 				+ "join ondo_interest_item i on c.category_code = i.category_code\n"
@@ -50,6 +50,7 @@ public class InterestDao {
 				//Map에 카테고리별로 그룹화
 				interestMap.computeIfAbsent(category_name, k -> new ArrayList<>()).add(dto);
 			}
+			
 			
 		} catch(Exception e) {
 			e.printStackTrace();
