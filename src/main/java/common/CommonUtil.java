@@ -3,8 +3,12 @@ package common;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+<<<<<<< Updated upstream
+=======
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+>>>>>>> Stashed changes
 public class CommonUtil {
 	//오늘 날짜 (yyyy-MM-dd)
 		public static String getToday() {
@@ -25,7 +29,9 @@ public class CommonUtil {
 			
 			return today;
 		}
+<<<<<<< Updated upstream
 }
+=======
 		
 		public static String getSessionInfo(HttpServletRequest request, String gubun) {
 			String result = "";
@@ -49,3 +55,4 @@ public class CommonUtil {
 			
 }
 
+>>>>>>> Stashed changes
