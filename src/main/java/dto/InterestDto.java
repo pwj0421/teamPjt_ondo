@@ -7,6 +7,8 @@ public class InterestDto {
     private String item_name;
     private String category_icon;
 	
+    // 나의 관심사 목록
+    // MatchDao.java : getMyInfo()
     // 매칭된 회원의 관심사 목록
     // MatchDao.java : getMatchList()
 	public InterestDto(int item_id, String item_name) {

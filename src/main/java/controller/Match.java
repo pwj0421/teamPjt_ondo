@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import command.match.InterestList;
 import command.match.MatchList;
+import command.match.MatchMyInfo;
 import common.CommonExecute;
 
 /**
@@ -40,6 +41,9 @@ public class Match extends HttpServlet {
 		String viewPage = "";
 		// MATCH MAIN
 		if(gubun.equals("main")) {
+			CommonExecute match = new MatchMyInfo();
+			match.execute(request);
+			
 			CommonExecute interest = new InterestList();
 			interest.execute(request);
 			
