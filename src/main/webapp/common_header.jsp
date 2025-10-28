@@ -33,7 +33,9 @@
 </form>
 
 <header id="mainHeader">
-  <div class="logo"><a class="no-style" onclick="goPage('Index','')">ONDO</a></div>
+ <div class="logo">
+  <a class="no-style" href="#" onclick="goPage('Index',''); return false;">ONDO</a>
+</div>
 
   <div class="header_search">
     <input type="text" placeholder="무엇이 궁금하신가요?">

@@ -821,7 +821,6 @@ body {
 .message_box button:hover {
   background: #ffca2c;
 }
-<<<<<<< Updated upstream
 
 /* 프로필 이미지 */
 .profile_img {
@@ -867,8 +866,7 @@ body {
   background-color: #e0e0e0;
   border-color: #bbb;
 }
-=======
->>>>>>> Stashed changes
+
 
 /* 프로필 이미지 */
 .profile_img {
