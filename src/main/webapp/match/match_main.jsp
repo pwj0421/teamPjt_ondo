@@ -56,7 +56,7 @@
         <span>#소통</span>
     </div>
     <div class="profile_edit_btn">
-        <button type="button">내 정보 수정하기</button>
+        <button type="button" onclick="goPage('Member','matchInfo')">내 정보 수정하기</button>
     </div>
   </div>
 
@@ -346,5 +346,6 @@ document.querySelectorAll('.message_btn').forEach(btn => {
 
 
 </script>
+<%@ include file="../common_footer.jsp" %>	
 </body>
 </html>
