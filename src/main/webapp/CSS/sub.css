@@ -734,7 +734,7 @@ body {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  
 }
 
 /* 각 항목 박스 */
@@ -821,6 +821,7 @@ body {
 .message_box button:hover {
   background: #ffca2c;
 }
+<<<<<<< Updated upstream
 
 /* 프로필 이미지 */
 .profile_img {
@@ -866,6 +867,8 @@ body {
   background-color: #e0e0e0;
   border-color: #bbb;
 }
+=======
+>>>>>>> Stashed changes
 
 /* 프로필 이미지 */
 .profile_img {

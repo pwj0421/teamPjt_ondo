@@ -290,6 +290,61 @@ document.querySelectorAll('.match_item').forEach(item => {
     });
 });
 
+
+/*인풋*/
+document.querySelectorAll('.message_btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.match_item');
+    let messageBox = item.nextElementSibling;
+
+    // 이미 존재하는 경우 → 토글만
+    if (messageBox && messageBox.classList.contains('message_box')) {
+      const isOpen = messageBox.classList.contains('open');
+      messageBox.classList.toggle('open', !isOpen);
+      item.classList.toggle('active', !isOpen);
+      return;
+    }
+
+    // 랜덤 인사 문구
+    const greetings = [
+      "안녕하세요! 처음 뵙네요 😊",
+      "언어 교류해요~ 🇯🇵🤝🇰🇷",
+      "요즘 날씨 좋죠? ☀️",
+      "잘 지내세요? 같이 이야기 나눠요!",
+      "취미 이야기해봐요 🎨",
+      "오늘 하루도 화이팅이에요 💪"
+    ];
+    const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+
+    // 박스 생성
+    messageBox = document.createElement('div');
+    messageBox.className = 'message_box';
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = randomGreeting;
+
+    const sendBtn = document.createElement('button');
+    sendBtn.textContent = '전송';
+
+    sendBtn.addEventListener('click', () => {
+      const text = input.value.trim();
+      if (!text) return;
+      alert(`${item.querySelector('.nickname').textContent}님에게 메세지 전송: ${text}`);
+      input.value = randomGreeting;
+    });
+
+    messageBox.appendChild(input);
+    messageBox.appendChild(sendBtn);
+    item.insertAdjacentElement('afterend', messageBox);
+
+    // 부드럽게 열리기
+    setTimeout(() => messageBox.classList.add('open'), 10);
+    item.classList.add('active');
+  });
+});
+
+
 </script>
 </body>
 </html>
