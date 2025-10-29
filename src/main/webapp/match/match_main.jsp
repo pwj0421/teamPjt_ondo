@@ -35,6 +35,10 @@
 		match.submit();
 	}
 	
+	function goRequestMessage() {
+		
+	}
+	
 </script>
 
 </head>
@@ -56,6 +60,7 @@
     </div>
     <div class="profile_edit_btn">
         <button type="button" onclick="goPage('Member','matchInfo')">내 정보 수정하기</button>
+        <button type="button" onclick="goMyinfo()">내 정보 수정하기</button>
     </div>
   </div>
 
@@ -129,7 +134,7 @@
 						</div>
 						<span class="toggle_interest_btn">더보기 ▼</span>
 					</div>
-		    		<button class="message_btn">메세지 요청</button>
+		    		<button class="message_btn" onclick="goRequestMessage()">메세지 요청</button>
 				</div>
 			</c:forEach>
 		</div>
