@@ -19,27 +19,18 @@ public class MatchList implements CommonExecute {
 		
 		String id = (String)session.getAttribute("sessionId");
 		
-		String[] interests = new String[31];
-		
-		ArrayList<String> searches = new ArrayList<String>();
-		ArrayList<Integer> interestList = new ArrayList<Integer>();
-		for (int i=0; i<31; i++) {
-			interestList.add(0);
-		}
+		ArrayList<Integer> searches = new ArrayList<Integer>();
 		
 		for(int i=0; i<31; i++){
-		    interests[i] = request.getParameter("t_interest_" + (i+1));
-		    if(interests[i] != null) {
-		    	searches.add(Integer.toString(i+1));
-		    	
-		    	interestList.set(i, i+1);
-		    } 
+		    String interest = request.getParameter("t_interest_" + (i+1));
+		    
+		    if(interest != null) searches.add(Integer.parseInt(interest));
 		}
 		
 		ArrayList<MatchDto> dtos = dao.getMatchList(id, searches);
 		
 		request.setAttribute("match_dtos", dtos);
-		request.setAttribute("interestList", interestList);
+		request.setAttribute("interestList", searches);
 	}
 
 }
