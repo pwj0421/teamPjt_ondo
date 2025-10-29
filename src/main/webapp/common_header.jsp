@@ -1,4 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>  
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 <link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/sub.css">
 <script src="<%= request.getContextPath() %>/js/jquery-1.8.1.min.js"></script>
 <script src="<%= request.getContextPath() %>/js/common.js"></script>
@@ -16,7 +19,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>  
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-
 <script>
 	function goPage(svl, page){
 		comHeader.t_gubun.value=page;
@@ -30,7 +32,9 @@
 </form>
 
 <header id="mainHeader">
-  <div class="logo"><a class="no-style" onclick="goPage('Index','')">ONDO</a></div>
+ <div class="logo">
+  <a class="no-style" href="#" onclick="goPage('Index',''); return false;">ONDO</a>
+</div>
 
   <div class="header_search">
     <input type="text" placeholder="무엇이 궁금하신가요?">
@@ -50,7 +54,17 @@
   </div>
 
   <div class="h_buttons">
-    <button onclick="goPage('Member','join')" >JOIN</button>
+  <!-- 로그인 전 -->
+  	<c:if test="${empty sessionId}">
+        <button onclick="goPage('Member', 'login')">LOGIN</button>
+        <button onclick="goPage('Member','join')">JOIN</button>
+    </c:if>
+    <!-- 로그인 후 -->
+    <c:if test="${not empty sessionId}">
+        <span class="sessionName">${sessionName}님</span>
+        <button onclick="goPage('Member','myInfo')">MYINFO</button>
+        <button onclick="goPage('Member','logout')">LOGOUT</button>
+    </c:if>
     <button>LANG</button>
   </div>
 </header>
