@@ -43,6 +43,21 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </head>
 
+<script>
+	function goUpdateMatchInfo(){
+		if (!nickOk) {
+	        alert("닉네임 중복 확인이 필요하거나 이미 사용 중인 닉네임입니다.");
+	        return;
+	    }
+
+	    const form = document.forms['matchInfoUpdate'];
+		matchInfoUpdate.t_gubun.value = "matchInfoUpdate";
+		matchInfoUpdate.method="post";
+		matchInfoUpdate.action="Member";
+		matchInfoUpdate.submit();
+	}
+	
+</script>
 <body>
 	<%@ include file="../menu/quickMenu.jsp" %>
 	<div class="mp_mypage_container">
@@ -56,21 +71,56 @@ document.addEventListener("DOMContentLoaded", () => {
 <!-- 매칭 정보 업데이트 입니다 -혜민 ~~-->
 
 		<form name="matchInfoUpdate">	
+			<input type="hidden" name="t_gubun">
+			<input type="hidden" name="t_id" value="${m_dto.getM_id()}">
 		    <div class="mp_info_row">
-		      <label>닉네임</label>
-		      <input type="text" placeholder="닉네임 입력" name="m_nickName">
+		      	<label>닉네임</label>
+		      	<input type="text" id="m_nickName" placeholder="닉네임 입력" value="${m_dto.getM_nickname()}" name="m_nickName">
+		    	<button type="button" class="mp_check_btn" onclick="checkNick()">중복확인</button>
+		    	<input type="text" id="nickCheckResult" name="checkNickName" class="mp_nickCheck" value="확인 필요" disabled>
+
 		    </div>
+	<!-- 닉네임 중복검사 -->	
+	<script> 
+	function checkNick() {
+	    const nick = document.getElementById("m_nickName").value.trim();
+	    const updateBtn = document.getElementById('updateBtn');
+	    const resultInput = document.getElementById('nickCheckResult');
+
+	    if (!nick) {
+	        alert("닉네임을 입력해주세요.");
+	        return;
+	    }
+
+	    fetch("Member?t_gubun=checkNick&nick=" + encodeURIComponent(nick))
+	        .then(response => response.json())
+	        .then(data => {
+	            if (data.result === "exist") {
+	                resultInput.value = "이미 사용 중 ❌";
+	                nickOk = false;
+	                updateBtn.style.opacity = "0.5"; // 시각적으로 막힌 느낌
+	            } else {
+	                resultInput.value = "사용 가능 ✅";
+	                nickOk = true;
+	                updateBtn.style.opacity = "1"; // 활성화
+	            }
+	        })
+	        .catch(err => console.error(err));
+	}
+</script>
+		
+		
 		
 		    <div class="mp_info_row">
 		      <label>한줄소개</label>
-		      <textarea placeholder="자신을 간단히 소개해주세요!" name="m_tagling"></textarea>
+		      <textarea placeholder="자신을 간단히 소개해주세요!" name="m_tagline">${m_dto.getM_tagline()}</textarea>
 		    </div>
 			<div class="mp_info_row">
 		      <label> 자기소개</label>
-		      <textarea placeholder="자신을 간단히 소개해주세요!" name="m_introduction"></textarea>
+		      <textarea placeholder="자신을 간단히 소개해주세요!" name="m_introduction">${m_dto.getM_introduction()}</textarea>
 		    </div>
 		    <div class="mp_button_box">
-		      <button type="button" onclick="goUpdateMatchInfo()">수정</button>
+		      <button type="button" id="updateBtn" onclick="goUpdateMatchInfo()">수정</button>
 		    </div>
 		</form>
 
