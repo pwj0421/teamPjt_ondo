@@ -35,6 +35,10 @@
 		match.submit();
 	}
 	
+	function goRequestMessage() {
+		
+	}
+	
 </script>
 
 </head>
@@ -47,16 +51,16 @@
     <div class="profile_image">
         <img src="image/basic_profile.png" alt="프로필 사진">
     </div>
-    <div class="profile_nickname">밍땅</div>
-    <div class="profile_intro">게임과 소통을 좋아하는 20대 한국인</div>
+    <div class="profile_nickname">${myInfoDto.getNickname()}</div>
+    <div class="profile_intro">${myInfoDto.getTagline()}</div>
     <div class="profile_tags">
-        <span>#20대</span>
-        <span>#한국인</span>
-        <span>#게임</span>
-        <span>#소통</span>
+    	<c:forEach items="${myInfoDto.getInterestDto()}" var="dto">
+    		<span>${dto.getItem_name()}</span>
+    	</c:forEach>
     </div>
     <div class="profile_edit_btn">
         <button type="button" onclick="goPage('Member','matchInfo')">내 정보 수정하기</button>
+        <button type="button" onclick="goMyinfo()">내 정보 수정하기</button>
     </div>
   </div>
 
@@ -70,78 +74,27 @@
 					
 					<form name="match">
 						<input type="hidden" name="t_gubun">
-    				<div class="category_grid">
-      				<!-- 언어 교류 -->
-						<div class="category_group">
-						 	<p class="category_title">💬 언어 교류</p>
-						 	<label><input type="checkbox" name="t_interest_1" value="1" <c:if test="${interestList.get(0) == 1}">checked</c:if>> 한국어 배우고 싶어요</label>
-						 	<label><input type="checkbox" name="t_interest_2" value="2" <c:if test="${interestList.get(1) == 2}">checked</c:if>> 일본어 배우고 싶어요</label>
-						 	<label><input type="checkbox" name="t_interest_3" value="3" <c:if test="${interestList.get(2) == 3}">checked</c:if>> 서로 언어 교환</label>
-						 	<label><input type="checkbox" name="t_interest_4" value="4" <c:if test="${interestList.get(3) == 4}">checked</c:if>> 언어 스터디 모집</label>
-						</div>
-
-						<!-- 취미/관심사 -->
-						<div class="category_group">
-						 	<p class="category_title">🎮 취미/관심사</p>
-						 	<label><input type="checkbox" name="t_interest_5" value="5" <c:if test="${interestList.get(4) == 5}">checked</c:if>> 애니메이션 / 만화 / 게임</label>
-						 	<label><input type="checkbox" name="t_interest_6" value="6" <c:if test="${interestList.get(5) == 6}">checked</c:if>> 음악 / 콘서트 / 아이돌</label>
-						 	<label><input type="checkbox" name="t_interest_7" value="7" <c:if test="${interestList.get(6) == 7}">checked</c:if>> 드라마 / 영화 / 유튜브</label>
-						 	<label><input type="checkbox" name="t_interest_8" value="8" <c:if test="${interestList.get(7) == 8}">checked</c:if>> 스포츠</label>
-						 	<label><input type="checkbox" name="t_interest_9" value="9" <c:if test="${interestList.get(8) == 9}">checked</c:if>> 여행 / 사진 / 자연</label>
-						 	<label><input type="checkbox" name="t_interest_10" value="10" <c:if test="${interestList.get(9) == 10}">checked</c:if>> 패션 / 뷰티</label>
-						</div>
-
-						<!-- 문화 교류 -->
-						<div class="category_group">
-						 	<p class="category_title">✈️ 문화 교류</p>
-						 	<label><input type="checkbox" name="t_interest_11" value="11" <c:if test="${interestList.get(10) == 11}">checked</c:if>> 한일 문화 이야기</label>
-						 	<label><input type="checkbox" name="t_interest_12" value="12" <c:if test="${interestList.get(11) == 12}">checked</c:if>> 명절 / 전통문화 공유</label>
-						 	<label><input type="checkbox" name="t_interest_13" value="13" <c:if test="${interestList.get(12) == 13}">checked</c:if>> 지역 추천</label>
-						 	<label><input type="checkbox" name="t_interest_14" value="14" <c:if test="${interestList.get(13) == 14}">checked</c:if>> 한일 트렌드 토론</label>
-						</div>
-
-						<!-- 친구 찾기 -->
-						<div class="category_group">
-						 	<p class="category_title">👥 친구 찾기</p>
-						 	<label><input type="checkbox" name="t_interest_15" value="15" <c:if test="${interestList.get(14) == 15}">checked</c:if>> 같은 나이대 친구</label>
-						 	<label><input type="checkbox" name="t_interest_16" value="16" <c:if test="${interestList.get(15) == 16}">checked</c:if>> 학생 / 직장인</label>
-						 	<label><input type="checkbox" name="t_interest_17" value="17" <c:if test="${interestList.get(16) == 17}">checked</c:if>> 온라인 대화 위주</label>
-						 	<label><input type="checkbox" name="t_interest_18" value="18" <c:if test="${interestList.get(17) == 18}">checked</c:if>> 오프라인 만남 가능</label>
-						</div>
-
-						<!-- 커리어 & 학습 -->
-						<div class="category_group">
-						 	<p class="category_title">💼 커리어 & 학습</p>
-						 	<label><input type="checkbox" name="t_interest_19" value="19" <c:if test="${interestList.get(18) == 19}">checked</c:if>> 유학 정보 교류</label>
-						 	<label><input type="checkbox" name="t_interest_20" value="20" <c:if test="${interestList.get(19) == 20}">checked</c:if>> 워킹홀리데이 / 취업 정보</label>
-						 	<label><input type="checkbox" name="t_interest_21" value="21" <c:if test="${interestList.get(20) == 21}">checked</c:if>> 자격증 / 공부 파트너</label>
-						</div>
-
-						<!-- 연애 / 관계 -->
-						<div class="category_group">
-						 	<p class="category_title">❤️ 연애 / 관계</p>
-						 	<label><input type="checkbox" name="t_interest_22" value="22" <c:if test="${interestList.get(21) == 22}">checked</c:if>> 국제 연애 관심</label>
-						 	<label><input type="checkbox" name="t_interest_23" value="23" <c:if test="${interestList.get(22) == 23}">checked</c:if>> 장거리 연애</label>
-						 	<label><input type="checkbox" name="t_interest_24" value="24" <c:if test="${interestList.get(23) == 24}">checked</c:if>> 진지한 관계</label>
-						</div>
-
-						<!-- 지역 기반 -->
-						<div class="category_group">
-						 	<p class="category_title">📍 지역 기반</p>
-						 	<label><input type="checkbox" name="t_interest_25" value="25" <c:if test="${interestList.get(24) == 25}">checked</c:if>> 서울 / 경기</label>
-						 	<label><input type="checkbox" name="t_interest_26" value="26" <c:if test="${interestList.get(25) == 26}">checked</c:if>> 부산 / 제주</label>
-						 	<label><input type="checkbox" name="t_interest_27" value="27" <c:if test="${interestList.get(26) == 27}">checked</c:if>> 도쿄 / 오사카</label>
-						 	<label><input type="checkbox" name="t_interest_28" value="28" <c:if test="${interestList.get(27) == 28}">checked</c:if>> 후쿠오카 / 홋카이도</label>
-						</div>
 						
-						<!-- 기타 -->
+					<div class="category_grid">
+						<c:forEach var="category" items="${interestMap}">
 						<div class="category_group">
-							<p class="category_title">🧩 기타</p>
-						 	<label><input type="checkbox" name="t_interest_29" value="29" <c:if test="${interestList.get(28) == 29}">checked</c:if>> 이벤트 / 오프라인 모임</label>
-						    <label><input type="checkbox" name="t_interest_30" value="30" <c:if test="${interestList.get(29) == 30}">checked</c:if>> 봉사활동 / 프로젝트 모집</label>
-						    <label><input type="checkbox" name="t_interest_31" value="31" <c:if test="${interestList.get(30) == 31}">checked</c:if>> 자유 주제</label>
+						 	<p class="category_title">
+						 		${category.value[0].category_icon} ${category.key}
+						 	</p>
+						 	<c:forEach var="item" items="${category.value}">
+						 		<label>
+						 			<input type="checkbox" 
+						 				   name="t_interest_${item.item_id}" 
+						 				   value="${item.item_id}"
+						 				   <c:if test="${interestList.contains(item.item_id)}">checked</c:if>> 
+						 			${item.item_name}
+						 		</label>
+						 		
+						 	</c:forEach>
 						</div>
-					</div>
+						</c:forEach>
+					</div>	
+					
 					</form>
     				<div class="category_buttons">
       					<button id="confirmCategory">확인</button>
@@ -169,9 +122,8 @@
 				      	<p class="intro">${dto.getTagline()}</p>
 						<div class="interest_box_container">
 						  <c:forEach items="${dto.getInterestDto()}" var="interest">
-						      <c:set var="interestId" value="${interest.getItem_id()}" />
 						      <c:choose>
-						          <c:when test="${interestList[interestId - 1] != 0}">
+						          <c:when test="${interestList.contains(interest.getItem_id())}">
 						              <span class="interest_box highlight">${interest.getItem_name()}</span>
 						          </c:when>
 						          <c:otherwise>
@@ -182,7 +134,7 @@
 						</div>
 						<span class="toggle_interest_btn">더보기 ▼</span>
 					</div>
-		    		<button class="message_btn">메세지 요청</button>
+		    		<button class="message_btn" onclick="goRequestMessage()">메세지 요청</button>
 				</div>
 			</c:forEach>
 		</div>
@@ -329,8 +281,28 @@ document.querySelectorAll('.message_btn').forEach(btn => {
 
     sendBtn.addEventListener('click', () => {
       const text = input.value.trim();
-      if (!text) return;
-      alert(`${item.querySelector('.nickname').textContent}님에게 메세지 전송: ${text}`);
+      if (!text) {
+    	  alert("인사 메세지를 입력해주세요!");
+    	  return;
+      }
+      
+      var id = mem.t_id.value;
+		$.ajax({
+			type :"POST",
+			url : "MemberCheckId",
+			data: "t_id="+id,
+			dataType : "text",
+			error : function(){
+				alert('통신실패!');
+			},
+			success : function(data){
+				var result = $.trim(data);
+//				alert("==="+result+"===");
+				mem.t_id_result.value = result;
+			}
+		});	
+      
+      alert("메세지 요청 완료!");
       input.value = randomGreeting;
     });
 
