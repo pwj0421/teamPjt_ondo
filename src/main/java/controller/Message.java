@@ -52,6 +52,7 @@ public class Message extends HttpServlet {
 		// 메세지 목록
 		} else if(gubun.equals("Messagelist")) {
 			
+		} else if(gubun.equals("Messagelist")) {
 			viewPage = "Message/message_list.jsp";
 			
 		} 
