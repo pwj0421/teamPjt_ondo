@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import command.match.InterestList;
 import command.match.MatchList;
+import command.match.MatchMyInfo;
 import common.CommonExecute;
 
 /**
@@ -40,16 +40,31 @@ public class Match extends HttpServlet {
 		String viewPage = "";
 		// MATCH MAIN
 		if(gubun.equals("main")) {
-			CommonExecute interest = new InterestList();
-			interest.execute(request);
+			// 나의 정보
+			CommonExecute myInfo = new MatchMyInfo();
+			myInfo.execute(request);
+			
+			// 관심사 목록
+			CommonExecute interestList = new command.member.InterestList();
+			interestList.execute(request);
+			
+			// 나의 관심사
+			CommonExecute myInterest = new command.match.InterestList();
+			myInterest.execute(request);
 			
 			viewPage = "match/match_main.jsp";
 			
 		// MATCH LIST
 		} else if(gubun.equals("list")) {
-			CommonExecute interest = new InterestList();
-			interest.execute(request);
+			// 나의 정보
+			CommonExecute myInfo = new MatchMyInfo();
+			myInfo.execute(request);
 			
+			// 관심사 목록
+			CommonExecute interestList = new command.member.InterestList();
+			interestList.execute(request);
+			
+			// 매치 리스트
 			CommonExecute match = new MatchList();
 			match.execute(request);
 			

@@ -1,0 +1,187 @@
+/* 관심사 전체 영역 */
+.interest-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+/* 여러 그룹을 정렬 */
+.interest-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  width: 95%;
+  max-width: 1200px;
+}
+
+/* 각 그룹 */
+.interest-group {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.04);
+  transition: all 0.2s ease;
+}
+.interest-group:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* 제목 */
+.interest-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+/* 태그 버튼형 체크박스 */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  margin: 6px 8px 6px 0;
+  cursor: pointer;
+}
+.tag input {
+  display: none; /* 체크박스 숨김 */
+}
+.tag span {
+  background: #f5f6fa;
+  color: #555;
+  border: 1.5px solid transparent;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.tag:hover span {
+  background: #ebedf5;
+}
+.tag input:checked + span {
+  background: #fff;
+  border-color: #ff4d6d;
+  color: #ff4d6d;
+  font-weight: 600;
+}
+
+/* 반응형 */
+@media (max-width:600px){
+  .interest-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* h5 태그부분 */
+.sub-info {
+  font-family: 'Gothic A1', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #666;
+  margin-top: -8px;
+  margin-bottom: 25px;
+  text-align: center;
+  letter-spacing: -0.3px;
+}
+
+
+/* 가입 목적 안내 문구 */
+.sub-info {
+  font-family: 'Gothic A1', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #666;
+  margin-top: -8px;
+  margin-bottom: 25px;
+  text-align: center;
+  letter-spacing: -0.3px;
+}
+
+/* 가입 목적 안내 문구 */
+.sub-info {
+  font-family: 'Gothic A1', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #666;
+  margin-top: -8px;
+  margin-bottom: 25px;
+  text-align: center;
+  letter-spacing: -0.3px;
+}
+
+/* 가입 목적 전체 영역 — 관심사와 통일 */
+.purpose-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+/* 여러 그룹(태그)을 감싸는 grid */
+.purpose-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  width: 95%;
+  max-width: 1200px;
+}
+
+/* 카드형 그룹 (관심사와 동일 스타일) */
+.purpose-group {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.04);
+  transition: all 0.2s ease;
+}
+.purpose-group:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* 제목 (옵션 — 필요시 h2 밑 소제목용) */
+.purpose-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+/* 태그 버튼형 체크박스 — 관심사와 동일 */
+.purpose-tag {
+  display: inline-flex;
+  align-items: center;
+  margin: 6px 8px 6px 0;
+  cursor: pointer;
+}
+.purpose-tag input {
+  display: none;
+}
+.purpose-tag span {
+  background: #f5f6fa;
+  color: #555;
+  border: 1.5px solid transparent;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.purpose-tag:hover span {
+  background: #ebedf5;
+}
+.purpose-tag input:checked + span {
+  background: #fff;
+  border-color: #ff4d6d; /* 관심사와 동일한 포인트 컬러 */
+  color: #ff4d6d;
+  font-weight: 600;
+}
+
+/* 반응형 동일 적용 */
+@media (max-width:600px){
+  .purpose-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

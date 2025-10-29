@@ -5,7 +5,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>마이페이지 - 매칭정보</title>
+<title>마이페이지 - 매칭정보수정</title>
 <style>
 body {
   background: #fff;
@@ -44,110 +44,120 @@ document.addEventListener("DOMContentLoaded", () => {
 </head>
 
 <body>
-<%@ include file="../menu/quickMenu.jsp" %>
-<div class="mp_mypage_container">
-  <%@ include file="../menu/mypage_menu.jsp" %>
+	<%@ include file="../menu/quickMenu.jsp" %>
+	<div class="mp_mypage_container">
+	<%@ include file="../menu/mypage_menu.jsp" %>
+	
+	
+  	<div class="mp_mypage_content">
+    	<h3>매칭 정보</h3>
+    
+    
+<!-- 매칭 정보 업데이트 입니다 -혜민 ~~-->
 
-  <div class="mp_mypage_content">
-    <h3>매칭 정보</h3>
+		<form name="matchInfoUpdate">	
+		    <div class="mp_info_row">
+		      <label>닉네임</label>
+		      <input type="text" placeholder="닉네임 입력" name="m_nickName">
+		    </div>
+		
+		    <div class="mp_info_row">
+		      <label>한줄소개</label>
+		      <textarea placeholder="자신을 간단히 소개해주세요!" name="m_tagling"></textarea>
+		    </div>
+			<div class="mp_info_row">
+		      <label> 자기소개</label>
+		      <textarea placeholder="자신을 간단히 소개해주세요!" name="m_introduction"></textarea>
+		    </div>
+		    <div class="mp_button_box">
+		      <button type="button" onclick="goUpdateMatchInfo()">수정</button>
+		    </div>
+		</form>
 
-    <div class="mp_info_row">
-      <label>닉네임</label>
-      <input type="text" placeholder="닉네임 입력">
-    </div>
 
-    <div class="mp_info_row">
-      <label>한 줄소개</label>
-      <textarea placeholder="자신을 간단히 소개해주세요!"></textarea>
-    </div>
-	<div class="mp_info_row">
-      <label> 자기소개</label>
-      <textarea placeholder="자신을 간단히 소개해주세요!"></textarea>
-    </div>
-    <div class="mp_button_box">
-      <button>수정</button>
-    </div>
 
-    <div class="mp_match_searchBox">
-      <div class="mp_selected_categories_box">
-        <div style="display:flex; align-items:center; flex-wrap:wrap; gap:8px;">
-          <p style="font-weight:600;">내 카테고리:</p>
-          <div class="mp_selected_categories"></div>
-        </div>
-        <button class="mp_search_btn">저장</button>
-      </div>
+<!-- 카테고리 업데이트   준영상 부탁합니다 ~~-->
+			<div class="mp_match_searchBox">
+			
+		    	<div class="mp_selected_categories_box">
+		        	<div style="display:flex; align-items:center; flex-wrap:wrap; gap:8px;">
+		          		<p style="font-weight:600;">내 카테고리:</p>
+		          			<div class="mp_selected_categories"></div>
+		        	</div>
+		        	<button class="mp_search_btn">저장</button>
+		      	</div>
+	
+	      		<div class="mp_category_container">
+	        		<div class="mp_category_grid">
+	
+	          			<div class="mp_category_group">
+				            <p class="mp_category_title">💬 언어 교류</p>
+				            <label><input type="checkbox" value="한국어 배우고 싶어요"> 한국어 배우고 싶어요</label>
+				            <label><input type="checkbox" value="일본어 배우고 싶어요"> 일본어 배우고 싶어요</label>
+				            <label><input type="checkbox" value="서로 언어 교환"> 서로 언어 교환</label>
+				            <label><input type="checkbox" value="언어 스터디 모집"> 언어 스터디 모집</label>
+	          			</div>
+	
+	          			<div class="mp_category_group">
+				            <p class="mp_category_title">🎮 취미/관심사</p>
+				            <label><input type="checkbox" value="애니메이션 / 만화 / 게임"> 애니메이션 / 만화 / 게임</label>
+				            <label><input type="checkbox" value="음악 / 콘서트 / 아이돌"> 음악 / 콘서트 / 아이돌</label>
+				            <label><input type="checkbox" value="드라마 / 영화 / 유튜브"> 드라마 / 영화 / 유튜브</label>
+				            <label><input type="checkbox" value="스포츠"> 스포츠</label>
+				            <label><input type="checkbox" value="여행 / 사진 / 자연"> 여행 / 사진 / 자연</label>
+				            <label><input type="checkbox" value="패션 / 뷰티"> 패션 / 뷰티</label>
+				        </div>
+	
+	          			<div class="mp_category_group">
+				            <p class="mp_category_title">✈️ 문화 교류</p>
+				            <label><input type="checkbox" value="한일 문화 이야기"> 한일 문화 이야기</label>
+				            <label><input type="checkbox" value="명절 / 전통문화 공유"> 명절 / 전통문화 공유</label>
+				            <label><input type="checkbox" value="지역 추천"> 지역 추천</label>
+				            <label><input type="checkbox" value="한일 트렌드 토론"> 한일 트렌드 토론</label>
+	         			</div>
+	
+	          			<div class="mp_category_group">
+				            <p class="mp_category_title">👥 친구 찾기</p>
+				            <label><input type="checkbox" value="같은 나이대 친구"> 같은 나이대 친구</label>
+				            <label><input type="checkbox" value="학생 / 직장인"> 학생 / 직장인</label>
+				            <label><input type="checkbox" value="온라인 대화 위주"> 온라인 대화 위주</label>
+				            <label><input type="checkbox" value="오프라인 만남 가능"> 오프라인 만남 가능</label>
+	         			</div>
+	
+	          			<div class="mp_category_group">
+							<p class="mp_category_title">💼 커리어 & 학습</p>
+							<label><input type="checkbox" value="유학 정보 교류"> 유학 정보 교류</label>
+							<label><input type="checkbox" value="워킹홀리데이 / 취업 정보"> 워킹홀리데이 / 취업 정보</label>
+							<label><input type="checkbox" value="자격증 / 공부 파트너"> 자격증 / 공부 파트너</label>
+	          			</div>
+	
+	          			<div class="mp_category_group">
+				            <p class="mp_category_title">❤️ 연애 / 관계</p>
+				            <label><input type="checkbox" value="국제 연애 관심"> 국제 연애 관심</label>
+				            <label><input type="checkbox" value="장거리 연애"> 장거리 연애</label>
+				            <label><input type="checkbox" value="진지한 관계"> 진지한 관계</label>
+	          			</div>
+	
+	          			<div class="mp_category_group">
+				            <p class="mp_category_title">📍 지역 기반</p>
+				            <label><input type="checkbox" value="서울 / 경기"> 서울 / 경기</label>
+				            <label><input type="checkbox" value="부산 / 제주"> 부산 / 제주</label>
+				            <label><input type="checkbox" value="도쿄 / 오사카"> 도쿄 / 오사카</label>
+				            <label><input type="checkbox" value="후쿠오카 / 홋카이도"> 후쿠오카 / 홋카이도</label>
+	          			</div>
+	
+	          			<div class="mp_category_group">
+				            <p class="mp_category_title">🧩 기타</p>
+				            <label><input type="checkbox" value="이벤트 / 오프라인 모임"> 이벤트 / 오프라인 모임</label>
+				            <label><input type="checkbox" value="봉사활동 / 프로젝트 모집"> 봉사활동 / 프로젝트 모집</label>
+				            <label><input type="checkbox" value="자유 주제"> 자유 주제</label>
+	          			</div>
+	
+	        		</div>
+				</div>
 
-      <div class="mp_category_container">
-        <div class="mp_category_grid">
-
-          <div class="mp_category_group">
-            <p class="mp_category_title">💬 언어 교류</p>
-            <label><input type="checkbox" value="한국어 배우고 싶어요"> 한국어 배우고 싶어요</label>
-            <label><input type="checkbox" value="일본어 배우고 싶어요"> 일본어 배우고 싶어요</label>
-            <label><input type="checkbox" value="서로 언어 교환"> 서로 언어 교환</label>
-            <label><input type="checkbox" value="언어 스터디 모집"> 언어 스터디 모집</label>
-          </div>
-
-          <div class="mp_category_group">
-            <p class="mp_category_title">🎮 취미/관심사</p>
-            <label><input type="checkbox" value="애니메이션 / 만화 / 게임"> 애니메이션 / 만화 / 게임</label>
-            <label><input type="checkbox" value="음악 / 콘서트 / 아이돌"> 음악 / 콘서트 / 아이돌</label>
-            <label><input type="checkbox" value="드라마 / 영화 / 유튜브"> 드라마 / 영화 / 유튜브</label>
-            <label><input type="checkbox" value="스포츠"> 스포츠</label>
-            <label><input type="checkbox" value="여행 / 사진 / 자연"> 여행 / 사진 / 자연</label>
-            <label><input type="checkbox" value="패션 / 뷰티"> 패션 / 뷰티</label>
-          </div>
-
-          <div class="mp_category_group">
-            <p class="mp_category_title">✈️ 문화 교류</p>
-            <label><input type="checkbox" value="한일 문화 이야기"> 한일 문화 이야기</label>
-            <label><input type="checkbox" value="명절 / 전통문화 공유"> 명절 / 전통문화 공유</label>
-            <label><input type="checkbox" value="지역 추천"> 지역 추천</label>
-            <label><input type="checkbox" value="한일 트렌드 토론"> 한일 트렌드 토론</label>
-          </div>
-
-          <div class="mp_category_group">
-            <p class="mp_category_title">👥 친구 찾기</p>
-            <label><input type="checkbox" value="같은 나이대 친구"> 같은 나이대 친구</label>
-            <label><input type="checkbox" value="학생 / 직장인"> 학생 / 직장인</label>
-            <label><input type="checkbox" value="온라인 대화 위주"> 온라인 대화 위주</label>
-            <label><input type="checkbox" value="오프라인 만남 가능"> 오프라인 만남 가능</label>
-          </div>
-
-          <div class="mp_category_group">
-            <p class="mp_category_title">💼 커리어 & 학습</p>
-            <label><input type="checkbox" value="유학 정보 교류"> 유학 정보 교류</label>
-            <label><input type="checkbox" value="워킹홀리데이 / 취업 정보"> 워킹홀리데이 / 취업 정보</label>
-            <label><input type="checkbox" value="자격증 / 공부 파트너"> 자격증 / 공부 파트너</label>
-          </div>
-
-          <div class="mp_category_group">
-            <p class="mp_category_title">❤️ 연애 / 관계</p>
-            <label><input type="checkbox" value="국제 연애 관심"> 국제 연애 관심</label>
-            <label><input type="checkbox" value="장거리 연애"> 장거리 연애</label>
-            <label><input type="checkbox" value="진지한 관계"> 진지한 관계</label>
-          </div>
-
-          <div class="mp_category_group">
-            <p class="mp_category_title">📍 지역 기반</p>
-            <label><input type="checkbox" value="서울 / 경기"> 서울 / 경기</label>
-            <label><input type="checkbox" value="부산 / 제주"> 부산 / 제주</label>
-            <label><input type="checkbox" value="도쿄 / 오사카"> 도쿄 / 오사카</label>
-            <label><input type="checkbox" value="후쿠오카 / 홋카이도"> 후쿠오카 / 홋카이도</label>
-          </div>
-
-          <div class="mp_category_group">
-            <p class="mp_category_title">🧩 기타</p>
-            <label><input type="checkbox" value="이벤트 / 오프라인 모임"> 이벤트 / 오프라인 모임</label>
-            <label><input type="checkbox" value="봉사활동 / 프로젝트 모집"> 봉사활동 / 프로젝트 모집</label>
-            <label><input type="checkbox" value="자유 주제"> 자유 주제</label>
-          </div>
-
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
