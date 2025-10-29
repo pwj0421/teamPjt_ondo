@@ -10,11 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import command.member.InterestList;
+import command.member.MatchInfoUpdate;
+import command.member.MatchInfoView;
 import command.member.MemberLogin;
 import command.member.MemberLogout;
+import command.member.MemberNickCheck;
 import command.member.MemberSave;
 import command.member.PurposeList;
 import common.CommonExecute;
+import dao.MyInfoUpdateDao;
 
 /**
  * Servlet implementation class Member
@@ -71,10 +75,28 @@ public class Member extends HttpServlet {
 		}else if(gubun.equals("myInfo")) {
 			
 			viewPage ="member/member_myInfo.jsp";
-		}else if(gubun.equals("matchInfo")) {
 			
-			viewPage ="member/member_matchInfo.jsp";
-		}else if(gubun.equals("newPassword")) {
+		}else if(gubun.equals("matchInfo")) {
+			 CommonExecute match = new MatchInfoView();
+	         match.execute(request);
+	         viewPage ="member/member_matchInfo.jsp";
+	     
+		}else if(gubun.equals("matchInfoUpdate")) {
+			 CommonExecute match = new MatchInfoUpdate();
+	         match.execute(request);
+	         viewPage ="common_alert_view.jsp";
+	         
+		}else if(gubun.equals("checkNick")) {
+		    CommonExecute member = new MemberNickCheck(); // 새 커맨드 생성
+		    member.execute(request);
+		    response.setContentType("application/json;charset=UTF-8");
+		    response.getWriter().print(request.getAttribute("json"));
+		    return; // forward 안 함
+		}
+
+		
+		
+		else if(gubun.equals("newPassword")) {
 			
 			viewPage ="member/member_newPassword.jsp";
 		}
