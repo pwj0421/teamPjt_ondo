@@ -95,6 +95,15 @@ a.no-style {
 	font-size:14px;
 }
 .h_buttons button:hover { background:#b0804c; }
+/* 로그인 후 세션 이름 스타일 */
+.h_buttons .sessionName {
+    display: inline-block;   /* 버튼과 같은 라인에 표시 */
+    margin-right: 10px;      /* 버튼과 간격 */
+    margin-top: 6px;         /* 위쪽 간격 */
+    font-size: 14px;         /* 버튼과 크기 맞춤 */
+    font-weight: 500;
+    color: #333;             /* 버튼과 어울리는 색상 */
+}
 
 body {
   padding-top: 70px; /* 헤더 높이만큼 띄워줌 */
@@ -2179,8 +2188,24 @@ a {
   flex-shrink: 0;
   margin-left: auto;
 }
-
+.mp_check_btn {
+  background-color: #c89f6d;
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: 10px;
+}
 .mp_search_btn:hover {
   background-color: #b38a5a;
+}
+
+.mp_nickCheck{
+	border : none !important;
+	width : 150px !important;
+	background-color: #ffffff !important;
 }
 

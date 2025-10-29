@@ -19,7 +19,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>  
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-
 <script>
 	function goPage(svl, page){
 		comHeader.t_gubun.value=page;
@@ -62,7 +61,7 @@
     </c:if>
     <!-- 로그인 후 -->
     <c:if test="${not empty sessionId}">
-        <li><a>${sessionName}님</a></li>
+        <span class="sessionName">${sessionName}님</span>
         <button onclick="goPage('Member','myInfo')">MYINFO</button>
         <button onclick="goPage('Member','logout')">LOGOUT</button>
     </c:if>
