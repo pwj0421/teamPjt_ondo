@@ -50,11 +50,11 @@ public class ComuPostDao {
     // ✅ 게시글 상세 조회
     public ComuPostDto getPostById(int postId) {
         ComuPostDto dto = null;
+
         String sql = "SELECT p.post_id, p.m_id, m.m_name, p.title, p.content, p.create_at, p.update_at, p.hit "
                 + "FROM ondo_comu_posts p "
                 + "JOIN ondo_member m ON p.m_id = m.m_id "
                 + "WHERE p.post_id = ?";
-
 
         try {
         	con = DBConnection.getConnection();
