@@ -9,21 +9,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import command.match.MatchList;
-import command.match.MatchMyInfo;
+import command.notice.NoticeList;
+import command.notice.NoticeSave;
 import common.CommonExecute;
 
 /**
- * Servlet implementation class Match
+ * Servlet implementation class Message
  */
-@WebServlet("/Match")
-public class Match extends HttpServlet {
+@WebServlet("/Message")
+public class Message extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Match() {
+    public Message() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,47 +33,32 @@ public class Match extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
-		
 		String gubun = request.getParameter("t_gubun");
-		if(gubun == null) gubun = "main";
 		
+		if(gubun == null) gubun = "requestlist";
 		String viewPage = "";
-		// MATCH MAIN
-		if(gubun.equals("main")) {
-			// 나의 정보
-			CommonExecute myInfo = new MatchMyInfo();
-			myInfo.execute(request);
+		
+		// 메세지 요청목록
+		if(gubun.equals("requestlist")) {
+	
+			viewPage = "Message/request_list.jsp";
+		
+		// 메세지 요청
+		} else if(gubun.equals("messageRequest")) {
 			
-			// 관심사 목록
-			CommonExecute interestList = new command.member.InterestList();
-			interestList.execute(request);
 			
-			// 나의 관심사
-			CommonExecute myInterest = new command.match.InterestList();
-			myInterest.execute(request);
+			viewPage = "common_alert.jsp";
+		
+		// 메세지 목록
+		} else if(gubun.equals("Messagelist")) {
 			
-			viewPage = "match/match_main.jsp";
+		} else if(gubun.equals("Messagelist")) {
+			viewPage = "Message/message_list.jsp";
 			
-		// MATCH LIST
-		} else if(gubun.equals("list")) {
-			// 나의 정보
-			CommonExecute myInfo = new MatchMyInfo();
-			myInfo.execute(request);
-			
-			// 관심사 목록
-			CommonExecute interestList = new command.member.InterestList();
-			interestList.execute(request);
-			
-			// 매치 리스트
-			CommonExecute match = new MatchList();
-			match.execute(request);
-			
-			viewPage = "match/match_main.jsp";
 		} 
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
 		rd.forward(request, response);
-		
 	}
 
 	/**
