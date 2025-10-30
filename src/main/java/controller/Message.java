@@ -8,9 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import command.notice.NoticeList;
-import command.notice.NoticeSave;
+import command.message.MessageRequest;
 import common.CommonExecute;
 
 /**
@@ -45,10 +43,14 @@ public class Message extends HttpServlet {
 		
 		// 메세지 요청
 		} else if(gubun.equals("messageRequest")) {
-			
-			
-			viewPage = "common_alert.jsp";
-		
+			 CommonExecute msgRequest = new MessageRequest();
+			    msgRequest.execute(request);
+			    
+			    // AJAX 전용 응답
+			    String result_msg = (String)request.getAttribute("t_msg"); // "전송성공" 또는 "전송실패"
+			    response.setContentType("text/plain; charset=UTF-8");
+			    response.getWriter().write(result_msg.equals("전송성공") ? "SUCCESS" : "FAIL");
+			    return; // forward 하지 않고 바로 반환
 		// 메세지 목록
 		} else if(gubun.equals("Messagelist")) {
 			
