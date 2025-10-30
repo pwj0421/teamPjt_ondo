@@ -9,6 +9,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.member.InterestList;
+import command.member.MatchInfoUpdate;
+import command.member.MatchInfoView;
+import command.member.MemberLogin;
+import command.member.MemberLogout;
+import command.member.MemberNickCheck;
+import command.member.MemberSave;
+import command.member.PurposeList;
+import common.CommonExecute;
+import dao.MyInfoUpdateDao;
+
 /**
  * Servlet implementation class Member
  */
@@ -28,22 +39,68 @@ public class Member extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		
 		String gubun = request.getParameter("t_gubun");
-		if(gubun == null) gubun = "join";
+		if(gubun == null) gubun="login";
+		String viewPage = "";
 		
-		String msg="";
-		String viewPage="";
 		
-		if(gubun.equals("join")) {
-			viewPage = "member/member_join.jsp";
-			
-		}else if(gubun.equals("login")){
+		
+		
+		if(gubun.equals("login")) {
 			viewPage = "member/member_login.jsp";
-		
-		
-		}else if(gubun.equals("myPage")) {
-			viewPage = "member/myPage.jsp";
+		//가입목적 리스트	
+		}else if(gubun.equals("join")) {
+			CommonExecute purpose = new PurposeList();
+			CommonExecute interest = new InterestList();
+			purpose.execute(request);
+			interest.execute(request);
+			viewPage = "member/member_join.jsp";
+		//회원가입
+		}else if(gubun.equals("save")) {
+			CommonExecute member = new MemberSave();
+			member.execute(request);
+			viewPage = "common_alert.jsp";
+		}else if(gubun.equals("memberLogin")) {
+			CommonExecute member = new MemberLogin();
+			member.execute(request);
+			viewPage = "common_alert.jsp";
+			
+		}else if(gubun.equals("logout")) {
+			CommonExecute member = new MemberLogout();
+			member.execute(request);
+			viewPage ="common_alert.jsp";
+			
+		}else if(gubun.equals("myInfo")) {
+			
+			viewPage ="member/member_myInfo.jsp";
+			
+		}else if(gubun.equals("matchInfo")) {
+			 CommonExecute match = new MatchInfoView();
+	         match.execute(request);
+	         viewPage ="member/member_matchInfo.jsp";
+	     
+		}else if(gubun.equals("matchInfoUpdate")) {
+			 CommonExecute match = new MatchInfoUpdate();
+	         match.execute(request);
+	         viewPage ="common_alert_view.jsp";
+	         
+		}else if(gubun.equals("checkNick")) {
+		    CommonExecute member = new MemberNickCheck(); // 새 커맨드 생성
+		    member.execute(request);
+		    response.setContentType("application/json;charset=UTF-8");
+		    response.getWriter().print(request.getAttribute("json"));
+		    return; // forward 안 함
 		}
+
+		
+		
+		else if(gubun.equals("newPassword")) {
+			
+			viewPage ="member/member_newPassword.jsp";
+		}
+		
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
 		rd.forward(request, response);
