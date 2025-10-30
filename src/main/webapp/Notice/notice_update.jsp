@@ -1,19 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../common_header.jsp" %>	
-<%@ include file="../menu/quickMenu.jsp" %>
+<%@ include file="../quickMenu.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 
-<title>공지사항 작성</title>
+<title>공지사항 수정</title>
 <script type="text/javascript">
-	function goSave(){
+	function goUpdate(){
 		if(checkValue(noti.title,"제목 입력!")) return;
 		if(checkValue(noti.content,"내용 입력!")) return;
 		
-		noti.t_gubun.value = "save";
+		noti.t_gubun.value = "update";
 		noti.method="post";
 		noti.action="Notice";
 		noti.submit();
@@ -26,45 +26,59 @@
   <h2>공지사항 작성</h2>
   <form name="noti">
     <input type="hidden" name="t_gubun">
+    <input type="hidden" name="n_no" value="${t_dto.getNo()}">
     
     <div class="form_section">
       <label>제목</label>
-      <input type="text" name="title" placeholder="공지사항 제목을 입력하세요" required autofocus>
+      <input type="text" name="title" value="${t_dto.getTitle()}" placeholder="공지사항 제목을 입력하세요" required>
     </div>
 
-  <div class="form_row">
+ <div class="form_row">
   <label style="margin-right:10px;">중요도</label>
   <select name="important" required style="width:120px; margin-right:30px;">
     <option value="">선택</option>
-    <option value="1">중요</option>
-    <option value="0">일반</option>
+    <option value="1" <c:if test="${t_dto.getImportant() eq '1'}">selected</c:if> >중요</option>
+    <option value="0" <c:if test="${t_dto.getImportant() eq '0'}">selected</c:if> >일반</option>
   </select>
 
   <label style="margin-right:10px;">공지 종류</label>
   <select name="type" required style="width:120px;">
     <option value="">선택</option>
-    <option value="notice">공지</option>
-    <option value="update">업데이트</option>
-    <option value="info">안내</option>
+    <option value="notice" <c:if test="${t_dto.getType() eq 'notice'}">selected</c:if> >공지</option>
+    <option value="update" <c:if test="${t_dto.getType() eq 'update'}">selected</c:if> >업데이트</option>
+    <option value="info"   <c:if test="${t_dto.getType() eq 'info'}">selected</c:if> >안내</option>
   </select>
-</div>
-
-
+ </div>
 
     <div class="form_section">
       <label>내용</label>
-      <textarea name="content" placeholder="내용을 입력하세요" required></textarea>
+      <textarea name="content" placeholder="내용을 입력하세요" required>${t_dto.getContent()}</textarea>
     </div>
 
-    <div class="form_section notice_write_attach">
+     <div class="form_section notice_write_attach">
       <label>첨부파일</label>
       <div id="attachContainer">
+        <c:if test="${not empty t_dto.getAttach_1()}">
+          <div class="attach_wrapper">
+            <span class="file_name">📎 ${t_dto.getAttach_1()}</span>
+          </div>
+        </c:if>
+        <c:if test="${not empty t_dto.getAttach_2()}">
+          <div class="attach_wrapper">
+            <span class="file_name">📎 ${t_dto.getAttach_2()}</span>
+          </div>
+        </c:if>
+        <c:if test="${not empty t_dto.getAttach_3()}">
+          <div class="attach_wrapper">
+            <span class="file_name">📎 ${t_dto.getAttach_3()}</span>
+          </div>
+        </c:if>
       </div>
       <button type="button" class="add_attach_btn" onclick="addAttach()">+ 파일 추가</button>
     </div>
 
     <div class="notice_write_buttons">
-      <button type="button" onclick="goSave()">등록</button>
+      <button type="button" onclick="goUpdate()">등록</button>
       <a href="Notice">취소</a>
     </div>
 
