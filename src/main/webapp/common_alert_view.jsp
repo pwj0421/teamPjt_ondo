@@ -3,7 +3,7 @@
     
 <form name="work">
 	<input type="hidden" name="t_gubun">
-	<input type="hidden" name="t_no" value="${t_no}">
+	<input type="hidden" name="n_no" value="${n_no}">
 </form>
 
 <script>

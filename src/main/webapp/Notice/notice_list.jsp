@@ -3,11 +3,15 @@
 <%@ include file="../common_header.jsp" %>	
 <%@ include file="../menu/quickMenu.jsp" %>
 <!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>공지사항</title>
 <script type="text/javascript">
 
 	function goView(no) {
 		noti.t_gubun.value = "view";
-		noti.t_no.value = no;
+		noti.n_no.value = no;
 		noti.method="post";
 		noti.action="Notice";
 		noti.submit();
@@ -24,13 +28,8 @@
 
 <form name="noti">
 	<input type="hidden" name="t_gubun">
-	<input type="hidden" name="t_no">
+	<input type="hidden" name="n_no">
 </form>
-
-<html>
-<head>
-<meta charset="UTF-8">
-<title>공지사항</title>
 </head>
 <body>
 <div class="notice_board">
@@ -44,7 +43,7 @@
   
   <div class="notice_list">
   <c:forEach items="${dtos}" var="dto">
-    <div class="notice_item" onclick="goView('view')">
+    <div class="notice_item" onclick="goView('${dto.getNo()}')">
       <c:if test="${dto.getType() eq 'notice'}">
       	<div class="notice_badge notice">공지</div>
       </c:if>
@@ -85,7 +84,7 @@
     <button>&gt;</button>
     
   </div>
-  <button class="notice_write_btn" onclick="goWriteForm()">글쓰기</button>
+  <button type="button" class="notice_write_btn" onclick="goWriteForm()">글쓰기</button>
 </div>
 
 
