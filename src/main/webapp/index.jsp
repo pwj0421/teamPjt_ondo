@@ -28,7 +28,7 @@
 
 	function goalert(){
 		alert("개발중입니다");
-}
+
 	function goSearchHeader(svl, page){
 		mainSearch.t_gubun.value=page;
 		mainSearch.method="POST";
