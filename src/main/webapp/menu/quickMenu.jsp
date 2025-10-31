@@ -1,6 +1,8 @@
 <%@ page pageEncoding="UTF-8"%>
 <style>
-
+	.sub_bar{
+		z-index: 9999;
+	}
 </style>
 <div class="sub_bar">	
 
