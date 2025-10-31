@@ -8,6 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import command.message.MessageReceiveList;
 import command.message.MessageRequest;
 import common.CommonExecute;
 
@@ -36,27 +38,46 @@ public class Message extends HttpServlet {
 		if(gubun == null) gubun = "requestlist";
 		String viewPage = "";
 		
-		// 메세지 요청목록
+		//받은 메세지 요청목록
 		if(gubun.equals("requestlist")) {
-	
-			viewPage = "Message/request_list.jsp";
+			 CommonExecute msgRequest = new MessageReceiveList();
+			 msgRequest.execute(request);
+			 
+			 viewPage = "Message/request_list.jsp";
 		
 		// 메세지 요청
 		} else if(gubun.equals("messageRequest")) {
-			 CommonExecute msgRequest = new MessageRequest();
-			    msgRequest.execute(request);
+			CommonExecute msgRequest = new MessageRequest();
+			msgRequest.execute(request);
 			    
+<<<<<<< Updated upstream
 			    // AJAX 전용 응답
 			    String result_msg = (String)request.getAttribute("t_msg"); // "전송성공" 또는 "전송실패"
 			    response.setContentType("text/plain; charset=UTF-8");
 			    response.getWriter().write(result_msg.equals("전송성공") ? "SUCCESS" : "FAIL");
 			    return; // forward 하지 않고 바로 반환
+<<<<<<< Updated upstream
 			    
 		// 내가 보낸 요청 목록
 	 		} else if(gubun.equals("myRequest")) {
 	 			viewPage = "Message/my_request.jsp";
 	 			
 	 			
+=======
+=======
+			// AJAX 전용 응답
+			String result_msg = (String)request.getAttribute("t_msg"); // "전송성공" 또는 "전송실패"
+			response.setContentType("text/plain; charset=UTF-8");
+			response.getWriter().write(result_msg.equals("전송성공") ? "SUCCESS" : "FAIL");
+			return; // forward 하지 않고 바로 반환
+			    
+		// 내가 보낸 요청 목록
+	 	} else if(gubun.equals("myRequest")) {
+	 		viewPage = "Message/my_request.jsp";
+	 			
+	 			
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 		// 메세지 목록
 		} else if(gubun.equals("Messagelist")) {
 			viewPage = "Message/message_list.jsp";
