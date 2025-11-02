@@ -203,5 +203,6 @@ body {
 		</div>
 	</div>
 	
+<%@ include file="../common_footer.jsp" %>	
 </body>
 </html>
