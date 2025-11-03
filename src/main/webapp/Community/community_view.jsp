@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../common_header.jsp" %>	
-<%@ include file="../quickMenu.jsp" %>
+<%@ include file="../menu/quickMenu.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>게시글 보기</title>
-<link rel="stylesheet" href="CSS/free_view.css">
+<link rel="stylesheet" href="CSS/sub.css">
 <script src="https://kit.fontawesome.com/2d323a629b.js" crossorigin="anonymous"></script>
 </head>
 <body>
