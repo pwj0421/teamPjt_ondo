@@ -36,8 +36,8 @@
   <label style="margin-right:10px;">중요도</label>
   <select name="important" required style="width:120px; margin-right:30px;">
     <option value="">선택</option>
-    <option value="1">중요</option>
-    <option value="0">일반</option>
+    <option value="1" <c:if test="${t_dto.getImportant() eq '1'}">selected</c:if>>중요</option>
+    <option value="0" <c:if test="${t_dto.getImportant() eq '0'}">selected</c:if>>일반</option>
   </select>
 
   <label style="margin-right:10px;">공지 종류</label>
