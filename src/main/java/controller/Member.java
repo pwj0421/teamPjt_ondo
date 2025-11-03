@@ -8,15 +8,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import command.member.CountryList;
 import command.member.InterestList;
-import command.member.MatchInfoInterestUpdate;
 import command.member.MatchInfoUpdate;
 import command.member.MatchInfoView;
-import command.member.MemberChangePassword;
-import command.member.MemberCheckUserExist;
 import command.member.MemberDeleteAccount;
 import command.member.MemberInfo;
 import command.member.MemberLogin;
@@ -48,13 +44,10 @@ public class Member extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		System.out.println("[DEBUG] Member 서블릿 실행됨 → gubun=" + request.getParameter("t_gubun"));
 		request.setCharacterEncoding("utf-8");
-		String sessionId = CommonUtil.getSessionInfo(request, "id");
+		
 		String gubun = request.getParameter("t_gubun");
-		if(gubun == null && sessionId == null) gubun="login";
-		if(gubun == null && sessionId != null) gubun="myInfo";
+		if(gubun == null) gubun="login";
 		String viewPage = "";
 		
 		
@@ -105,7 +98,7 @@ public class Member extends HttpServlet {
 		}else if(gubun.equals("memberUpdate")) {
 			CommonExecute member = new MemberUpdate();
 			member.execute(request);
-			viewPage = "member/common_alert_view.jsp";
+			viewPage = "common_alert.jsp";
 			
 		} else if(gubun.equals("memberDelete")) {
 			CommonExecute member = new MemberDeleteAccount();
@@ -115,15 +108,6 @@ public class Member extends HttpServlet {
 		}else if(gubun.equals("matchInfo")) {
 			 CommonExecute match = new MatchInfoView();
 	         match.execute(request);
-	         
-	         // 관심사 목록
-			 CommonExecute interestList = new command.member.InterestList();
-			 interestList.execute(request);
-				
-			 // 나의 관심사
-			 CommonExecute myInterest = new command.match.InterestList();
-			 myInterest.execute(request);
-			 
 	         viewPage ="member/member_matchInfo.jsp";
 	     
 		}else if(gubun.equals("matchInfoUpdate")) {
@@ -137,27 +121,19 @@ public class Member extends HttpServlet {
 		    response.setContentType("application/json;charset=UTF-8");
 		    response.getWriter().print(request.getAttribute("json"));
 		    return; // forward 안 함
-		    
-		} else if(gubun.equals("interestUpdate")) {
-			CommonExecute match = new MatchInfoInterestUpdate();
-	        match.execute(request);
-	         
-	        viewPage ="common_alert_view.jsp"; 	
-	        
-		} else if(gubun.equals("newPassword")) {
+		}
+
+		
+		
+		else if(gubun.equals("newPassword")) {
 			
 			viewPage ="member/member_newPassword.jsp";
-		} else if(gubun.equals("changePassword")) {
-			CommonExecute member = new MemberChangePassword();
-			member.execute(request);
-			viewPage ="common_alert.jsp";
-			
-		} else if(gubun.equals("findAccount")) {
-			viewPage = "member/member_findaccount.jsp";
-		} 
+		}
+		
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
 		rd.forward(request, response);
+		
 	
 	}
 

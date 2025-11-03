@@ -84,35 +84,11 @@
   font-size: 15px;
   font-family: "Gothic A1";
 }
-
-/* ===== 텍스트에어리어 (input과 디자인 통일) ===== */
-.form_box textarea {
-  width: 100%;
-  min-height: 100px;
-  padding: 12px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  font-size: 15px;
-  font-family: "Gothic A1", sans-serif;
-  resize: vertical; /* 크기 조절 가능 (가로는 고정, 세로만) */
-  box-sizing: border-box;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.form_box textarea:focus {
-  border-color: #5c7cfa;
-  box-shadow: 0 0 4px rgba(92, 124, 250, 0.3);
-  outline: none;
-}
-
-
 /* ===== ID 중복확인 그룹 (디자인 통일 버전) ===== */
 .id-check-group {
   display: grid;
-  grid-template-columns: 1fr 90px 60px; /* ← 버튼·결과칸 폭 고정 */
-  gap: 10px;
- 
+  grid-template-columns: 1.8fr auto 1fr; /* 입력칸 넓게, 결과창 짧게 */
+  gap: 8px;
 }
 
 /* ===== 아이디 입력칸 ===== */
@@ -136,17 +112,17 @@
 
 /* ===== ID중복확인 버튼 (폼 버튼 디자인과 통일) ===== */
 .btn-idcheck {
-  width: 100%;
   height: 47px;
-  background-color: #c89f6d;
+  padding: 0 12px;
+  background-color: #c89f6d; /* 기존 메인 포인트 컬러 */
   color: #fff;
-  border: none;
-  border-radius: 10px;
   font-size: 15px;
   font-weight: 500;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
-  white-space: nowrap; /* ✅ 줄바꿈 방지 */
   font-family: "Gothic A1", sans-serif;
+  transition: all 0.2s ease;
 }
 
 .btn-idcheck:active {
@@ -155,14 +131,18 @@
 
 /* ===== 결과 표시 텍스트 (깔끔하게 글자만 남김) ===== */
 .m_id_result {
-  width: 100%;
   border: none;
   background: transparent;
-  color: #555;
+  padding: 0;
   text-align: left;
+  color: #555;
   font-size: 14px;
+  font-family: "Gothic A1", sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+  display: inline-block;     /* 추가 */
+  vertical-align: middle;    /* 추가 */
 }
-
 
 
 
@@ -391,72 +371,14 @@
   background-color: #b68c5a;
 }
 
-/* ✅ 6단계 확인 화면 고급 스타일 */
-.confirm-box {
-  text-align: left;
-  width: 100%;
-  background: #fffefc;
-  border: 1px solid #eadbc8;
-  border-radius: 16px;
-  padding: 25px 28px;
-  margin-top: 20px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
-  font-size: 15px;
-  line-height: 1.8;
-  color: #333;
-}
-
-.confirm-box h4 {
-  font-size: 16px;
-  color: #b6854d;
-  margin-top: 18px;
-  margin-bottom: 8px;
-  border-left: 4px solid #c89f6d;
-  padding-left: 8px;
-}
-
-.confirm-item {
-  margin-bottom: 6px;
-  display: flex;
-  align-items: flex-start;
-}
-
-.confirm-item strong {
-  width: 110px;
-  color: #5f4a3d;
-  font-weight: 600;
-}
-
-.confirm-item span {
-  flex: 1;
-  color: #333;
-  word-break: break-all;
-}
-
-/* 구분선 스타일 */
-.confirm-section {
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px dashed #e0d6c8;
-}
-
-
 </style>
 </head>
 <script type="text/javascript">
-	
-	
 	function checkId() {
 	    if (checkValue(mem.m_id, "ID입력 후 검사")) return;
 	
-	    var id = mem.m_id.value.trim();
+	    var id = mem.m_id.value;
 	
-	    if(id.length < 5 || id.length > 15) {
-	    	alert("아이디는 5자 이상 15자 이하로 입력해주세요.");
-	    	mem.m_id.focus();
-	    	return;
-	    }
-	    
 	    $.ajax({
 	      type: "POST",
 	      url: "MemberCheckId",
@@ -489,41 +411,6 @@
 	      }
 	    });
 	  }
-
-	// ✅ 닉네임 중복검사
-	let nickOk = false;
-
-	function checkNick() {
-	    const nick = document.getElementById("m_nickName").value.trim();
-	    const resultInput = document.getElementById("nickCheckResult");
-
-	    if (!nick) {
-	        alert("닉네임을 입력해주세요.");
-	        return;
-	    }
-
-	    fetch("Member?t_gubun=checkNick&nick=" + encodeURIComponent(nick))
-	        .then(response => response.json())
-	        .then(data => {
-	            if (data.result === "exist") {
-	                resultInput.value = "사용중";
-	                resultInput.style.color = "red";
-	                nickOk = false;
-	            } else {
-	                resultInput.value = "사용가능";
-	                resultInput.style.color = "green";
-	                nickOk = true;
-	            }
-	        })
-	        .catch(err => {
-	            console.error(err);
-	            alert("닉네임 중복 검사 중 오류가 발생했습니다.");
-	        });
-	    
-	}
-	
-
-	
 	function validateStep(step) {
 		if(step == 1) {
 			if(checkValue(mem.m_country, "국적을 선택해주세요!")) return false;
@@ -532,10 +419,7 @@
 			if(checkLength(mem.m_id, 5, 15, "아이디는 최소 5자 이상 15자 이하 입니다!")) return false;
 			
 			if(checkValue(mem.m_nickname, "사용할 닉네임을 입력해주세요")) return false;
-			if (!nickOk) {
-			    alert("닉네임 중복 확인을 완료해주세요!");
-			    return false;
-			}
+			
 			if(checkValue(mem.m_password, "비밀번호를 입력하세요!")) return false;
 			if(checkLength(mem.m_password, 5, 20, "비밀번호는 최소 5자 이상 20자 이하 입니다!")) return false;
 			if(checkValue(mem.m_password_confirm, "비밀번호를 재입력 하세요.")) return false;
@@ -580,16 +464,18 @@
 			return;
 		}
 		
-		/* // 비밀번호 정규식 검사
+		// 비밀번호 정규식 검사
 		var pw = mem.m_password.value;
-		var rule = /^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9!@#$%^&*]{5,20}$/;
+		var rule = /^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9!@#$%^&*]{6,20}$/;
 		if(!rule.test(pw)) {
-			alert("비밀번호는 영문+숫자 조합의 5~20자로 입력해주세요.");
+			alert("비밀번호는 영문+숫자 조합의 6~20자로 입력해주세요.");
 			mem.m_password.focus();
 			return;
-		} */
+		}
 		
-		
+		function onlyNumber(obj) {
+			obj.value = obj.value.replace(/[^0-9]/g, '');
+		}
  
 		// 2.첨부 용량 체크	
 		var file = mem.m_image;
@@ -622,43 +508,6 @@
 		mem.submit();
 	}
 	
-	function onlyNumber(obj) {
-		  const val = obj.value;
-		  
-		  // 숫자만 남기기
-		  const onlyNum = val.replace(/[^0-9]/g, '');
-
-		  // 숫자 외 문자가 있었을 경우 경고
-		  if (val !== onlyNum) {
-		    alert("숫자만 입력 가능합니다.");
-		  }
-
-		  obj.value = onlyNum;
-		}
-	// ✅ DOM이 다 로드된 뒤 실행되도록 감싸기
-	document.addEventListener("DOMContentLoaded", function() {
-
-	  // ID 입력 시 결과 초기화
-	  const idInput = document.getElementById("c_id");
-	  if (idInput) {
-	      idInput.addEventListener("input", function() {
-	          mem.m_id_result.value = "";
-	          mem.m_id_result.style.color = "#555";
-	      });
-	  }
-
-	  // 닉네임 입력 시 결과 초기화
-	  const nickInput = document.getElementById("m_nickName");
-	  if (nickInput) {
-	      nickInput.addEventListener("input", function() {
-	          document.getElementById("nickCheckResult").value = "";
-	          document.getElementById("nickCheckResult").style.color = "#555";
-	          nickOk = false;
-	      });
-	  }
-
-	});
-
 </script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
@@ -670,10 +519,9 @@
 		  <div class="step_indicator">
 		    <div class="step active">1. 기본정보</div>
 		    <div class="step">2. 주소</div>
-		    <div class="step">3. 가입목적</div>
-		    <div class="step">4. 관심사</div>
-		    <div class="step">5. 추천인</div>
-		    <div class="step">6. 가입정보확인</div>
+		    <div class="step">3. 개인프로필</div>
+		    <div class="step">4. 추천인 입력</div>
+		    <div class="step">5. 확인</div>
 		  </div>
 		
 		  <!-- 1단계 -->
@@ -681,7 +529,7 @@
 		    <h2>기본 정보 입력</h2>
 		    <div class="profile_upload">
 		      <label for="profileImgInput">
-		        <img id="profileImgPreview" src="attach/member_profile/basic_profile.png" alt="프로필 이미지">
+		        <img id="profileImgPreview" src="../image/basic_profile.png" alt="프로필 이미지">
 		      </label>
 		      <input type="file" name="m_image" id="profileImgInput" accept="image/*">
 		    </div>
@@ -694,18 +542,12 @@
 		     </select>
 		    
 		    <div class="id-check-group">
-			  <input type="text" name="m_id" id="c_id" placeholder="아이디">
+			  <input type="text" name="m_id" placeholder="아이디">
 			  <button type="button" class="btn-idcheck" onclick="checkId()">중복확인</button>
 			  <input type="text" name="m_id_result" class="m_id_result" disabled>
 			</div>
 
-		    <!-- 닉네임 입력 + 중복확인 -->
-			<div class="id-check-group">
-			  <input type="text" name="m_nickname" id="m_nickName" placeholder="닉네임">
-			  <button type="button" class="btn-idcheck" onclick="checkNick()">중복확인</button>
-			  <input type="text" id="nickCheckResult" name="checkNickName" class="m_id_result" disabled>
-			</div>
-
+		    <input type="text" name="m_nickname" placeholder="닉네임">
 		    <input type="password" name="m_password" placeholder="비밀번호">
 		    <input type="password" name="m_password_confirm" placeholder="비밀번호 확인">
 		    <input type="text" name="m_name" placeholder="이름">
@@ -719,11 +561,11 @@
 		     <input type="text" name="m_tel3" placeholder="5678" onkeyup="onlyNumber(this)" style="width:20%">
 		     
 		    <input type="text" name="m_email1" placeholder="이메일" style="width:53%">&nbsp;@
-		    <select id="m_email2" name="m_email2" class="custom-select" style="width:40%">
+		    <select id="" name="m_email2" class="custom-select" style="width:40%">
 		       <option value="">선택</option>
-		       <option value="naver.com">naver.com</option>
-		       <option value="daum.com">daum.net</option>
-		       <option value="google.com">gmail.com</option>
+		       <option value="naver">naver.com</option>
+		       <option value="daum">daum.net</option>
+		       <option value="google">gmail.com</option>
 		     </select>
 		    <input type="text" name="m_age" placeholder="나이" onkeyup="onlyNumber(this)">
 	
@@ -736,10 +578,6 @@
 			  <option value="NORMAL">일반 회원</option>
 			  <option value="TUTOR">튜터</option>
 			</select>
-			
-			<input name="m_tagline" placeholder="한줄로 나를 표현해 보세요.">
-			<textarea name="m_introduction" placeholder="간단한 자기소개를 작성해주세요."></textarea>
-			
 		    <div class="nav_buttons">
 		      <button type="button" onclick="changeStep(2)" style="margin-left:180px;">다음</button>
 		    </div>
@@ -844,12 +682,6 @@
 		     <h2>가입 정보 확인</h2>
 		    <p>입력한 정보를 확인해주세요.</p>
 		    
-		    <div id="confirm-info" class="confirm-box">
-		        <!-- JS로 내용이 채워집니다 -->
-		    </div>
-		    
-		    
-		    
 		    <div class="nav_buttons">
 		      <button type="button" onclick="changeStep(5)">이전</button>
 		      <button type="button" onclick="memberSave()">회원가입 완료</button>
@@ -871,8 +703,7 @@ function changeStep(to) {
 
   const fromBox = document.getElementById("step" + currentStep);
   const toBox = document.getElementById("step" + to);
-//✅ 현재단계를 미리 갱신
-  currentStep = to;
+
   // fade out
   fromBox.style.opacity = "0";
   fromBox.style.transform = "translateY(-20px)";
@@ -890,78 +721,13 @@ function changeStep(to) {
     document.querySelectorAll(".step").forEach(s => s.classList.remove("active"));
     document.querySelector(".step:nth-child(" + to + ")").classList.add("active");
 
+    currentStep = to;
  // ✅ 2단계로 이동할 때 자동 적용
     if (to === 2) setTimeout(applyAddressMode, 100);
-    if (to === 6) {
-    	  const infoBox = document.getElementById("confirm-info");
-
-    	  const genderEl = document.querySelector('input[name="m_gender"]:checked');
-    	  const gender = genderEl ? (genderEl.value === "M" ? "남성" : "여성") : "선택 안함";
-
-    	  const email2 = document.querySelector('select[name="m_email2"]');
-    	  const email =
-    	    mem.m_email1.value && email2.value
-    	      ? mem.m_email1.value + "@" + email2.options[email2.selectedIndex].text
-    	      : "미입력";
-
-    	  const tel =
-    	    mem.m_tel_country_code.value + " " +
-    	    [mem.m_tel1.value, mem.m_tel2.value, mem.m_tel3.value].filter(Boolean).join("-");
-
-    	  const purposes = Array.from(document.querySelectorAll('input[name="m_purpose_code"]:checked'))
-    	    .map(el => el.nextElementSibling.textContent)
-    	    .join(", ") || "선택 안함";
-
-    	  const interests = Array.from(document.querySelectorAll('input[name="m_interest"]:checked'))
-    	    .map(el => el.nextElementSibling.textContent)
-    	    .join(", ") || "선택 안함";
-
-    	  const tagline = (document.querySelector('input[name="m_tagline"]')?.value || "").trim() || "미입력";
-    	  const intro = (document.querySelector('textarea[name="m_introduction"]')?.value || "").trim() || "미입력";
-    	  const recommender = (document.querySelector('input[name="m_recommender"]')?.value || "").trim() || "없음";
-
-    	  infoBox.innerHTML =
-    		  '<h4>기본 정보</h4>' +
-    		  '<div class="confirm-item"><strong>국적:</strong><span>' + mem.m_country.options[mem.m_country.selectedIndex].text + '</span></div>' +
-    		  '<div class="confirm-item"><strong>아이디:</strong><span>' + mem.m_id.value + '</span></div>' +
-    		  '<div class="confirm-item"><strong>닉네임:</strong><span>' + mem.m_nickname.value + '</span></div>' +
-    		  '<div class="confirm-item"><strong>이름:</strong><span>' + mem.m_name.value + '</span></div>' +
-    		  '<div class="confirm-item"><strong>성별:</strong><span>' + gender + '</span></div>' +
-    		  '<div class="confirm-item"><strong>나이:</strong><span>' + mem.m_age.value + '</span></div>' +
-    		  '<div class="confirm-item"><strong>회원 유형:</strong><span>' + mem.m_type.options[mem.m_type.selectedIndex].text + '</span></div>' +
-    		  '<div class="confirm-item"><strong>이메일:</strong><span>' + email + '</span></div>' +
-    		  '<div class="confirm-item"><strong>연락처:</strong><span>' + tel + '</span></div>' +
-
-    		  '<div class="confirm-section"></div>' +
-    		  '<h4>주소 정보</h4>' +
-    		  '<div class="confirm-item"><strong>우편번호:</strong><span>' + mem.m_zipcode.value + '</span></div>' +
-    		  '<div class="confirm-item"><strong>주소:</strong><span>' + mem.m_address.value + ' ' + mem.m_address_detail.value + '</span></div>' +
-
-    		  '<div class="confirm-section"></div>' +
-    		  '<h4>개인 프로필</h4>' +
-    		  '<div class="confirm-item"><strong>한줄소개:</strong><span>' + tagline + '</span></div>' +
-    		  '<div class="confirm-item"><strong>자기소개:</strong><span>' + intro + '</span></div>' +
-
-    		  '<div class="confirm-section"></div>' +
-    		  '<h4>가입 목적</h4>' +
-    		  '<div class="confirm-item"><span>' + purposes + '</span></div>' +
-
-    		  '<div class="confirm-section"></div>' +
-    		  '<h4>관심사</h4>' +
-    		  '<div class="confirm-item"><span>' + interests + '</span></div>' +
-
-    		  '<div class="confirm-section"></div>' +
-    		  '<h4>추천인</h4>' +
-    		  '<div class="confirm-item"><span>' + recommender + '</span></div>';
-
-    	}
-
+ 
  // ✅ 새 단계로 전환 후 자동 스크롤 위로 이동
     window.scrollTo({ top: 0, behavior: "smooth" });
- 
-    
   }, 300);
-
 }
 //주소 검색 API (카카오 우편번호)
 function execDaumPostcode() {

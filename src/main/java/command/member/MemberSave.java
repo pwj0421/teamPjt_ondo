@@ -22,7 +22,7 @@ public class MemberSave implements CommonExecute {
 		
 			MemberDao dao = new MemberDao();
 			
-			String savePath = request.getSession().getServletContext().getRealPath("/") + "attach/member_profile";
+			String savePath = request.getSession().getServletContext().getRealPath("/") + "image/";
 			
 			
 			File dir = new File(savePath);
@@ -68,8 +68,6 @@ public class MemberSave implements CommonExecute {
 			String email1 = mprTemp.getParameter("m_email1");
 			String email2 = mprTemp.getParameter("m_email2");
 			String type = mprTemp.getParameter("m_type");
-			String tagline = mprTemp.getParameter("m_tagline");
-			String introduction = mprTemp.getParameter("m_introduction");
 			String recommender = mprTemp.getParameter("m_recommender");
 			String reg = CommonUtil.getTodayTime();
 			String fileName = mprTemp.getFilesystemName("m_image");
@@ -87,8 +85,7 @@ public class MemberSave implements CommonExecute {
 				    country, zipcode, address, address_detail,
 				    tel1, tel2, tel3,
 				    email1, email2, type, recommender,
-				    reg, "", "", Integer.parseInt(age), tel_country_code,
-				    tagline, introduction
+				    reg, "", "", Integer.parseInt(age), tel_country_code
 				);
 			
 			

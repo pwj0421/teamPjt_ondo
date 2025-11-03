@@ -13,10 +13,6 @@ public class MemberDto {
 	
 	private List<String> purposeCode;
 	
-	
-	
-	
-	
 	// 탈퇴해원 체크용
 	public MemberDto(String m_id, String m_name, String m_password, 
             String m_type, String m_quit, String m_image) {
@@ -29,19 +25,7 @@ public class MemberDto {
 			}
 	
 	
-	//인덱스 프로필
-	public MemberDto(String m_nickname, String m_image, String m_gender, String m_country, String m_tagline, int m_age) {
-		super();
-		this.m_nickname = m_nickname;
-		this.m_image = m_image;
-		this.m_gender = m_gender;
-		this.m_country = m_country;
-		this.m_tagline = m_tagline;
-		this.m_age = m_age;
-	}
-
-
-
+	
 	//내정보 수정
 	public MemberDto(String m_id, String m_name, String m_country, String m_zipcode, String m_address,
 			String m_address_detail, String m_tel1, String m_tel2, String m_tel3, 
@@ -110,7 +94,7 @@ public class MemberDto {
 	public MemberDto(String m_id, String m_password, String m_name, String m_nickname, String m_image, String m_gender,
 			String m_country, String m_zipcode, String m_address, String m_address_detail, String m_tel1, String m_tel2,
 			String m_tel3, String m_email1, String m_email2, String m_type, String m_recommender,
-			String m_reg, String m_updated, String m_quit, int m_age, String m_tel_country_code, String m_tagline, String m_introduction) {
+			String m_reg, String m_updated, String m_quit, int m_age, String m_tel_country_code) {
 		this.m_id = m_id;
 		this.m_password = m_password;
 		this.m_name = m_name;
@@ -133,8 +117,6 @@ public class MemberDto {
 		this.m_quit = m_quit;
 		this.m_age = m_age;
 		this.m_tel_country_code = m_tel_country_code;
-		this.m_tagline = m_tagline;
-		this.m_introduction = m_introduction;
 	}
 
 
