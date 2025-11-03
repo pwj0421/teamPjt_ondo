@@ -66,12 +66,13 @@ public class NoticeDao {
 	}
 
 	//목록 --페이징&검색조건시 수정 필요
-	public ArrayList<NoticeDto> getNoticeList() {
+	public ArrayList<NoticeDto> getNoticeList(String work, String search) {
 		ArrayList<NoticeDto> dtos = new ArrayList<NoticeDto>();
-		String sql = "select n.n_no, n.n_title, m.m_name, to_char(n.n_reg_date, 'yyyy-MM-dd') as n_reg_date, \r\n"
+		String sql = "select n.n_no, n.n_title, m.m_name, to_char(n.n_reg_date, 'yy-MM-dd') as n_reg_date, \r\n"
 				+ "       n.n_hit, n.n_type, n.n_important, n.n_attach_1, n.n_attach_2, n.n_attach_3\r\n"
 				+ "    from ondo_notice n, ondo_member m\r\n"
 				+ "    where n.n_reg_id = m.m_id\r\n"
+				+ "    and "+work+" like '%"+search+"%'\r\n"
 				+ "    order by n.n_no desc";
 		
 		try {
@@ -235,6 +236,31 @@ public class NoticeDao {
 		}
 		
 		return result;
+	}
+
+	// 총 글 개수
+	public int getTotalCount(String work, String search) {
+		int count = 0;
+		String sql = "select count(*) as count\r\n" + 
+					 "from ondo_notice\r\n" + 
+					 "where "+work+" like '%"+search+"%'";
+		
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				count = rs.getInt("count");
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("getTotalCount() 오류 : "+sql);
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		
+		return count;
 	}
 
 
