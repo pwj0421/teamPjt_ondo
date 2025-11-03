@@ -17,7 +17,7 @@
 <div class="login-container" style="display:flex; justify-content:center;">
   <div class="login-box">
     <h2>로그인</h2>
-    <form name="loginForm">
+    <form name="loginForm" onkeydown="if(event.key === 'Enter'){ memberLogin(); return false; }">
       <input type="hidden" name="t_gubun">
 
       <input type="text" name="m_id" placeholder="아이디를 입력하세요" required>

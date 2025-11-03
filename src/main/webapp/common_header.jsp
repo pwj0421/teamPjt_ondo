@@ -26,6 +26,11 @@
 		comHeader.action=svl;
 		comHeader.submit();
 	}
+	function confirmLogout() {		
+		if (confirm("로그아웃 하시겠습니까?")) {			
+			goPage('Member', 'logout');		
+			}	
+		}
 </script>
 <form name="comHeader">
 	<input type="hidden" name="t_gubun">
@@ -63,7 +68,7 @@
     <c:if test="${not empty sessionId}">
         <span class="sessionName">${sessionName}님</span>
         <button onclick="goPage('Member','myInfo')">MYINFO</button>
-        <button onclick="goPage('Member','logout')">LOGOUT</button>
+        <button onclick="confirmLogout()">LOGOUT</button>
     </c:if>
     <button>LANG</button>
   </div>

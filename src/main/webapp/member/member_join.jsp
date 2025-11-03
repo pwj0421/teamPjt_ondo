@@ -393,7 +393,14 @@
 	
 	        // 결과 텍스트 반영
 	        mem.m_id_result.value = result;
-	
+			
+	     	// 결과 색상 표시 추가
+	        if (result === "사용가능") {
+	          mem.m_id_result.style.color = "green";
+	        } else {
+	          mem.m_id_result.style.color = "red";
+	        }
+	     
 	        // 간단한 시각 피드백 (선택)
 	        var $idInput = $(mem.m_id);
 	        if (result === "사용가능") {
@@ -451,10 +458,53 @@
 	function memberSave(){
 		if(!validateStep(1)) return;
 		if(!validateStep(2)) return;
+		
+		if(mem.m_id_result.value != "사용가능") {
+			alert("아이디 중복 확인을 완료해주세요!");
+			return;
+		}
+		
+		// 비밀번호 정규식 검사
+		var pw = mem.m_password.value;
+		var rule = /^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9!@#$%^&*]{6,20}$/;
+		if(!rule.test(pw)) {
+			alert("비밀번호는 영문+숫자 조합의 6~20자로 입력해주세요.");
+			mem.m_password.focus();
+			return;
+		}
+		
+		function onlyNumber(obj) {
+			obj.value = obj.value.replace(/[^0-9]/g, '');
+		}
+ 
+		// 2.첨부 용량 체크	
+		var file = mem.m_image;
+		var fileMaxSize  = 10; // 첨부 최대 용량 설정
+		if(file.value !=""){
+			// 사이즈체크
+			var maxSize  = 1024 * 1024 * fileMaxSize;
+			var fileSize = 0;
+			// 브라우저 확인
+			var browser=navigator.appName;
+			// 익스플로러일 경우
+			if (browser=="Microsoft Internet Explorer"){
+				var oas = new ActiveXObject("Scripting.FileSystemObject");
+				fileSize = oas.getFile(file.value).size;
+			}else {
+			// 익스플로러가 아닐경우
+				fileSize = file.files[0].size;
+			}
+		
+			if(fileSize > maxSize){
+				alert(" 첨부파일 사이즈는 "+fileMaxSize+"MB 이내로 등록 가능합니다. ");
+				return;
+			}	
+		}
 			
-		mem.t_gubun.value="save";
-		mem.method="post";
-		mem.action="Member";
+		mem.method="post" 
+		//multipart/form=data로 폼 전송시 
+		//<input type="hidden" name="t_gubun" value="save"> 이런방식으로는 전달이 안됨
+		mem.action="Member?t_gubun=save"
 		mem.submit();
 	}
 	
@@ -462,7 +512,7 @@
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <body>
-<form name="mem">
+<form name="mem" enctype="multipart/form-data">
 	<input type="hidden" name="t_gubun">
 		<div class="signup_container">
 		  <!-- 단계 표시 -->
@@ -486,10 +536,9 @@
 		     <!-- 국적 선택 -->
 		     <select id="nationality" name="m_country" class="custom-select">
 		       <option value="">국적 선택</option>
-		       <option value="KR">한국</option>
-		       <option value="JP">일본</option>
-		       <option value="CN">중국</option>
-		       <option value="US">미국</option>
+		       <c:forEach var="country" items="${countryList}">
+		       		<option value="${country.country_code}">${country.country_name}</option>
+		       </c:forEach>
 		     </select>
 		    
 		    <div class="id-check-group">
@@ -507,9 +556,9 @@
 		       <option value="+82">+82(한국)</option>
 		       <option value="+81">+81</option>
 		     </select>
-		     <input type="text" name="m_tel1" placeholder="010" style="width:15%">&nbsp;-
-		     <input type="text" name="m_tel2" placeholder="1234" style="width:20%">&nbsp;-
-		     <input type="text" name="m_tel3" placeholder="5678" style="width:20%">
+		     <input type="text" name="m_tel1" placeholder="010" onkeyup="onlyNumber(this)" style="width:15%">&nbsp;-
+		     <input type="text" name="m_tel2" placeholder="1234" onkeyup="onlyNumber(this)" style="width:20%">&nbsp;-
+		     <input type="text" name="m_tel3" placeholder="5678" onkeyup="onlyNumber(this)" style="width:20%">
 		     
 		    <input type="text" name="m_email1" placeholder="이메일" style="width:53%">&nbsp;@
 		    <select id="" name="m_email2" class="custom-select" style="width:40%">
@@ -518,7 +567,7 @@
 		       <option value="daum">daum.net</option>
 		       <option value="google">gmail.com</option>
 		     </select>
-		    <input type="text" name="m_age" placeholder="나이">
+		    <input type="text" name="m_age" placeholder="나이" onkeyup="onlyNumber(this)">
 	
 		    <div class="gender-group">
 			  <label><input type="radio" name="m_gender" value="M"> 남</label>
