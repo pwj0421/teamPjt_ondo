@@ -1,19 +1,6 @@
 package dto;
 
 public class MessageDto {
-<<<<<<< Updated upstream
-	private String senderId, receiverId, greetingMsg, sendDate, prifileImg, nickname, tagline;
-	
-	//receiveRequestList  mypage > request_list
-	public MessageDto(String senderId, String receiverId, String greetingMsg, String sendDate, String prifileImg,
-			String nickname, String tagline) {
-=======
-<<<<<<< Updated upstream
-	private String senderId;
-	private String receiverId;
-	private String greetingMessage;
-	private String sendDate;
-=======
 	private String requestNo, senderId, receiverId, greetingMsg, sendDate, 
 					profileImg, r_nickname, r_tagline,
 					r_gender, r_country, r_age;
@@ -24,16 +11,10 @@ public class MessageDto {
 	public MessageDto(String requestNo, String senderId, String receiverId, String greetingMsg, String sendDate, String profileImg,
 			String r_nickname,String r_gender, String r_country, String r_age) {
 		this.requestNo = requestNo;
->>>>>>> Stashed changes
 		this.senderId = senderId;
 		this.receiverId = receiverId;
 		this.greetingMsg = greetingMsg;
 		this.sendDate = sendDate;
-<<<<<<< Updated upstream
-		this.prifileImg = prifileImg;
-		this.nickname = nickname;
-		this.tagline = tagline;
-=======
 		this.profileImg = profileImg;
 		this.r_nickname = r_nickname;
 		this.r_gender = r_gender;
@@ -47,7 +28,6 @@ public class MessageDto {
 
 	public void setRequestNo(String requestNo) {
 		this.requestNo = requestNo;
->>>>>>> Stashed changes
 	}
 
 	public String getSenderId() {
@@ -82,30 +62,7 @@ public class MessageDto {
 		this.sendDate = sendDate;
 	}
 
-<<<<<<< Updated upstream
-	public String getPrifileImg() {
-		return prifileImg;
-	}
 
-	public void setPrifileImg(String prifileImg) {
-		this.prifileImg = prifileImg;
-	}
-
-	public String getNickname() {
-		return nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-
-	public String getTagline() {
-		return tagline;
-	}
-
-	public void setTagline(String tagline) {
-		this.tagline = tagline;
-=======
 	public String getProfileImg() {
 		return profileImg;
 	}
@@ -152,15 +109,9 @@ public class MessageDto {
 
 	public void setR_age(String r_age) {
 		this.r_age = r_age;
->>>>>>> Stashed changes
+		
 	}
 	
-	
-	
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 	
 	
 }

@@ -50,21 +50,6 @@ public class Message extends HttpServlet {
 			CommonExecute msgRequest = new MessageRequest();
 			msgRequest.execute(request);
 			    
-<<<<<<< Updated upstream
-			    // AJAX 전용 응답
-			    String result_msg = (String)request.getAttribute("t_msg"); // "전송성공" 또는 "전송실패"
-			    response.setContentType("text/plain; charset=UTF-8");
-			    response.getWriter().write(result_msg.equals("전송성공") ? "SUCCESS" : "FAIL");
-			    return; // forward 하지 않고 바로 반환
-<<<<<<< Updated upstream
-			    
-		// 내가 보낸 요청 목록
-	 		} else if(gubun.equals("myRequest")) {
-	 			viewPage = "Message/my_request.jsp";
-	 			
-	 			
-=======
-=======
 			// AJAX 전용 응답
 			String result_msg = (String)request.getAttribute("t_msg"); // "전송성공" 또는 "전송실패"
 			response.setContentType("text/plain; charset=UTF-8");
@@ -75,9 +60,7 @@ public class Message extends HttpServlet {
 	 	} else if(gubun.equals("myRequest")) {
 	 		viewPage = "Message/my_request.jsp";
 	 			
-	 			
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+
 		// 메세지 목록
 		} else if(gubun.equals("Messagelist")) {
 			viewPage = "Message/message_list.jsp";
