@@ -57,7 +57,7 @@
 <form name="mainSearch">
 	<input type="hidden" name="t_gubun">
   	<div class="header_search">
-    	<input type="text" name="s_keyword"  value="${headerSearchTxt }" placeholder="무엇이 궁금하신가요?"  onkeypress="if(event.key === 'Enter'){event.preventDefault(); goSearchHeader('Search','list');}">
+    	<input type="text" name="indexHeaderSearch"  value="${headerSearchTxt }" placeholder="무엇이 궁금하신가요?"  onkeypress="if(event.key === 'Enter'){event.preventDefault(); goSearchHeader('Search','list');}">
 	    <button type ="button" onclick="goSearchHeader('Search','list')">    
 	    	<!-- 돋보기 아이콘이에요 수정 ㄴㄴ  -->
 				      <svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 -960 960 960" width="24px" fill="#1f1f1f">
