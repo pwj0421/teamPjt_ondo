@@ -3,11 +3,36 @@
 <%@ include file="../common_header.jsp" %>	
 <%@ include file="../menu/quickMenu.jsp" %>
 <!DOCTYPE html>
-<script type="text/javascript">
+<html>
+<head>
+<meta charset="UTF-8">
+<title>공지사항</title>
 
+<style type="text/css">
+
+.notice_select {
+  height: 31px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.notice_select:hover {
+  border-color: #999;
+}
+
+</style>
+
+<script type="text/javascript">
 	function goView(no) {
 		noti.t_gubun.value = "view";
-		noti.t_no.value = no;
+		noti.n_no.value = no;
 		noti.method="post";
 		noti.action="Notice";
 		noti.submit();
@@ -19,32 +44,41 @@
 		noti.action="Notice";
 		noti.submit();
 	}
+	function goSearch(){
+		notice.method="post";
+		notice.action="Notice";
+		notice.submit();
+	}
 
 </script>
 
 <form name="noti">
 	<input type="hidden" name="t_gubun">
-	<input type="hidden" name="t_no">
+	<input type="hidden" name="n_no">
 </form>
 
-<html>
-<head>
-<meta charset="UTF-8">
-<title>공지사항</title>
 </head>
 <body>
 <div class="notice_board">
   <div class="notice_header">
     <h2 class="notice_title">공지사항</h2>
-    <div class="notice_actions">
-      <input type="text" class="notice_search" placeholder="검색어를 입력하세요">
-      <button class="notice_write_btn">검색</button>
-    </div>
+    <form name="notice">
+     <input type="hidden" name="t_nowPage">
+	    <div class="notice_actions">
+	     <select class="notice_select" name="t_select">
+		      <option value="n_title" <c:if test="${empty search || select eq 'n_title'}">selected</c:if>>제목</option>
+		      <option value="n_content" <c:if test="${not empty search && select eq 'n_content'}">selected</c:if>>내용</option>
+		   </select>
+	      <input type="text" class="notice_search" name="t_search" value="${search}" placeholder="검색어를 입력하세요">
+	      <button type="button" onclick="goSearch()" class="notice_write_btn">검색</button>
+	    </div>
+    </form>
   </div>
+  
   
   <div class="notice_list">
   <c:forEach items="${dtos}" var="dto">
-    <div class="notice_item" onclick="goView('view')">
+    <div class="notice_item" onclick="goView('${dto.getNo()}')">
       <c:if test="${dto.getType() eq 'notice'}">
       	<div class="notice_badge notice">공지</div>
       </c:if>
@@ -85,7 +119,7 @@
     <button>&gt;</button>
     
   </div>
-  <button class="notice_write_btn" onclick="goWriteForm()">글쓰기</button>
+  <button type="button" class="notice_write_btn" onclick="goWriteForm()">글쓰기</button>
 </div>
 
 

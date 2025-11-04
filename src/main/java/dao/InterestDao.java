@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class InterestDao {
 	
 	//카테고리 별 묶는 map 생성
 	public Map<String, List<InterestDto>> getInterestMap() {
-		Map<String, List<InterestDto>> interestMap = new HashMap<>();
+		Map<String, List<InterestDto>> interestMap = new LinkedHashMap<>();
 		
 		 Map<String, String> iconMap = new HashMap<>();
 	        iconMap.put("C001", "💬");

@@ -2,9 +2,9 @@ package common;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 
 public class CommonUtil {
 	//오늘 날짜 (yyyy-MM-dd)
@@ -26,8 +26,6 @@ public class CommonUtil {
 			
 			return today;
 		}
-
-
 		
 		public static String getSessionInfo(HttpServletRequest request, String gubun) {
 			String result = "";
@@ -50,5 +48,4 @@ public class CommonUtil {
 		   }
 			
 }
-
 

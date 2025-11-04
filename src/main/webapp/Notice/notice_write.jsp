@@ -29,15 +29,15 @@
     
     <div class="form_section">
       <label>제목</label>
-      <input type="text" name="title" placeholder="공지사항 제목을 입력하세요" required>
+      <input type="text" name="title" placeholder="공지사항 제목을 입력하세요" required autofocus>
     </div>
 
   <div class="form_row">
   <label style="margin-right:10px;">중요도</label>
   <select name="important" required style="width:120px; margin-right:30px;">
     <option value="">선택</option>
-    <option value="1">중요</option>
-    <option value="0">일반</option>
+    <option value="1" <c:if test="${t_dto.getImportant() eq '1'}">selected</c:if>>중요</option>
+    <option value="0" <c:if test="${t_dto.getImportant() eq '0'}">selected</c:if>>일반</option>
   </select>
 
   <label style="margin-right:10px;">공지 종류</label>

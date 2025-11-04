@@ -19,7 +19,6 @@ public class MatchInfoUpdate implements CommonExecute {
 		String updated = CommonUtil.getTodayTime();
 
 		int result = dao.matchInfoUpdate(id, nickName, tagline, introduction, updated);
-		System.out.print(id+"=="+ nickName+"=="+  tagline+"=="+ introduction + "==" + updated);
 		String msg = "";
 		if(result == 1) msg = "수정 되었습니다.";
 		else msg = "수정 실패! 관리자에게 문의 바랍니다.";

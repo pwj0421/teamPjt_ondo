@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import command.member.CountryList;
 import command.member.InterestList;
+import command.member.MatchInfoInterestUpdate;
 import command.member.MatchInfoUpdate;
 import command.member.MatchInfoView;
 import command.member.MemberDeleteAccount;
@@ -108,6 +109,15 @@ public class Member extends HttpServlet {
 		}else if(gubun.equals("matchInfo")) {
 			 CommonExecute match = new MatchInfoView();
 	         match.execute(request);
+	         
+	         // 관심사 목록
+			 CommonExecute interestList = new command.member.InterestList();
+			 interestList.execute(request);
+				
+			 // 나의 관심사
+			 CommonExecute myInterest = new command.match.InterestList();
+			 myInterest.execute(request);
+			 
 	         viewPage ="member/member_matchInfo.jsp";
 	     
 		}else if(gubun.equals("matchInfoUpdate")) {
@@ -121,19 +131,20 @@ public class Member extends HttpServlet {
 		    response.setContentType("application/json;charset=UTF-8");
 		    response.getWriter().print(request.getAttribute("json"));
 		    return; // forward 안 함
-		}
-
-		
-		
-		else if(gubun.equals("newPassword")) {
+		    
+		} else if(gubun.equals("interestUpdate")) {
+			CommonExecute match = new MatchInfoInterestUpdate();
+	        match.execute(request);
+	         
+	        viewPage ="common_alert_view.jsp"; 	
+	        
+		} else if(gubun.equals("newPassword")) {
 			
 			viewPage ="member/member_newPassword.jsp";
 		}
 		
-		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
 		rd.forward(request, response);
-		
 	
 	}
 

@@ -66,9 +66,29 @@ function goPage(svl, page){
 // 소메뉴 열기/닫기 토글
 function toggleSubMenu(id){
   const menu = document.getElementById(id);
-  menu.style.display = (menu.style.display === "block") ? "none" : "block";
+  const isOpen = menu.style.display === "block";
+
+  // 상태 토글
+  menu.style.display = isOpen ? "none" : "block";
+
+  // 열린 상태 기억 (localStorage)
+  if(isOpen){
+    localStorage.removeItem("openSubMenu");
+  } else {
+    localStorage.setItem("openSubMenu", id);
+  }
 }
+
+// 페이지 로드 시 이전에 열려있던 메뉴 복원
+window.addEventListener("DOMContentLoaded", function(){
+  const openMenuId = localStorage.getItem("openSubMenu");
+  if(openMenuId){
+    const menu = document.getElementById(openMenuId);
+    if(menu) menu.style.display = "block";
+  }
+});
 </script>
+
 
 <form name="mpMenu">
 	<input type="hidden" name="t_gubun">
@@ -89,7 +109,8 @@ function toggleSubMenu(id){
   <div class="menu-item">
     <button onclick="toggleSubMenu('msgMenu')">메시지</button>
     <div class="sub-menu" id="msgMenu">
-      <a href="javascript:goPage('Message','requestlist')">요청목록</a>
+      <a href="javascript:goPage('Message','requestlist')">받은 요청목록</a>
+      <a href="javascript:goPage('Message','myRequest')">보낸 요청목록</a>
       <a href="javascript:goPage('Message','Messagelist')">쪽지함</a>
     </div>
   </div>
