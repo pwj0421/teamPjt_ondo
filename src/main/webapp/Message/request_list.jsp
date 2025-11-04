@@ -178,112 +178,28 @@ body {
   <div class="mp_mypage_content">
     <h3>친구 요청 목록</h3>
 
-    <div class="friend_card_container">
-      <!-- 친구 카드 1 -->
-      <div class="friend_card">
-        <img src="image/basic_profile.png" alt="프로필1">
-        <div class="friend_nickname">김유리</div>
-        <div class="friend_intro">안녕하세요! 일본 문화에 관심 많아요.</div>
-        <div class="friend_subinfo"> 일본 | 여 | 25</div>
-        <div class="friend_categories">
-          <span>언어 교류</span>
-          <span>여행</span>
-          <span>문화</span>
-        </div>
-        <div class="friend_button_box">
-          <button class="friend_accept">수락</button>
-          <button class="friend_reject">거절</button>
-        </div>
-      </div>
-
-      <!-- 친구 카드 2 -->
-      <div class="friend_card">
-        <img src="image/basic_profile.png" alt="프로필2">
-        <div class="friend_nickname">박준호</div>
-        <div class="friend_intro">한국어 배우고 싶어요~</div>
-        <div class="friend_subinfo"> 한국 | 남 | 27</div>
-        <div class="friend_categories">
-          <span>언어 교류</span>
-          <span>게임</span>
-          <span>음악</span>
-        </div>
-        <div class="friend_button_box">
-          <button class="friend_accept">수락</button>
-          <button class="friend_reject">거절</button>
-        </div>
-      </div>
-
-      <!-- 친구 카드 3 -->
-      <div class="friend_card">
-        <img src="image/basic_profile.png" alt="프로필3">
-        <div class="friend_nickname">사토 루이</div>
-        <div class="friend_intro">애니와 만화 좋아합니다!</div>
-        <div class="friend_subinfo"> 일본 | 남 | 23</div>
-        <div class="friend_categories">
-          <span>애니</span>
-          <span>게임</span>
-          <span>여행</span>
-        </div>
-        <div class="friend_button_box">
-          <button class="friend_accept">수락</button>
-          <button class="friend_reject">거절</button>
-        </div>
-      </div>
-
-      <!-- 친구 카드 4 -->
-      <div class="friend_card">
-        <img src="image/basic_profile.png" alt="프로필4">
-        <div class="friend_nickname">이하나</div>
-        <div class="friend_intro">음악 콘서트 자주 다녀요!</div>
-        <div class="friend_subinfo"> 한국 | 여 | 24</div>
-        <div class="friend_categories">
-          <span>음악</span>
-          <span>문화</span>
-        </div>
-        <div class="friend_button_box">
-          <button class="friend_accept">수락</button>
-          <button class="friend_reject">거절</button>
-        </div>
-      </div>
-
-      <!-- 친구 카드 5 -->
-      <div class="friend_card">
-        <img src="image/basic_profile.png" alt="프로필5">
-        <div class="friend_nickname">오사카 히로</div>
-        <div class="friend_intro">한국어 배우고 싶어요!</div>
-        <div class="friend_subinfo"> 일본 | 남 | 28</div>
-        <div class="friend_categories">
-          <span>언어 교류</span>
-          <span>여행</span>
-          <span>언어교류</span>
-          <span>한국음식</span>
-        </div>
-        <div class="friend_button_box">
-          <button class="friend_accept">수락</button>
-          <button class="friend_reject">거절</button>
-        </div>
-      </div>
-
-      <!-- 친구 카드 6 -->
-      <div class="friend_card">
-        <img src="image/basic_profile.png" alt="프로필6">
-        <div class="friend_nickname">정민지</div>
-        <div class="friend_intro">드라마와 영화 좋아합니다!</div>
-        <div class="friend_subinfo"> 한국 | 여 | 26</div>
-        <div class="friend_categories">
-          <span>드라마</span>
-          <span>영화</span>
-          <span>여행</span>
-          <span>언어교류</span>
-          <button class="category_more_btn">더보기</button>
-        </div>
-        <div class="friend_button_box">
-          <button class="friend_accept">수락</button>
-          <button class="friend_reject">거절</button>
-        </div>
-      </div>
-    </div>
-
+	<div class="friend_card_container">		<!-- 친구 카드 1 -->
+		<c:forEach items="${match_dtos}" var="dto">
+			<div class="friend_card">
+		        <img src="image/basic_profile.png" alt="프로필1">
+		        <div class="friend_nickname">김유리</div>
+		        <div class="friend_intro">안녕하세요! 일본 문화에 관심 많아요.</div>
+		        <div class="friend_subinfo"> 일본 | 여 | 25</div>
+		        <div class="friend_categories">
+					<span>언어 교류</span>
+					<span>여행</span>
+					<span>문화</span>
+	        	</div>
+	        	<div class="friend_button_box">
+					<button type="button"  onclick=""  class="friend_accept">수락</button>
+					<button type="button" onclick="" class="friend_reject">거절</button>
+	        	</div>
+	      	</div>
+		</c:forEach>
+  
+	</div>
+	
+	
     <!-- 페이징 모형 -->
     <div class="friend_paging">
       <span class="active">1</span>

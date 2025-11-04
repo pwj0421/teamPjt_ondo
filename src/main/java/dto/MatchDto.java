@@ -8,9 +8,12 @@ public class MatchDto {
 
 	private ArrayList<InterestDto> interestDto;
 	
+	// MATCH MAIN
+	// MatchDao.java : getMatchMyInfo()
+	// MatchMyInfo.java
+	
 	// MATCH LIST
-	// MatchDao.java
-	// getMatchList()
+	// MatchDao.java : getMatchList()
 	// MatchList.java
 	public MatchDto(String memberId, String image, String nickname, String tagline,
 			ArrayList<InterestDto> interestDto) {

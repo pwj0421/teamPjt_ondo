@@ -3,6 +3,7 @@ package command.match;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import common.CommonExecute;
 import dao.MatchDao;
@@ -13,7 +14,9 @@ public class InterestList implements CommonExecute {
 	public void execute(HttpServletRequest request) {
 		MatchDao dao = new MatchDao();
 		
-		String id = "user001";
+		HttpSession session = request.getSession();
+		
+		String id = (String)session.getAttribute("sessionId");
 		
 		ArrayList<Integer> interestList = dao.getInterestList(id);
 		

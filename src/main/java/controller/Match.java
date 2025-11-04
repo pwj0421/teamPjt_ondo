@@ -1,72 +1,68 @@
 package controller;
 
 import java.io.IOException;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
+import java.util.List;
+import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import command.match.InterestList;
-import command.match.MatchList;
+import javax.servlet.http.*;
+import command.match.*;
 import common.CommonExecute;
+import common.CommonUtil;
+import dao.MessageDao;
 
-/**
- * Servlet implementation class Match
- */
 @WebServlet("/Match")
 public class Match extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Match() {
-        super();
-        // TODO Auto-generated constructor stub
+    private static final long serialVersionUID = 1L;
+
+    private MessageDao messageDao = new MessageDao();
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+
+        String gubun = request.getParameter("t_gubun");
+        if (gubun == null) gubun = "main";
+
+        String viewPage = "";
+
+        if (gubun.equals("main")) {
+            CommonExecute myInfo = new MatchMyInfo();
+            myInfo.execute(request);
+
+            CommonExecute interestList = new command.member.InterestList();
+            interestList.execute(request);
+
+            CommonExecute myInterest = new command.match.InterestList();
+            myInterest.execute(request);
+
+            viewPage = "match/match_main.jsp";
+
+        } else if (gubun.equals("list")) {
+            // 나의 정보
+            CommonExecute myInfo = new MatchMyInfo();
+            myInfo.execute(request);
+
+            // 관심사 목록
+            CommonExecute interestList = new command.member.InterestList();
+            interestList.execute(request);
+
+            // 매치 리스트
+            CommonExecute match = new MatchList();
+            match.execute(request);
+
+         // 이미 메시지를 보낸 대상 ID 리스트 DB에서 가져오기
+            String senderId = CommonUtil.getSessionInfo(request, "id");
+            List<String> sentMessageList = messageDao.getSentMessageReceiverIds(senderId);
+            request.setAttribute("sentMessageList", sentMessageList);
+
+            System.out.println(sentMessageList.size());
+            viewPage = "match/match_main.jsp";
+        }
+
+        RequestDispatcher rd = request.getRequestDispatcher(viewPage);
+        rd.forward(request, response);
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		
-		String gubun = request.getParameter("t_gubun");
-		if(gubun == null) gubun = "main";
-		
-		String viewPage = "";
-		// MATCH MAIN
-		if(gubun.equals("main")) {
-			CommonExecute interest = new InterestList();
-			interest.execute(request);
-			
-			viewPage = "match/match_main.jsp";
-			
-		// MATCH LIST
-		} else if(gubun.equals("list")) {
-			CommonExecute interest = new InterestList();
-			interest.execute(request);
-			
-			CommonExecute match = new MatchList();
-			match.execute(request);
-			
-			viewPage = "match/match_main.jsp";
-		} 
-		
-		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
-		rd.forward(request, response);
-		
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
+    }
 }

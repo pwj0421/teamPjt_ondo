@@ -16,7 +16,6 @@ public class NoticeDto {
 		this.type = type;
 	}
 	
-
 	//리스트
 	public NoticeDto(String no, String title, String reg_name, String reg_date, String important, String type,
 			String attach_1, String attach_2, String attach_3, int hit) {
@@ -31,6 +30,46 @@ public class NoticeDto {
 		this.attach_3 = attach_3;
 		this.hit = hit;
 	}
+
+	//상세보기
+	public NoticeDto(String no, String title, String content, String reg_id, String reg_name, String reg_date,
+			String type, String important, String attach_1, String attach_2, String attach_3, int hit) {
+		super();
+		this.no = no;
+		this.title = title;
+		this.content = content;
+		this.reg_id = reg_id;
+		this.reg_name = reg_name;
+		this.reg_date = reg_date;
+		this.type = type;
+		this.important = important;
+		this.attach_1 = attach_1;
+		this.attach_2 = attach_2;
+		this.attach_3 = attach_3;
+		this.hit = hit;
+	}
+	
+	//최신글 3개
+	public NoticeDto(String no, String title) {
+		this.no = no;
+		this.title = title;
+	}
+	
+	//수정
+	public NoticeDto(String no, String title, String content, String important, String type, String update_date, String attach_1,
+			String attach_2, String attach_3) {
+		this.no = no;
+		this.title = title;
+		this.content = content;
+		this.important = important;
+		this.type = type;
+		this.update_date = update_date;
+		this.attach_1 = attach_1;
+		this.attach_2 = attach_2;
+		this.attach_3 = attach_3;
+	}
+	
+	
 
 	public String getNo() {
 			return no;
