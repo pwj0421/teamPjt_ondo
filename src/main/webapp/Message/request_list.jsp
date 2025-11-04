@@ -170,45 +170,58 @@ body {
 }
 </style>
 </head>
+<script>
+	function updateState(requestId, state, gubun){
+		msgReqList.t_gubun.value=gubun;
+		msgReqList.state.value=state;
+		msgReqList.requestId.value=requestId;
+		msgReqList.method="post";
+		msgReqList.action="Message";
+		msgReqList.submit();
+		
+	}
+</script>
 <body>
-<%@ include file="../menu/quickMenu.jsp" %>
-<div class="mp_mypage_container">
-  <%@ include file="../menu/mypage_menu.jsp" %>
+	<form name="msgReqList">
+		<input type="hidden" name="t_gubun">
+		<input type="hidden" name="state">
+		<input type="hidden" name="requestId">
+		<input type="hidden" name="locate" value="requestlist">
+	</form>
+	<%@ include file="../menu/quickMenu.jsp" %>
+	<div class="mp_mypage_container">
+	  	<%@ include file="../menu/mypage_menu.jsp" %>
+	
+		<div class="mp_mypage_content">
+	    	<h3>친구 요청 목록</h3>
+	
+			<div class="friend_card_container">		<!-- 친구 카드 1 -->
+				<c:forEach items="${r_dtos}" var="dto">
+					<div class="friend_card">
+				        <img src="attach/member_profile/${dto.getProfileImg()}" alt="프로필1">
+				        <div class="friend_nickname">${dto.getNickname()}</div>
+				        <div class="friend_intro">${dto.getGreetingMsg()}</div>
+				        <div class="friend_subinfo"> ${dto.getCountry()} | ${dto.getGender()} | ${dto.getAge()}</div>
+			        	<button type="button"  onclick=""  class="friend_accept">정보자세히보기</button>
+			        	<div class="friend_button_box">
+							<button type="button"  onclick="updateState('${dto.getRequest_id()}','accepted','stateUpdate')"  class="friend_accept">수락</button>
+							<button type="button"  onclick="updateState('${dto.getRequest_id()}','rejected','stateUpdate')"  class="friend_reject">거절</button>
+			        	</div>
+			      	</div>
+				</c:forEach>
+		  
+			</div>
+		
+		
+		    <!-- 페이징 모형 -->
+		    <div class="friend_paging">
+		      <span class="active">1</span>
+		      <span>2</span>
+		      <span>3</span>
+		    </div>
 
-  <div class="mp_mypage_content">
-    <h3>친구 요청 목록</h3>
-
-	<div class="friend_card_container">		<!-- 친구 카드 1 -->
-		<c:forEach items="${match_dtos}" var="dto">
-			<div class="friend_card">
-		        <img src="image/basic_profile.png" alt="프로필1">
-		        <div class="friend_nickname">김유리</div>
-		        <div class="friend_intro">안녕하세요! 일본 문화에 관심 많아요.</div>
-		        <div class="friend_subinfo"> 일본 | 여 | 25</div>
-		        <div class="friend_categories">
-					<span>언어 교류</span>
-					<span>여행</span>
-					<span>문화</span>
-	        	</div>
-	        	<div class="friend_button_box">
-					<button type="button"  onclick=""  class="friend_accept">수락</button>
-					<button type="button" onclick="" class="friend_reject">거절</button>
-	        	</div>
-	      	</div>
-		</c:forEach>
-  
+		</div>
 	</div>
-	
-	
-    <!-- 페이징 모형 -->
-    <div class="friend_paging">
-      <span class="active">1</span>
-      <span>2</span>
-      <span>3</span>
-    </div>
-
-  </div>
-</div>
 </body>
 <%@ include file="../common_footer.jsp" %> 
 </html>

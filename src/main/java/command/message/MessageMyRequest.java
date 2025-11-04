@@ -1,5 +1,4 @@
 package command.message;
-import java.util.ArrayList;
 
 import java.util.ArrayList;
 
@@ -10,7 +9,7 @@ import common.CommonUtil;
 import dao.MessageDao;
 import dto.MessageDto;
 
-public class MessageReceiveList implements CommonExecute {
+public class MessageMyRequest implements CommonExecute {
 
 	@Override
 	public void execute(HttpServletRequest request) {
@@ -18,9 +17,9 @@ public class MessageReceiveList implements CommonExecute {
 		
 		String myId = CommonUtil.getSessionInfo(request, "id");
 		
-		ArrayList<MessageDto> dtos = dao.getReceiveRequest(myId);
+		ArrayList<MessageDto> dtos = dao.myRequestMessageList(myId);
 		
-		request.setAttribute("r_dtos", dtos);
+		request.setAttribute("r_dto", dtos);
 
 	}
 
