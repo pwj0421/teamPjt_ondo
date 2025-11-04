@@ -161,40 +161,57 @@ body {
   color: #fff;
 }
 </style>
+<script>
+	function requestCancel(requestNo, gubun){
+		if(confirm("요청을 취소하시겠습니까?")){
+			MyRequest.t_gubun.value=gubun;
+			MyRequest.requestNo.value=requestNo;
+			MyRequest.method="post";
+			MyRequest.action="Message";
+			MyRequest.submit();
+		}
+
+	}
+</script>
 </head>
 <body>
-<%@ include file="../menu/quickMenu.jsp" %>
-<div class="sent_request_container">
-  <%@ include file="../menu/mypage_menu.jsp" %>
+	<form name="MyRequest">
+		<input type="hidden" name="t_gubun">
+		<input type="hidden" name="requestNo">
+	</form>
 
-  <div class="sent_request_content">
-    <h3>보낸 친구 요청 목록</h3>
+	<%@ include file="../menu/quickMenu.jsp" %>
+	<div class="sent_request_container">
+  	<%@ include file="../menu/mypage_menu.jsp" %>
 
-		<div class="friend_card_container">
-	     	<c:forEach items="${r_dto}" var="dto">
-				<div class="friend_card">
-			        <img src="attach/member_profile/${dto.getProfileImg()}" alt="프로필1">
-			        <div class="friend_nickname">${dto.getNickname()}</div>
-			        <div class="friend_intro">${dto.getGreetingMsg()}</div>
-			        <div class="friend_subinfo"> ${dto.getCountry()} | ${dto.getGender()} | ${dto.getAge()}</div>
-		        	<button type="button"  onclick=""  class="friend_accept">정보자세히보기</button>
-		        	<div class="friend_button_box">
-						<button type="button" onclick="" class="friend_reject">요청취소</button>
-		        	</div>
-		      	</div>
-			</c:forEach>
-    	</div>
+		<div class="sent_request_content">
+			<h3>보낸 친구 요청 목록</h3>
 
-    	<!-- 페이징 -->
-	    <div class="friend_paging">
-	      <span class="active">1</span>
-	      <span>2</span>
-	      <span>3</span>
-	    </div>
+			<div class="friend_card_container">
+		     	<c:forEach items="${r_dto}" var="dto">
+					<div class="friend_card">
+				        <img src="attach/member_profile/${dto.getProfileImg()}" alt="프로필1">
+				        <div class="friend_nickname">${dto.getNickname()}</div>
+				        <div class="friend_intro">${dto.getGreetingMsg()}</div>
+				        <div class="friend_subinfo"> ${dto.getCountry()} | ${dto.getGender()} | ${dto.getAge()}</div>
+			        	<button type="button"  onclick="goView()"  class="friend_accept">정보자세히보기</button>
+			        	<div class="friend_button_box">
+							<button type="button" onclick="requestCancel('${dto.getRequest_id()}','requestCancel')"  class="friend_reject">요청취소</button>
+			        	</div>
+			      	</div>
+				</c:forEach>
+	    	</div>
 
-  </div>
-</div>
+	    	<!-- 페이징 -->
+		    <div class="friend_paging">
+		      <span class="active">1</span>
+		      <span>2</span>
+		      <span>3</span>
+		    </div>
+
+		</div>
+	</div>
+	<%@ include file="../common_footer.jsp" %> 
 </body>
-<%@ include file="../common_footer.jsp" %> 
 </html>
  
