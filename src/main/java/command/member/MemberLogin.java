@@ -21,6 +21,7 @@ public class MemberLogin implements CommonExecute {
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
+		
 		//탈퇴회원 여부 먼저 확인
 		boolean isQuitMember = dao.isQuitMember(id);
 		
