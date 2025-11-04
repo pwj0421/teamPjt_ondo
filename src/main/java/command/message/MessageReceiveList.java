@@ -20,7 +20,6 @@ public class MessageReceiveList implements CommonExecute {
 		
 		ArrayList<MessageDto> dtos = dao.getReceiveRequest(myId);
 		
-		
 		request.setAttribute("r_dtos", dtos);
 
 	}

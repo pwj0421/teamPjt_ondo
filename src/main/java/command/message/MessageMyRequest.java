@@ -17,7 +17,7 @@ public class MessageMyRequest implements CommonExecute {
 		
 		String myId = CommonUtil.getSessionInfo(request, "id");
 		
-		ArrayList<MessageDto> dtos = dao.getReceiveRequest(myId);
+		ArrayList<MessageDto> dtos = dao.myRequestMessageList(myId);
 		
 		request.setAttribute("r_dto", dtos);
 

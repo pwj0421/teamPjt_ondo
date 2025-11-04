@@ -196,7 +196,7 @@ body {
 	    	<h3>친구 요청 목록</h3>
 	
 			<div class="friend_card_container">		<!-- 친구 카드 1 -->
-				<c:forEach items="${r_dto}" var="dto">
+				<c:forEach items="${r_dtos}" var="dto">
 					<div class="friend_card">
 				        <img src="attach/member_profile/${dto.getProfileImg()}" alt="프로필1">
 				        <div class="friend_nickname">${dto.getNickname()}</div>
@@ -205,7 +205,7 @@ body {
 			        	<button type="button"  onclick=""  class="friend_accept">정보자세히보기</button>
 			        	<div class="friend_button_box">
 							<button type="button"  onclick="updateState('${dto.getRequest_id()}','accepted','stateUpdate')"  class="friend_accept">수락</button>
-							<button type="button"  onclick="updateState('${dto.getRequest_id()}','rejeacted','stateUpdate')"  class="friend_reject">거절</button>
+							<button type="button"  onclick="updateState('${dto.getRequest_id()}','rejected','stateUpdate')"  class="friend_reject">거절</button>
 			        	</div>
 			      	</div>
 				</c:forEach>

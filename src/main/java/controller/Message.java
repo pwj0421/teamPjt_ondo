@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import command.message.MessageMyRequest;
 import command.message.MessageReceiveList;
 import command.message.MessageRequest;
+import command.message.RequestStateCancel;
 import command.message.RequestStateUpdate;
 import common.CommonExecute;
 
@@ -69,12 +70,19 @@ public class Message extends HttpServlet {
 			viewPage = "Message/message_list.jsp";
 			
 			
-		// 내가 보낸 요청 목록
+		// 요청상태 업데이트 수락/ 거절 - receiveRequestList  11/4
  		} else if(gubun.equals("stateUpdate")) {
  			CommonExecute state = new RequestStateUpdate();
  			state.execute(request);
 			 
- 			viewPage = "Message/my_request.jsp";
+ 			viewPage = "common_alert_view.jsp";
+ 			
+ 		// 요청 취소 - myRequest Cancel 11/4
+ 		} else if(gubun.equals("requestCancel")) {
+ 			CommonExecute state = new RequestStateCancel(); 
+ 			state.execute(request);
+			 
+ 			viewPage = "common_alert_view.jsp";
  		} 
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
