@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import command.member.CountryList;
 import command.member.InterestList;
@@ -46,9 +47,10 @@ public class Member extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
-		
+		String sessionId = CommonUtil.getSessionInfo(request, "id");
 		String gubun = request.getParameter("t_gubun");
-		if(gubun == null) gubun="login";
+		if(gubun == null && sessionId == null) gubun="login";
+		if(gubun == null && sessionId != null) gubun="myInfo";
 		String viewPage = "";
 		
 		
@@ -99,7 +101,7 @@ public class Member extends HttpServlet {
 		}else if(gubun.equals("memberUpdate")) {
 			CommonExecute member = new MemberUpdate();
 			member.execute(request);
-			viewPage = "common_alert.jsp";
+			viewPage = "member/common_alert_view.jsp";
 			
 		} else if(gubun.equals("memberDelete")) {
 			CommonExecute member = new MemberDeleteAccount();

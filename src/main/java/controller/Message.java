@@ -8,7 +8,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import command.message.MessageMyRequest;
+import command.message.MessageReceiveList;
 import command.message.MessageRequest;
+import command.message.RequestStateCancel;
+import command.message.RequestStateUpdate;
 import common.CommonExecute;
 
 /**
@@ -35,33 +39,51 @@ public class Message extends HttpServlet {
 		
 		if(gubun == null) gubun = "requestlist";
 		String viewPage = "";
-		
-		// 메세지 요청목록
+
+		// 내가 받은 메세지 요청목록
 		if(gubun.equals("requestlist")) {
-	
+			CommonExecute msgRequest = new MessageReceiveList();
+			msgRequest.execute(request);
+			
 			viewPage = "Message/request_list.jsp";
 		
 		// 메세지 요청
 		} else if(gubun.equals("messageRequest")) {
 			 CommonExecute msgRequest = new MessageRequest();
-			    msgRequest.execute(request);
-			    
-			    // AJAX 전용 응답
-			    String result_msg = (String)request.getAttribute("t_msg"); // "전송성공" 또는 "전송실패"
-			    response.setContentType("text/plain; charset=UTF-8");
-			    response.getWriter().write(result_msg.equals("전송성공") ? "SUCCESS" : "FAIL");
-			    return; // forward 하지 않고 바로 반환
-			    
+			 msgRequest.execute(request);
+
+		    String result_msg = (String)request.getAttribute("t_msg"); // "전송성공" 또는 "전송실패"
+		    response.setContentType("text/plain; charset=UTF-8");
+		    response.getWriter().write(result_msg.equals("전송성공") ? "SUCCESS" : "FAIL");
+		    return; 
+		    
 		// 내가 보낸 요청 목록
-	 		} else if(gubun.equals("myRequest")) {
-	 			viewPage = "Message/my_request.jsp";
+ 		} else if(gubun.equals("myRequest")) {
+ 			CommonExecute msgRequest = new MessageMyRequest();
+			msgRequest.execute(request);
+			 
+ 			viewPage = "Message/my_request.jsp";
 	 			
 	 			
-		// 메세지 목록
+		// 메세지 목록 > 쪽지함
 		} else if(gubun.equals("Messagelist")) {
 			viewPage = "Message/message_list.jsp";
 			
-		} 
+			
+		// 요청상태 업데이트 수락/ 거절 - receiveRequestList  11/4
+ 		} else if(gubun.equals("stateUpdate")) {
+ 			CommonExecute state = new RequestStateUpdate();
+ 			state.execute(request);
+			 
+ 			viewPage = "common_alert_view.jsp";
+ 			
+ 		// 요청 취소 - myRequest Cancel 11/4
+ 		} else if(gubun.equals("requestCancel")) {
+ 			CommonExecute state = new RequestStateCancel(); 
+ 			state.execute(request);
+			 
+ 			viewPage = "common_alert_view.jsp";
+ 		} 
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
 		rd.forward(request, response);
