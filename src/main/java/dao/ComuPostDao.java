@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,33 @@ public class ComuPostDao {
 	 Connection conn = null;
      PreparedStatement ps = null;
      ResultSet rs = null;
+    
+    // 게시글 저장
+    public int getComuNo(){
+    	int no = 0;
+		String sql="select nvl(max(post_id), 0000) as n_no\r\n"
+				+ "from ondo_comu_posts";
+		
+		try {
+			conn = DBConnection.getConnection();
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				no = rs.getInt("n_no");
+				
+				no = no + 1;
+				
+				DecimalFormat df = new DecimalFormat("N000");
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("getNoticeNo() 오류 : "+sql);
+		} finally {
+			DBConnection.closeDB(conn, ps, rs);
+		}
+		
+		return no;
+    }
      
     // 게시글 리스트
     public List<ComuPostDto> getPostList() {
@@ -77,14 +105,15 @@ public class ComuPostDao {
 
     // 게시글 삽입
     public void insertPost(ComuPostDto dto) {
-        String sql = "INSERT INTO ondo_comu_posts(post_id, m_id, title, content, create_at, update_at, hit) VALUES (ondo_comu_posts_seq.nextval, ?, ?, ?, SYSDATE, SYSDATE, 0)";
+        String sql = "INSERT INTO ondo_comu_posts(post_id, m_id, title, content, create_at, update_at, hit) VALUES (?, ?, ?, ?, SYSDATE, SYSDATE, 0)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, new String[]{"post_id"})) {
 
-            ps.setString(1, dto.getM_id());
-            ps.setString(2, dto.getTitle());
-            ps.setString(3, dto.getContent());
+        	ps.setInt(1, dto.getPost_id());
+            ps.setString(2, dto.getM_id());
+            ps.setString(3, dto.getTitle());
+            ps.setString(4, dto.getContent());
             ps.executeUpdate();
 
             // 방금 등록한 post_id 가져오기

@@ -15,6 +15,25 @@
 <title>자유게시판</title>
 <link rel="stylesheet" href="CSS/sub.css">
 <script src="https://kit.fontawesome.com/2d323a629b.js" crossorigin="anonymous"></script>
+<script type="text/javascript">
+	function goWrite(){
+		comu.t_gubun.value="write";
+		comu.method = "post";
+		comu.action = "Community";
+		comu.submit();
+	}
+	function goView(no){
+		comu.post_id.value=no;
+		comu.t_gubun.value="view";
+		comu.method = "post";
+		comu.action = "Community";
+		comu.submit();
+	}
+</script>
+<form name="comu">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="post_id">
+</form>
 </head>
 <style>
 	
@@ -120,7 +139,7 @@
     <h2 class="board_title">자유게시판</h2>
     <button type="button" 
         class="write_btn"
-        onclick="location.href='<%=request.getContextPath()%>/Community?t_gubun=write'">
+        onclick="goWrite()">
   		글쓰기
 	</button>
   </div>
@@ -145,7 +164,7 @@
       <tr>
         <td class="number_cell"><%= dto.getPost_id() %></td>
         <td class="title">
-          <a href="Community?t_gubun=view&post_id=<%= dto.getPost_id() %>">
+          <a href="javascript:goView('<%dto.getPost_id()%>')">
               <%= dto.getTitle() %>
           </a>
         </td>

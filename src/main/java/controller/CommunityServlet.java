@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import common.CommonUtil;
 import dao.ComuPostDao;
 import dao.ComuCommentDao;
 import dao.ComuAttachmentDao;
@@ -33,7 +34,7 @@ public class CommunityServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+    	request.setCharacterEncoding("utf-8");
         String gubun = request.getParameter("t_gubun");
         if (gubun == null) gubun = "list";
 
@@ -56,7 +57,8 @@ public class CommunityServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String gubun = request.getParameter("t_gubun");
+    	request.setCharacterEncoding("utf-8");
+    	String gubun = request.getParameter("t_gubun");
         if ("insert".equals(gubun)) {
             insertPost(request, response);
         } else {
@@ -120,21 +122,25 @@ public class CommunityServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         // 세션에서 로그인한 사용자 ID 가져오기
-        String m_id = (String) request.getSession().getAttribute("loginId");
+        String m_id = (String) CommonUtil.getSessionInfo(request, "id");
         if (m_id == null) {
             response.sendRedirect("login.jsp");
             return;
         }
-
+        
+        ComuPostDao dao = new ComuPostDao();
+        
+        
+        int no = dao.getComuNo();
         String title = request.getParameter("title");
         String content = request.getParameter("content");
 
         ComuPostDto dto = new ComuPostDto();
+        dto.setPost_id(no);
         dto.setM_id(m_id);
         dto.setTitle(title);
         dto.setContent(content);
 
-        ComuPostDao dao = new ComuPostDao();
         dao.insertPost(dto); // 게시글 DB 저장
 
         // 첨부파일 처리
