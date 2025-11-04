@@ -16,11 +16,12 @@ public class MemberLogin implements CommonExecute {
 		String id = request.getParameter("m_id");
 		String password = request.getParameter("m_password");
 		
-//		try {
-//			password = dao.encryptSHA256(password);
-//		} catch (NoSuchAlgorithmException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			password = dao.encryptSHA256(password);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		
 		//탈퇴회원 여부 먼저 확인
 		boolean isQuitMember = dao.isQuitMember(id);
 		
