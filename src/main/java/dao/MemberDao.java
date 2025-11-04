@@ -25,9 +25,9 @@ public class MemberDao {
 	        + "m_tel1, m_tel2, m_tel3, "
 	        + "m_email1, m_email2, "
 	        + "m_type, m_recommender, "
-	        + "m_reg,"
-	        + "m_nickname, m_image, m_tel_country_code"
-	        + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,TO_DATE(?,'YYYY-MM-DD HH24:MI:SS'),?,?,?)";
+	        + "m_reg, m_nickname, m_image, m_tel_country_code,"
+	        + "m_tagline, m_introduction"
+	        + ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,TO_DATE(?,'YYYY-MM-DD HH24:MI:SS'),?,?,?,?,?)";
 	    
 	    String sqlInterest = "insert into ondo_member_interest (member_id, item_id) values (?, ?)";
 	    try {
@@ -57,7 +57,8 @@ public class MemberDao {
 	        pstmt.setString(18, dto.getM_nickname());
 	        pstmt.setString(19, dto.getM_image());
 	        pstmt.setString(20, dto.getM_tel_country_code());
-
+	        pstmt.setString(21, dto.getM_tagline());
+	        pstmt.setString(22, dto.getM_introduction());
 	        result = pstmt.executeUpdate();
 	        pstmt.close();
 	        
