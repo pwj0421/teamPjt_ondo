@@ -1,85 +1,100 @@
 package dao;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import common.DBConnection;
 import dto.ComuPostDto;
+import common.DBConnection; // DBConnection 클래스에서 Connection 가져오기
 
 public class ComuPostDao {
-	Connection 			con = null;
-	PreparedStatement 	pstmt  = null;
-	ResultSet 			rs  = null;
-	
-    // ✅ 전체 게시글 조회
+
+	 Connection conn = null;
+     PreparedStatement ps = null;
+     ResultSet rs = null;
+     
+    // 게시글 리스트
     public List<ComuPostDto> getPostList() {
         List<ComuPostDto> list = new ArrayList<>();
-        String sql = "SELECT p.post_id, p.m_id, m.m_name, p.title, p.content, "
-                + "p.create_at, p.update_at, p.hit "
-                + "FROM ondo_comu_posts p "
-                + "JOIN ondo_member m ON p.m_id = m.m_id "
-                + "ORDER BY p.post_id DESC";
-
-        try {
-        		con = DBConnection.getConnection();
-    			pstmt  = con.prepareStatement(sql);
-    			rs  = pstmt.executeQuery();
+        String sql = "SELECT p.post_id, m.m_name, p.title, p.create_at, p.hit " +
+                "FROM ondo_comu_posts p " +
+                "JOIN ondo_member m ON p.m_id = m.m_id " +
+                "ORDER BY p.post_id DESC";
+        System.out.println(sql);
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                String m_id  = rs.getString("m_id");
-                String m_name  = rs.getString("m_name");
-                String title = rs.getString("title");
-                String content = rs.getString("content");
-                String create_at = rs.getString("create_at");
-                String update_at = rs.getString("update_at");
-                int post_id = rs.getInt("post_id");
-                int hit     = rs.getInt("hit");
-                ComuPostDto dto = new ComuPostDto(m_id, m_name, title, content, create_at, update_at, post_id, hit);
+                ComuPostDto dto = new ComuPostDto();
+                dto.setPost_id(rs.getInt("post_id"));
+               // dto.setM_id(rs.getString("m_id"));
+                dto.setTitle(rs.getString("title"));
+               // dto.setContent(rs.getString("content"));
+                dto.setCreate_at(rs.getDate("create_at"));
+                //dto.setUpdate_at(rs.getDate("update_at"));
+                dto.setHit(rs.getInt("hit"));
+                dto.setM_name(rs.getString("m_name"));
                 list.add(dto);
             }
 
-            System.out.println("✅ 조회된 게시글 수: " + list.size()); // 확인용 로그
-            
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return list;
     }
 
-    // ✅ 게시글 상세 조회
-    public ComuPostDto getPostById(int postId) {
+    // 게시글 조회
+    public ComuPostDto getPostById(int post_id) {
         ComuPostDto dto = null;
+        String sql = "SELECT p.*, m.m_name FROM ondo_comu_posts p JOIN ondo_member m ON p.m_id=m.m_id WHERE post_id=?";
 
-        String sql = "SELECT p.post_id, p.m_id, m.m_name, p.title, p.content, p.create_at, p.update_at, p.hit "
-                + "FROM ondo_comu_posts p "
-                + "JOIN ondo_member m ON p.m_id = m.m_id "
-                + "WHERE p.post_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        try {
-        	con = DBConnection.getConnection();
-			pstmt  = con.prepareStatement(sql);
-			pstmt.setInt(1, postId); 
-			rs  = pstmt.executeQuery();
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                	String m_id  = rs.getString("m_id");
-                    String m_name  = rs.getString("m_name");
-                    String title = rs.getString("title");
-                    String content = rs.getString("content");
-                    String create_at = rs.getString("create_at");
-                    String update_at = rs.getString("update_at");
-                    int post_id = rs.getInt("post_id");
-                    int hit     = rs.getInt("hit");
-                    dto = new ComuPostDto(m_id, m_name, title, content, create_at, update_at, post_id, hit);
-                }
+            ps.setInt(1, post_id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                dto = new ComuPostDto();
+                dto.setPost_id(rs.getInt("post_id"));
+                dto.setM_id(rs.getString("m_id"));
+                dto.setTitle(rs.getString("title"));
+                dto.setContent(rs.getString("content"));
+                dto.setCreate_at(rs.getDate("create_at"));
+                dto.setUpdate_at(rs.getDate("update_at"));
+                dto.setHit(rs.getInt("hit"));
+                dto.setM_name(rs.getString("m_name"));
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return dto;
+    }
+
+    // 게시글 삽입
+    public void insertPost(ComuPostDto dto) {
+        String sql = "INSERT INTO ondo_comu_posts(post_id, m_id, title, content, create_at, update_at, hit) VALUES (ondo_comu_posts_seq.nextval, ?, ?, ?, SYSDATE, SYSDATE, 0)";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, new String[]{"post_id"})) {
+
+            ps.setString(1, dto.getM_id());
+            ps.setString(2, dto.getTitle());
+            ps.setString(3, dto.getContent());
+            ps.executeUpdate();
+
+            // 방금 등록한 post_id 가져오기
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                dto.setPost_id(rs.getInt(1));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

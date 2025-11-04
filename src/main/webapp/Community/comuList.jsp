@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*, dao.ComuPostDao, dto.ComuPostDto" %>
 <%@ include file="../common_header.jsp" %>
-<%@ include file="../quickMenu.jsp" %>
+<%@ include file="../menu/quickMenu.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
