@@ -84,6 +84,29 @@
   font-size: 15px;
   font-family: "Gothic A1";
 }
+
+/* ===== 텍스트에어리어 (input과 디자인 통일) ===== */
+.form_box textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: "Gothic A1", sans-serif;
+  resize: vertical; /* 크기 조절 가능 (가로는 고정, 세로만) */
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form_box textarea:focus {
+  border-color: #5c7cfa;
+  box-shadow: 0 0 4px rgba(92, 124, 250, 0.3);
+  outline: none;
+}
+
+
 /* ===== ID 중복확인 그룹 (디자인 통일 버전) ===== */
 .id-check-group {
   display: grid;
@@ -377,8 +400,14 @@
 	function checkId() {
 	    if (checkValue(mem.m_id, "ID입력 후 검사")) return;
 	
-	    var id = mem.m_id.value;
+	    var id = mem.m_id.value.trim();
 	
+	    if(id.length < 5 || id.length > 15) {
+	    	alert("아이디는 5자 이상 15자 이하로 입력해주세요.");
+	    	mem.m_id.focus();
+	    	return;
+	    }
+	    
 	    $.ajax({
 	      type: "POST",
 	      url: "MemberCheckId",
@@ -464,18 +493,16 @@
 			return;
 		}
 		
-		// 비밀번호 정규식 검사
+		/* // 비밀번호 정규식 검사
 		var pw = mem.m_password.value;
-		var rule = /^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9!@#$%^&*]{6,20}$/;
+		var rule = /^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9!@#$%^&*]{5,20}$/;
 		if(!rule.test(pw)) {
-			alert("비밀번호는 영문+숫자 조합의 6~20자로 입력해주세요.");
+			alert("비밀번호는 영문+숫자 조합의 5~20자로 입력해주세요.");
 			mem.m_password.focus();
 			return;
-		}
+		} */
 		
-		function onlyNumber(obj) {
-			obj.value = obj.value.replace(/[^0-9]/g, '');
-		}
+		
  
 		// 2.첨부 용량 체크	
 		var file = mem.m_image;
@@ -507,6 +534,20 @@
 		mem.action="Member?t_gubun=save"
 		mem.submit();
 	}
+	
+	function onlyNumber(obj) {
+		  const val = obj.value;
+		  
+		  // 숫자만 남기기
+		  const onlyNum = val.replace(/[^0-9]/g, '');
+
+		  // 숫자 외 문자가 있었을 경우 경고
+		  if (val !== onlyNum) {
+		    alert("숫자만 입력 가능합니다.");
+		  }
+
+		  obj.value = onlyNum;
+		}
 	
 </script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -578,6 +619,10 @@
 			  <option value="NORMAL">일반 회원</option>
 			  <option value="TUTOR">튜터</option>
 			</select>
+			
+			<input name="m_tagline" placeholder="한줄로 나를 표현해 보세요.">
+			<textarea name="m_introduction" placeholder="간단한 자기소개를 작성해주세요."></textarea>
+			
 		    <div class="nav_buttons">
 		      <button type="button" onclick="changeStep(2)" style="margin-left:180px;">다음</button>
 		    </div>
@@ -703,7 +748,8 @@ function changeStep(to) {
 
   const fromBox = document.getElementById("step" + currentStep);
   const toBox = document.getElementById("step" + to);
-
+//✅ 현재단계를 미리 갱신
+  currentStep = to;
   // fade out
   fromBox.style.opacity = "0";
   fromBox.style.transform = "translateY(-20px)";
@@ -721,7 +767,7 @@ function changeStep(to) {
     document.querySelectorAll(".step").forEach(s => s.classList.remove("active"));
     document.querySelector(".step:nth-child(" + to + ")").classList.add("active");
 
-    currentStep = to;
+    
  // ✅ 2단계로 이동할 때 자동 적용
     if (to === 2) setTimeout(applyAddressMode, 100);
  
