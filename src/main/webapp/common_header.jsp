@@ -26,6 +26,11 @@
 		comHeader.action=svl;
 		comHeader.submit();
 	}
+	function confirmLogout() {		
+		if (confirm("로그아웃 하시겠습니까?")) {			
+			goPage('Member', 'logout');		
+			}	
+		}
 	
 	function goSearchHeader(svl, page){
 		mainSearch.t_gubun.value=page;
@@ -80,8 +85,8 @@
     <!-- 로그인 후 -->
     <c:if test="${not empty sessionId}">
         <span class="sessionName">${sessionName}님</span>
-        <button type="button" onclick="goPage('Member','myInfo')">MYINFO</button>
-        <button type="button" onclick="goPage('Member','logout')">LOGOUT</button>
+        <button onclick="goPage('Member','myInfo')">MYINFO</button>
+        <button onclick="confirmLogout()">LOGOUT</button>
     </c:if>
     <button>LANG</button>
   </div>

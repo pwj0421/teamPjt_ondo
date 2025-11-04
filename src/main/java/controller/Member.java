@@ -9,16 +9,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.member.CountryList;
 import command.member.InterestList;
 import command.member.MatchInfoInterestUpdate;
 import command.member.MatchInfoUpdate;
 import command.member.MatchInfoView;
+import command.member.MemberDeleteAccount;
+import command.member.MemberInfo;
 import command.member.MemberLogin;
 import command.member.MemberLogout;
 import command.member.MemberNickCheck;
 import command.member.MemberSave;
+import command.member.MemberUpdate;
 import command.member.PurposeList;
 import common.CommonExecute;
+import common.CommonUtil;
 import dao.MyInfoUpdateDao;
 
 /**
@@ -51,12 +56,14 @@ public class Member extends HttpServlet {
 		
 		if(gubun.equals("login")) {
 			viewPage = "member/member_login.jsp";
-		//가입목적 리스트	
+		//가입목적, 관심사, 국가 리스트	
 		}else if(gubun.equals("join")) {
 			CommonExecute purpose = new PurposeList();
 			CommonExecute interest = new InterestList();
+			CommonExecute country = new CountryList();
 			purpose.execute(request);
 			interest.execute(request);
+			country.execute(request);
 			viewPage = "member/member_join.jsp";
 		//회원가입
 		}else if(gubun.equals("save")) {
@@ -74,8 +81,30 @@ public class Member extends HttpServlet {
 			viewPage ="common_alert.jsp";
 			
 		}else if(gubun.equals("myInfo")) {
+			if(CommonUtil.getSessionInfo(request, "id") == null) {
+				request.setAttribute("t_msg", "세션 정보가 만료되었습니다. 다시 로그인 해주세요.");
+				request.setAttribute("t_url", "Member");
+				viewPage="common_alert.jsp";
+			} else {
+				CommonExecute member = new MemberInfo();
+				member.execute(request);
+				CommonExecute country = new CountryList();
+				country.execute(request);
+				CommonExecute purpose = new PurposeList();
+				purpose.execute(request);
+				
+				viewPage ="member/member_myInfo.jsp";
+			}
 			
-			viewPage ="member/member_myInfo.jsp";
+		}else if(gubun.equals("memberUpdate")) {
+			CommonExecute member = new MemberUpdate();
+			member.execute(request);
+			viewPage = "common_alert.jsp";
+			
+		} else if(gubun.equals("memberDelete")) {
+			CommonExecute member = new MemberDeleteAccount();
+			member.execute(request);
+			viewPage = "common_alert.jsp";
 			
 		}else if(gubun.equals("matchInfo")) {
 			 CommonExecute match = new MatchInfoView();
