@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="dao.ComuPostDao, dto.ComuPostDto, dao.ComuCommentDao, dto.ComuCommentDto, java.util.List" %>
 <%@ include file="../common_header.jsp" %>
-<%@ include file="../quickMenu.jsp" %>
+<%@ include file="../menu/quickMenu.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>

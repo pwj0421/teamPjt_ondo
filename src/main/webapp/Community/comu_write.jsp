@@ -17,7 +17,8 @@
   <div class="write_header">자유게시판 글쓰기</div>
 
   <!-- 글쓰기 폼 -->
-  <form class="write_form" action="comu_write_process.jsp" method="post" enctype="multipart/form-data">
+  <form class="write_form" action="<%= request.getContextPath() %>/CommunityWrite" method="post" enctype="multipart/form-data">
+
     <label for="title">제목</label>
     <input type="text" name="title" id="title" required>
 
