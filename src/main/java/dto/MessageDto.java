@@ -1,34 +1,47 @@
 package dto;
 
 public class MessageDto {
-	private String senderId, receiverId, greetingMsg, sendDate, prifileImg, nickname, tagline;
-	
+
+	private String request_id, sender_id, receiver_id, greetingMsg, request_date, gender,age,country,nickname,profileImg;
+
 	//receiveRequestList  mypage > request_list
-	public MessageDto(String senderId, String receiverId, String greetingMsg, String sendDate, String prifileImg,
-			String nickname, String tagline) {
-		this.senderId = senderId;
-		this.receiverId = receiverId;
+	public MessageDto(String request_id, String sender_id, String receiver_id, String greetingMsg, String request_date,
+			String gender, String age, String country, String nickname, String profileImg) {
+		super();
+		this.request_id = request_id;
+		this.sender_id = sender_id;
+		this.receiver_id = receiver_id;
 		this.greetingMsg = greetingMsg;
-		this.sendDate = sendDate;
-		this.prifileImg = prifileImg;
+		this.request_date = request_date;
+		this.gender = gender;
+		this.age = age;
+		this.country = country;
 		this.nickname = nickname;
-		this.tagline = tagline;
+		this.profileImg = profileImg;
 	}
 
-	public String getSenderId() {
-		return senderId;
+	public String getRequest_id() {
+		return request_id;
 	}
 
-	public void setSenderId(String senderId) {
-		this.senderId = senderId;
+	public void setRequest_id(String request_id) {
+		this.request_id = request_id;
 	}
 
-	public String getReceiverId() {
-		return receiverId;
+	public String getSender_id() {
+		return sender_id;
 	}
 
-	public void setReceiverId(String receiverId) {
-		this.receiverId = receiverId;
+	public void setSender_id(String sender_id) {
+		this.sender_id = sender_id;
+	}
+
+	public String getReceiver_id() {
+		return receiver_id;
+	}
+
+	public void setReceiver_id(String receiver_id) {
+		this.receiver_id = receiver_id;
 	}
 
 	public String getGreetingMsg() {
@@ -39,20 +52,36 @@ public class MessageDto {
 		this.greetingMsg = greetingMsg;
 	}
 
-	public String getSendDate() {
-		return sendDate;
+	public String getRequest_date() {
+		return request_date;
 	}
 
-	public void setSendDate(String sendDate) {
-		this.sendDate = sendDate;
+	public void setRequest_date(String request_date) {
+		this.request_date = request_date;
 	}
 
-	public String getPrifileImg() {
-		return prifileImg;
+	public String getGender() {
+		return gender;
 	}
 
-	public void setPrifileImg(String prifileImg) {
-		this.prifileImg = prifileImg;
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getAge() {
+		return age;
+	}
+
+	public void setAge(String age) {
+		this.age = age;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 	public String getNickname() {
@@ -63,16 +92,15 @@ public class MessageDto {
 		this.nickname = nickname;
 	}
 
-	public String getTagline() {
-		return tagline;
+	public String getProfileImg() {
+		return profileImg;
 	}
 
-	public void setTagline(String tagline) {
-		this.tagline = tagline;
+	public void setProfileImg(String profileImg) {
+		this.profileImg = profileImg;
 	}
-	
-	
-	
+
+
 	
 	
 }
