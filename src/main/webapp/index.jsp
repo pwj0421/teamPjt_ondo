@@ -54,6 +54,11 @@
 			searchTxt = document.getElementById("indexSearchTxt").value;
 		}
 		
+		if(searchTxt == ""){
+			alert("검색어를 입력해주세요.");
+			return;
+		}
+		
 		indexSearch.indexHeaderSearch.value=searchTxt;
 		indexSearch.menu="list";
 		indexSearch.method="post";
