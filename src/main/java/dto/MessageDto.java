@@ -1,49 +1,47 @@
 package dto;
 
 public class MessageDto {
-	private String requestNo, senderId, receiverId, greetingMsg, sendDate, 
-					profileImg, r_nickname, r_tagline,
-					r_gender, r_country, r_age;
-	
-	
-	
+
+	private String request_id, sender_id, receiver_id, greetingMsg, request_date, gender,age,country,nickname,profileImg;
+
 	//receiveRequestList  mypage > request_list
-	public MessageDto(String requestNo, String senderId, String receiverId, String greetingMsg, String sendDate, String profileImg,
-			String r_nickname,String r_gender, String r_country, String r_age) {
-		this.requestNo = requestNo;
-		this.senderId = senderId;
-		this.receiverId = receiverId;
+	public MessageDto(String request_id, String sender_id, String receiver_id, String greetingMsg, String request_date,
+			String gender, String age, String country, String nickname, String profileImg) {
+		super();
+		this.request_id = request_id;
+		this.sender_id = sender_id;
+		this.receiver_id = receiver_id;
 		this.greetingMsg = greetingMsg;
-		this.sendDate = sendDate;
+		this.request_date = request_date;
+		this.gender = gender;
+		this.age = age;
+		this.country = country;
+		this.nickname = nickname;
 		this.profileImg = profileImg;
-		this.r_nickname = r_nickname;
-		this.r_gender = r_gender;
-		this.r_country = r_country;
-		this.r_age = r_age;
 	}
 
-	public String getRequestNo() {
-		return requestNo;
+	public String getRequest_id() {
+		return request_id;
 	}
 
-	public void setRequestNo(String requestNo) {
-		this.requestNo = requestNo;
+	public void setRequest_id(String request_id) {
+		this.request_id = request_id;
 	}
 
-	public String getSenderId() {
-		return senderId;
+	public String getSender_id() {
+		return sender_id;
 	}
 
-	public void setSenderId(String senderId) {
-		this.senderId = senderId;
+	public void setSender_id(String sender_id) {
+		this.sender_id = sender_id;
 	}
 
-	public String getReceiverId() {
-		return receiverId;
+	public String getReceiver_id() {
+		return receiver_id;
 	}
 
-	public void setReceiverId(String receiverId) {
-		this.receiverId = receiverId;
+	public void setReceiver_id(String receiver_id) {
+		this.receiver_id = receiver_id;
 	}
 
 	public String getGreetingMsg() {
@@ -54,14 +52,45 @@ public class MessageDto {
 		this.greetingMsg = greetingMsg;
 	}
 
-	public String getSendDate() {
-		return sendDate;
+	public String getRequest_date() {
+		return request_date;
 	}
 
-	public void setSendDate(String sendDate) {
-		this.sendDate = sendDate;
+	public void setRequest_date(String request_date) {
+		this.request_date = request_date;
 	}
 
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getAge() {
+		return age;
+	}
+
+	public void setAge(String age) {
+		this.age = age;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 
 	public String getProfileImg() {
 		return profileImg;
@@ -71,47 +100,7 @@ public class MessageDto {
 		this.profileImg = profileImg;
 	}
 
-	public String getR_nickname() {
-		return r_nickname;
-	}
 
-	public void setR_nickname(String r_nickname) {
-		this.r_nickname = r_nickname;
-	}
-
-	public String getR_tagline() {
-		return r_tagline;
-	}
-
-	public void setR_tagline(String r_tagline) {
-		this.r_tagline = r_tagline;
-	}
-
-	public String getR_gender() {
-		return r_gender;
-	}
-
-	public void setR_gender(String r_gender) {
-		this.r_gender = r_gender;
-	}
-
-	public String getR_country() {
-		return r_country;
-	}
-
-	public void setR_country(String r_country) {
-		this.r_country = r_country;
-	}
-
-	public String getR_age() {
-		return r_age;
-	}
-
-	public void setR_age(String r_age) {
-		this.r_age = r_age;
-		
-	}
-	
 	
 	
 }

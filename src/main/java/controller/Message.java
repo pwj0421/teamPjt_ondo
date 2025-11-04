@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import command.message.MessageReceiveList;
 import command.message.MessageRequest;
+import command.message.RequestStateUpdate;
 import common.CommonExecute;
 
 /**
@@ -37,35 +38,44 @@ public class Message extends HttpServlet {
 		
 		if(gubun == null) gubun = "requestlist";
 		String viewPage = "";
-		
-		//받은 메세지 요청목록
+
+		// 내가 받은 메세지 요청목록
 		if(gubun.equals("requestlist")) {
-			 CommonExecute msgRequest = new MessageReceiveList();
-			 msgRequest.execute(request);
-			 
-			 viewPage = "Message/request_list.jsp";
+			CommonExecute msgRequest = new MessageReceiveList();
+			msgRequest.execute(request);
+			
+			viewPage = "Message/request_list.jsp";
 		
 		// 메세지 요청
 		} else if(gubun.equals("messageRequest")) {
-			CommonExecute msgRequest = new MessageRequest();
-			msgRequest.execute(request);
-			    
-			// AJAX 전용 응답
-			String result_msg = (String)request.getAttribute("t_msg"); // "전송성공" 또는 "전송실패"
-			response.setContentType("text/plain; charset=UTF-8");
-			response.getWriter().write(result_msg.equals("전송성공") ? "SUCCESS" : "FAIL");
-			return; // forward 하지 않고 바로 반환
-			    
-		// 내가 보낸 요청 목록
-	 	} else if(gubun.equals("myRequest")) {
-	 		viewPage = "Message/my_request.jsp";
-	 			
+			 CommonExecute msgRequest = new MessageRequest();
+			 msgRequest.execute(request);
 
-		// 메세지 목록
+		    String result_msg = (String)request.getAttribute("t_msg"); // "전송성공" 또는 "전송실패"
+		    response.setContentType("text/plain; charset=UTF-8");
+		    response.getWriter().write(result_msg.equals("전송성공") ? "SUCCESS" : "FAIL");
+		    return; 
+		    
+		// 내가 보낸 요청 목록
+ 		} else if(gubun.equals("myRequest")) {
+ 			CommonExecute msgRequest = new MessageMyRequest();
+			msgRequest.execute(request);
+			 
+ 			viewPage = "Message/my_request.jsp";
+	 			
+	 			
+		// 메세지 목록 > 쪽지함
 		} else if(gubun.equals("Messagelist")) {
 			viewPage = "Message/message_list.jsp";
 			
-		} 
+			
+		// 내가 보낸 요청 목록
+ 		} else if(gubun.equals("stateUpdate")) {
+ 			CommonExecute state = new RequestStateUpdate();
+ 			state.execute(request);
+			 
+ 			viewPage = "Message/my_request.jsp";
+ 		} 
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
 		rd.forward(request, response);
