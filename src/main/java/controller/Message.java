@@ -8,7 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import command.message.MessageMyRequest;
 import command.message.MessageReceiveList;
 import command.message.MessageRequest;
 import command.message.RequestStateUpdate;
