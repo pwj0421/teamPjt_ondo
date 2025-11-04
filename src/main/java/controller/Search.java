@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import command.message.MessageReceiveList;
+import command.search.SerachTotalList;
 import common.CommonExecute;
 
 /**
@@ -38,9 +38,8 @@ public class Search extends HttpServlet {
 		String viewPage = "";
 		
 		if(gubun.equals("list")) {
-			// 쓰실 거 같은데 다른데서 긁어오시는 거 귀찮으시니까 주석으로 해둘게요 수정해서 사용하세요!!!
-			// CommonExecute msgRequest = new MessageReceiveList();
-			// msgRequest.execute(request);
+			CommonExecute search = new SerachTotalList();
+			search.execute(request);
 			 
 			 viewPage = "search/search_list.jsp";
 		

@@ -5,6 +5,15 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<script type="text/javascript">
+	function goNotiView(no){
+		noti.t_gubun.value="view";
+		noti.n_no.value=no;
+		noti.method="post";
+		noti.action="Notice";
+		noti.submit();
+	}
+</script>
 <title>검색 결과</title>
 <style>
 /* 전체 레이아웃 */
@@ -128,6 +137,11 @@
 </head>
 <body>
 
+<form name="noti">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="n_no">
+</form>
+
 <div class="sr_main">
   <!-- 네비게이션 메뉴 -->
   <div class="sr_mypage_nav">
@@ -141,7 +155,7 @@
 
   <!-- 오른쪽 콘텐츠 -->
   <div class="sr_container">
-    <h3>검색어 "<strong>여행</strong>"로 검색된 내용입니다.</h3>
+    <h3>검색어 "<strong>${headerSearchTxt }</strong>"로 검색된 내용입니다.</h3>
 
     <!-- 자유게시판 -->
     <div class="sr_section-title" id="sr_board_free">자유게시판</div>
@@ -169,15 +183,37 @@
     <!-- 공지사항 -->
     <div class="sr_section-title" id="sr_board_notice">공지사항</div>
     <div class="sr_post-list">
-      <div class="sr_post-item">
-        <div class="sr_post-left">
-          <h5>11월 단체 <strong>여행</strong> 행사 안내</h5>
-          <p>회원분들을 위한 단체 <strong>여행</strong> 이벤트를 진행합니다!</p>
-        </div>
-        <div class="sr_post-right">
-          <span>관리자</span> | <span>2025-10-20</span>
-        </div>
-      </div>
+    <c:forEach items="${notiDtos }" var="dto">
+     <a href="javascript:goNotiView('${dto.getNo() }')">
+	     <div class="sr_post-item">
+	        <div class="sr_post-left">
+	        <%-- 1) 제목/검색어를 먼저 이스케이프 --%>
+			<c:set var="titleEsc" value="${fn:escapeXml(dto.getTitle())}" />
+			<c:set var="qEsc"     value="${fn:escapeXml(headerSearchTxt)}" />
+			
+			<%-- 2) 검색어가 있을 때만 <strong>으로 감싼 치환 문자열 생성 --%>
+			<c:choose>
+			  <c:when test="${not empty qEsc}">
+			    <c:set var="wrapped"><strong>${qEsc}</strong></c:set>
+			    <c:set var="highlighted" value="${fn:replace(titleEsc, qEsc, wrapped)}" />
+			    <%-- 3) 치환 결과에는 <strong> 태그가 있으니 escapeXml=false로 출력 --%>
+			    <h5><c:out value="${highlighted}" escapeXml="false" /></h5>
+			  </c:when>
+			  <c:otherwise>
+			    <c:out value="${titleEsc}" />
+			  </c:otherwise>
+			</c:choose>
+	        
+	          <!-- <h5>${dto.getTitle() }</h5> -->
+	          <p>${dto.getContent() }</p>
+	        </div>
+	        <div class="sr_post-right">
+	          <span>${dto.getReg_name() }</span> | <span>${dto.getReg_date()}</span>
+	        </div>
+	      </div>
+      </a>
+    </c:forEach>
+      
     </div>
 
     <!-- 사진게시판 -->
