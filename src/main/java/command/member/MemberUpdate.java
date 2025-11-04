@@ -93,7 +93,8 @@ public class MemberUpdate implements CommonExecute {
 		
 		String msg = result > 0 ? "회원정보가 성공적으로 수정되었습니다." : "회원정보 수정 실패! 관리자에게 문의하세요.";
 		request.setAttribute("t_msg", msg);
-		request.setAttribute("t_url", "Member?t_gubun=myInfo");
+		request.setAttribute("t_url", "Member");
+		request.setAttribute("t_gubun", "myInfo");
 	}
 
 }
