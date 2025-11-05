@@ -489,6 +489,7 @@
 	      }
 	    });
 	  }
+
 	// ✅ 닉네임 중복검사
 	let nickOk = false;
 
@@ -518,7 +519,9 @@
 	            console.error(err);
 	            alert("닉네임 중복 검사 중 오류가 발생했습니다.");
 	        });
+	    
 	}
+	
 
 	
 	function validateStep(step) {
@@ -632,7 +635,30 @@
 
 		  obj.value = onlyNum;
 		}
-	
+	// ✅ DOM이 다 로드된 뒤 실행되도록 감싸기
+	document.addEventListener("DOMContentLoaded", function() {
+
+	  // ID 입력 시 결과 초기화
+	  const idInput = document.getElementById("c_id");
+	  if (idInput) {
+	      idInput.addEventListener("input", function() {
+	          mem.m_id_result.value = "";
+	          mem.m_id_result.style.color = "#555";
+	      });
+	  }
+
+	  // 닉네임 입력 시 결과 초기화
+	  const nickInput = document.getElementById("m_nickName");
+	  if (nickInput) {
+	      nickInput.addEventListener("input", function() {
+	          document.getElementById("nickCheckResult").value = "";
+	          document.getElementById("nickCheckResult").style.color = "#555";
+	          nickOk = false;
+	      });
+	  }
+
+	});
+
 </script>
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
