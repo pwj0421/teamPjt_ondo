@@ -17,7 +17,7 @@ import javax.servlet.http.Part;
 import common.CommonUtil;
 import dao.ComuPostDao;
 import dao.ComuCommentDao;
-import dao.ComuAttachmentDao;
+
 import dto.ComuPostDto;
 import dto.ComuCommentDto;
 import dto.ComuAttachmentDto;
@@ -65,7 +65,9 @@ public class CommunityServlet extends HttpServlet {
             deletePost(request, response);
         }  else if ("update".equals(gubun)) {
             updatePost(request, response);
-        } else {
+        }  else if ("updateProc".equals(gubun)) {
+            updatePostProc(request, response);
+        }  else {
             doGet(request, response);
         }
     }
@@ -89,6 +91,7 @@ public class CommunityServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String postIdParam = request.getParameter("post_id");
+        
         if (postIdParam == null) {
             response.sendRedirect("Community?t_gubun=list");
             return;
@@ -96,30 +99,26 @@ public class CommunityServlet extends HttpServlet {
 
         int post_id = Integer.parseInt(postIdParam);
         ComuPostDao dao = new ComuPostDao();
-        ComuPostDto post = dao.getPostById(post_id);
-
-        request.setAttribute("post", post);
+       
         
+            dao.increaseHit(post_id);
+           
+        
+        ComuPostDto post = dao.getPostById(post_id);
+       
         if (post == null) {
             response.sendRedirect("Community?t_gubun=list");
             return;
         }
+        
+        request.setAttribute("post", post);
 
-        // 댓글
-       ComuCommentDao cDao = new ComuCommentDao();
-       List<ComuCommentDto> commentList = cDao.getCommentsByPostId(post_id);
-
-        // 첨부파일
-//        ComuAttachmentDao aDao = new ComuAttachmentDao();
-//       List<ComuAttachmentDto> attachments = aDao.getAttachmentsByPostId(post_id);
-
-//        request.setAttribute("post", post);
-//        request.setAttribute("commentList", commentList);
-//        request.setAttribute("attachments", attachments);
 
        	  RequestDispatcher rd = request.getRequestDispatcher("Community/comu_view.jsp");
           rd.forward(request, response);
+    	
     	}
+    
 
     // 게시글 작성 처리
     private void insertPost(HttpServletRequest request, HttpServletResponse response)
@@ -149,25 +148,7 @@ public class CommunityServlet extends HttpServlet {
 
         dao.insertPost(dto); // 게시글 DB 저장
 
-        // 첨부파일 처리
-        List<Part> parts = (List<Part>) request.getParts();
-        String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) uploadDir.mkdir();
-
-        ComuAttachmentDao aDao = new ComuAttachmentDao();
-        for (Part part : parts) {
-            if (part.getName().equals("file") && part.getSize() > 0) {
-                String fileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
-                part.write(uploadPath + File.separator + fileName);
-
-                ComuAttachmentDto aDto = new ComuAttachmentDto();
-                aDto.setPost_id(dto.getPost_id()); // 방금 등록된 게시글 ID
-                aDto.setFile_path(UPLOAD_DIR + "/" + fileName);
-                aDto.setFile_type(fileName.substring(fileName.lastIndexOf(".") + 1));
-                aDao.insertAttachment(aDto);
-            }
-        }
+        
 
         RequestDispatcher rd = request.getRequestDispatcher("Community/comu_list.jsp");
         rd.forward(request, response);
@@ -199,7 +180,7 @@ public class CommunityServlet extends HttpServlet {
             }
     }
         
-        //게시글 업데이트
+        //게시글 업데이트 열기
         private void updatePost(HttpServletRequest request, HttpServletResponse response)
                 throws ServletException, IOException {
             String idParam = request.getParameter("post_id");
@@ -217,5 +198,24 @@ public class CommunityServlet extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("Community/comu_update.jsp");
             rd.forward(request, response);
         }
+        
+        private void updatePostProc(HttpServletRequest request, HttpServletResponse response)
+                throws ServletException, IOException {
+
+            request.setCharacterEncoding("UTF-8");
+
+            int postId = Integer.parseInt(request.getParameter("post_id"));
+            String title = request.getParameter("title");
+            String content = request.getParameter("content");
+
+            ComuPostDao dao = new ComuPostDao();
+            boolean result = dao.updatePost(postId, title, content); // ✅ DB 실제 수정 호출
+
+            System.out.println("update result: " + result); // 로그 찍기 (true/false 확인)
+
+            response.sendRedirect("Community?t_gubun=view&post_id=" + postId);
+        }
+
+
 
 }

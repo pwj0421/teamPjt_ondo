@@ -77,7 +77,11 @@ public class ComuPostDao {
     // 게시글 조회
     public ComuPostDto getPostById(int post_id) {
         ComuPostDto dto = null;
-        String sql = "SELECT p.*, m.m_name FROM ondo_comu_posts p JOIN ondo_member m ON p.m_id=m.m_id WHERE post_id=?";
+        String sql = "SELECT p.post_id, p.m_id, p.title, p.content, p.create_at, \r\n"
+        		+ " p.hit, m.m_name \r\n"
+        		+ "FROM ondo_comu_posts p JOIN ondo_member m ON p.m_id = m.m_id \r\n"
+        		+ "WHERE post_id = ?";
+
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -91,18 +95,31 @@ public class ComuPostDao {
                 dto.setTitle(rs.getString("title"));
                 dto.setContent(rs.getString("content"));
                 dto.setCreate_at(rs.getDate("create_at"));
-                dto.setUpdate_at(rs.getDate("update_at"));
                 dto.setHit(rs.getInt("hit"));
                 dto.setM_name(rs.getString("m_name"));
             }
-
+           
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return dto;
     }
+    
+    //조회수 증가
+    public void increaseHit(int postId) {
+        String sql = "UPDATE ondo_comu_posts SET hit = hit + 1 WHERE post_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, postId);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    
+    
     // 게시글 삽입
     public void insertPost(ComuPostDto dto) {
         String sql = "INSERT INTO ondo_comu_posts(post_id, m_id, title, content, create_at, update_at, hit) VALUES (?, ?, ?, ?, SYSDATE, SYSDATE, 0)";
@@ -149,6 +166,7 @@ public class ComuPostDao {
         boolean result = false;
         String sql = "UPDATE ondo_comu_posts SET title = ?, content = ?, update_at = SYSDATE WHERE post_id = ?";
 
+
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -164,5 +182,7 @@ public class ComuPostDao {
         }
         return result;
     }
+    
+   
 
 }

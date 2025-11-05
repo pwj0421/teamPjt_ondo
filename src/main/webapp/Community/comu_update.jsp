@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/sub.css">
   <script type="text/javascript">
   	function goUpdate(){
-  		comu.t_gubun.value = "update";
+  		comu.t_gubun.value = "updateProc";
   		comu.method = "post";
   		comu.action = "Community";
   		comu.submit();
@@ -49,11 +49,7 @@
     <textarea name="content" id="content" required><%= post.getContent() %></textarea>
 
     <!-- 파일 첨부 영역 -->
-    <div class="file_upload_group">
-      <label for="file">파일 변경</label>
-      <input type="file" name="file" id="file">
-      <p class="file_info">(첨부파일을 새로 선택하면 기존 파일은 대체됩니다.)</p>
-    </div>
+ 
 
     <div class="write_btn_group">
       <button type="button" class="submit_btn" onclick="goUpdate()">수정 완료</button>

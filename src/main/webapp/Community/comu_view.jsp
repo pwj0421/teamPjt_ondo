@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, dao.ComuAttachmentDao, dto.ComuAttachmentDto, dao.ComuPostDao, dto.ComuPostDto" %>
+<%@ page import="java.util.List, dto.ComuAttachmentDto, dao.ComuPostDao, dto.ComuPostDto" %>
 <%@ include file="../common_header.jsp" %>	
 <%@ include file="../menu/quickMenu.jsp" %>
 <%
@@ -38,16 +38,12 @@
 
 <!-- 게시글 내용 -->
 <div class="view_content">
-  <p>
-    ${post.getContent()}
-  </p>
-
-  <div class="attached_images">
-
-       
-   
-  </div>
+  <label for="content" class="content_label">본문 내용</label>
+  <textarea id="content" class="view_textarea" readonly>
+${post.getContent()}
+  </textarea>
 </div>
+
 
 
 <!-- 첨부파일 다운로드 버튼 -->
@@ -76,6 +72,12 @@
 		comu.action = "Community";
 		comu.submit();
 	}
+  function goList(){
+	  	comu.t_gubun.value="list";
+		comu.method = "post";
+		comu.action = "Community";
+		comu.submit();
+  }
 </script>
 <form name="comu">
 	<input type="hidden" name="t_gubun">
@@ -84,7 +86,7 @@
 
   <!-- 하단 버튼 -->
   <div class="view_buttons">
-    <button class="back_btn" onclick="">목록으로</button>
+    <button class="back_btn" onclick="goList()">목록으로</button>
     <button class="edit_btn" onclick="goUpdate()">수정</button>
     <button class="delete_btn" onclick="goDelete()">삭제</button>
   </div>
