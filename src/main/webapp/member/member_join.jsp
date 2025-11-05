@@ -110,7 +110,7 @@
 /* ===== ID 중복확인 그룹 (디자인 통일 버전) ===== */
 .id-check-group {
   display: grid;
-  grid-template-columns: 1fr 90px 0px; /* ← 버튼·결과칸 폭 고정 */
+  grid-template-columns: 1fr 90px 60px; /* ← 버튼·결과칸 폭 고정 */
   gap: 10px;
  
 }
@@ -444,7 +444,7 @@
 </style>
 </head>
 <script type="text/javascript">
-
+	
 	
 	function checkId() {
 	    if (checkValue(mem.m_id, "ID입력 후 검사")) return;
@@ -489,6 +489,38 @@
 	      }
 	    });
 	  }
+	// ✅ 닉네임 중복검사
+	let nickOk = false;
+
+	function checkNick() {
+	    const nick = document.getElementById("m_nickName").value.trim();
+	    const resultInput = document.getElementById("nickCheckResult");
+
+	    if (!nick) {
+	        alert("닉네임을 입력해주세요.");
+	        return;
+	    }
+
+	    fetch("Member?t_gubun=checkNick&nick=" + encodeURIComponent(nick))
+	        .then(response => response.json())
+	        .then(data => {
+	            if (data.result === "exist") {
+	                resultInput.value = "사용중";
+	                resultInput.style.color = "red";
+	                nickOk = false;
+	            } else {
+	                resultInput.value = "사용가능";
+	                resultInput.style.color = "green";
+	                nickOk = true;
+	            }
+	        })
+	        .catch(err => {
+	            console.error(err);
+	            alert("닉네임 중복 검사 중 오류가 발생했습니다.");
+	        });
+	}
+
+	
 	function validateStep(step) {
 		if(step == 1) {
 			if(checkValue(mem.m_country, "국적을 선택해주세요!")) return false;
@@ -497,7 +529,10 @@
 			if(checkLength(mem.m_id, 5, 15, "아이디는 최소 5자 이상 15자 이하 입니다!")) return false;
 			
 			if(checkValue(mem.m_nickname, "사용할 닉네임을 입력해주세요")) return false;
-			
+			if (!nickOk) {
+			    alert("닉네임 중복 확인을 완료해주세요!");
+			    return false;
+			}
 			if(checkValue(mem.m_password, "비밀번호를 입력하세요!")) return false;
 			if(checkLength(mem.m_password, 5, 20, "비밀번호는 최소 5자 이상 20자 이하 입니다!")) return false;
 			if(checkValue(mem.m_password_confirm, "비밀번호를 재입력 하세요.")) return false;
@@ -620,7 +655,7 @@
 		    <h2>기본 정보 입력</h2>
 		    <div class="profile_upload">
 		      <label for="profileImgInput">
-		        <img id="profileImgPreview" src="../image/basic_profile.png" alt="프로필 이미지">
+		        <img id="profileImgPreview" src="attach/member_profile/basic_profile.png" alt="프로필 이미지">
 		      </label>
 		      <input type="file" name="m_image" id="profileImgInput" accept="image/*">
 		    </div>
