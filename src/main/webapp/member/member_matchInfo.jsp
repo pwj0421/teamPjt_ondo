@@ -60,6 +60,7 @@ body {
 
 <script>
 	function goUpdateMatchInfo() {
+		if(checkValue(matchInfoUpdate.m_nickName, "닉네임을 입력해주세요!")) return;
 		if(matchInfoUpdate.m_nickName.value != matchInfoUpdate.ori_nickname.value) {
 			if(matchInfoUpdate.checkNickName.value == "") {
 				alert("닉네임 중복 확인이 필요합니다.");
@@ -71,6 +72,8 @@ body {
 		        return;
 		    }
 		}
+		if(checkLength(matchInfoUpdate.m_tagline, 0, 60, "한 줄 소개는 60자까지 입니다.")) return;
+		if(checkLength(matchInfoUpdate.m_introduction, 0, 300, "자기소개는 300자까지 입니다.")) return;
 		
 	    const form = document.forms['matchInfoUpdate'];
 		matchInfoUpdate.t_gubun.value = "matchInfoUpdate";

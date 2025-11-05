@@ -25,17 +25,25 @@ public class Match extends HttpServlet {
         String viewPage = "";
 
         if (gubun.equals("main")) {
+        	// 나의 정보
             CommonExecute myInfo = new MatchMyInfo();
             myInfo.execute(request);
 
+            // 관심사 목록
             CommonExecute interestList = new command.member.InterestList();
             interestList.execute(request);
 
-            CommonExecute myInterest = new command.match.InterestList();
-            myInterest.execute(request);
+            // 나의 관심사
+            CommonExecute Interests = new command.match.InterestList();
+            Interests.execute(request);
 
+            // 탭
+            String tab = request.getParameter("t_tab");
+            if(tab == null) tab = "NORMAL";
+            request.setAttribute("t_tab", tab);
+            
             viewPage = "match/match_main.jsp";
-
+            
         } else if (gubun.equals("list")) {
             // 나의 정보
             CommonExecute myInfo = new MatchMyInfo();
@@ -49,13 +57,18 @@ public class Match extends HttpServlet {
             CommonExecute match = new MatchList();
             match.execute(request);
 
-         // 이미 메시지를 보낸 대상 ID 리스트 DB에서 가져오기
+            // 이미 메시지를 보낸 대상 ID 리스트 DB에서 가져오기
             String senderId = CommonUtil.getSessionInfo(request, "id");
             List<String> sentMessageList = messageDao.getSentMessageReceiverIds(senderId);
             request.setAttribute("sentMessageList", sentMessageList);
 
-            System.out.println(sentMessageList.size());
             viewPage = "match/match_main.jsp";
+            
+        } else if(gubun.equals("view")) {
+        	CommonExecute match = new MatchView();
+            match.execute(request);
+        	
+        	viewPage = "match/match_view.jsp";
         }
 
         RequestDispatcher rd = request.getRequestDispatcher(viewPage);
