@@ -61,7 +61,9 @@ public class CommunityServlet extends HttpServlet {
     	String gubun = request.getParameter("t_gubun");
         if ("insert".equals(gubun)) {
             insertPost(request, response);
-        } else {
+        } else if ("delete".equals(gubun)) {   // ✅ 게시글 삭제 추가
+            deletePost(request, response);
+        }else {
             doGet(request, response);
         }
     }
@@ -167,5 +169,31 @@ public class CommunityServlet extends HttpServlet {
 
         RequestDispatcher rd = request.getRequestDispatcher("Community/comu_list.jsp");
         rd.forward(request, response);
+    }
+        
+        // ✅ 게시글 삭제 처리 (POST 방식)
+        private void deletePost(HttpServletRequest request, HttpServletResponse response)
+                throws ServletException, IOException {
+
+            request.setCharacterEncoding("UTF-8");
+
+            String postIdParam = request.getParameter("post_id");
+            if (postIdParam == null || postIdParam.isEmpty()) {
+                response.sendRedirect("Community?t_gubun=list");
+                return;
+            }
+
+            int post_id = Integer.parseInt(postIdParam);
+
+            ComuPostDao dao = new ComuPostDao();
+            boolean isDeleted = dao.deletePost(post_id);
+
+            if (isDeleted) {
+                System.out.println("게시글 삭제 성공: " + post_id);
+                response.sendRedirect("Community?t_gubun=list");
+            } else {
+                System.out.println("게시글 삭제 실패: " + post_id);
+                response.sendRedirect("Community?t_gubun=view&post_id=" + post_id + "&error=delete_failed");
+            }
     }
 }
