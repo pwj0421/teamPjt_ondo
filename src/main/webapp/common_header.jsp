@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/sub.css">
 <script src="<%= request.getContextPath() %>/js/jquery-1.8.1.min.js"></script>
 <script src="<%= request.getContextPath() %>/js/common.js"></script>
-<link rel="stylesheet" href="../CSS/sub.css" />
+<link rel="stylesheet" href="CSS/sub.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">

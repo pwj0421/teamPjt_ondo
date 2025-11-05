@@ -376,6 +376,53 @@ public class MemberDao {
 		    return result;
 		}
 
+	   public boolean checkPassword(String id, String password) {
+		   boolean checkPw = false;
+		   String sql = "select count(*) as cnt from ondo_member\n"
+		   			+ "where m_id = ? and m_password = ?";
+		   try {
+			   conn = DBConnection.getConnection();
+			   pstmt = conn.prepareStatement(sql);
+			   pstmt.setString(1, id);
+			   pstmt.setString(2, password);
+			   rs = pstmt.executeQuery();
+			   if(rs.next()) {
+				   int count = rs.getInt("cnt");
+				   if(count > 0) {
+					   checkPw = true;
+				   }
+			   }
+			   
+		   } catch(Exception e) {
+			   e.printStackTrace();
+			   System.out.println("checkPassword() 오류 : " + sql);
+		   } finally {
+			   DBConnection.closeDB(conn, pstmt, rs);
+		   }
+		   return checkPw;
+	   }
+	   
+	   public int updatePassword(String id, String newPassword) {
+		   int result = 0;
+		   String sql = "update ondo_member set m_password = ?\n"
+		   			+ "where m_id = ?";
+		   try {
+			   conn = DBConnection.getConnection();
+			   pstmt = conn.prepareStatement(sql);
+			   pstmt.setString(1, newPassword);
+			   pstmt.setString(2, id);
+			   result = pstmt.executeUpdate();
+			   
+		   } catch(Exception e) {
+			   e.printStackTrace();
+			   System.out.println("updatePassword() 오류 : " + sql);
+		   } finally {
+			   DBConnection.closeDB(conn, pstmt, null);
+		   }
+		   
+		   return result;
+	   }
+
 	   
 	   
 }
