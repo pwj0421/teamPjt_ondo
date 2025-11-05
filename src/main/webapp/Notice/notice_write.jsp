@@ -14,17 +14,16 @@
 		if(checkValue(noti.content,"내용 입력!")) return;
 		
 		noti.t_gubun.value = "save";
-		noti.method="post";
-		noti.action="Notice";
+		noti.method = "post";
+		noti.action = "Notice?t_gubun=save"; // ✅ multipart 전송 시 핵심 수정
 		noti.submit();
-		
 	}
 </script>
 </head>
 <body>
   <div class="notice_write">
   <h2>공지사항 작성</h2>
-  <form name="noti">
+  <form name="noti" enctype="multipart/form-data">
     <input type="hidden" name="t_gubun">
     
     <div class="form_section">
@@ -49,8 +48,6 @@
   </select>
 </div>
 
-
-
     <div class="form_section">
       <label>내용</label>
       <textarea name="content" placeholder="내용을 입력하세요" required></textarea>
@@ -58,8 +55,7 @@
 
     <div class="form_section notice_write_attach">
       <label>첨부파일</label>
-      <div id="attachContainer">
-      </div>
+      <div id="attachContainer"></div>
       <button type="button" class="add_attach_btn" onclick="addAttach()">+ 파일 추가</button>
     </div>
 
@@ -72,8 +68,8 @@
 </div>
 
 <script>
-  const MAX_ATTACH = 3;           // 최대 3개
-  const MAX_SIZE = 10 * 1024 * 1024; // 10MB (바이트 단위)
+  const MAX_ATTACH = 3;
+  const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
   function addAttach() {
     const container = document.getElementById('attachContainer');
@@ -85,17 +81,19 @@
       return;
     }
 
+    // ✅ attach_1, attach_2, attach_3 형식으로 이름 지정
+    const attachNum = currentCount + 1;
     const div = document.createElement('div');
     div.className = 'attach_wrapper';
     div.innerHTML = `
-      <input type="file" name="attach[]" onchange="previewFile(this)">
+      <input type="file" name="attach_${attachNum}" onchange="previewFile(this)">
       <span class="file_name"></span>
       <button type="button" onclick="removeAttach(this)">삭제</button>
     `;
     container.appendChild(div);
 
-    // 3개가 되면 버튼 숨기기
-    if (container.querySelectorAll('.attach_wrapper').length >= MAX_ATTACH) {
+    // 3개가 되면 버튼 숨김
+    if (attachNum >= MAX_ATTACH) {
       addBtn.style.display = 'none';
     }
   }
@@ -103,10 +101,9 @@
   function removeAttach(btn) {
     const container = document.getElementById('attachContainer');
     const addBtn = document.querySelector('.add_attach_btn');
-
     btn.parentElement.remove();
 
-    // 3개 미만이 되면 버튼 다시 보이게
+    // 삭제 후 파일이 3개 미만이면 추가 버튼 다시 표시
     if (container.querySelectorAll('.attach_wrapper').length < MAX_ATTACH) {
       addBtn.style.display = 'inline-block';
     }
@@ -121,15 +118,13 @@
       return;
     }
 
-    // 10MB 초과 시 경고 및 초기화
     if (file.size > MAX_SIZE) {
       alert("파일 크기는 10MB를 초과할 수 없습니다.");
-      input.value = ""; // 파일 선택 초기화
+      input.value = ""; 
       fileNameSpan.textContent = "";
       return;
     }
 
-    // 파일명 미리보기 표시
     fileNameSpan.textContent = "📎 " + file.name;
   }
 </script>
