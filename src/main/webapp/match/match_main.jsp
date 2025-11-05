@@ -45,7 +45,7 @@
 <div class="match_main_container" style="height: 1000px;">
 
   <!-- 내 프로필 -->
-  <div class="match_myprofile">
+  <div class="match_myprofile" style="margin-top: 100px;">
     <div class="profile_image">
     	<c:choose>
     		<c:when test="${empty myInfoDto.getImage()}">
