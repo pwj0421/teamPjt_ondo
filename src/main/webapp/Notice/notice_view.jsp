@@ -90,27 +90,30 @@ function goDelete(){
 
   <div class="notice_view_meta">
     <div class="notice_author_meta">
-      <img src="../image/basic_profile.png" alt="관리자 프로필">
+      <img src="attach/member_profile/${t_dto.getProfileImg()}" alt="관리자 프로필">
       <span>${t_dto.getReg_name()} ·</span>
       <span>${t_dto.getReg_date()} ·</span>
       <span>${t_dto.getHit()}</span>
     </div>
     <div class="notice_meta_right">
-      <div class="notice_view_attach">
-        <span class="attach_button" onclick="toggleAttach()">📎 첨부파일 보기</span>
-          <ul class="attach_list" id="attachList">
-            <c:if test="${not empty t_dto.getAttach_1()}">
-              <li><a href="upload/notice/${t_dto.getAttach_1()}" download>${t_dto.getAttach_1()}</a></li>
-            </c:if>
-            <c:if test="${not empty t_dto.getAttach_2()}">
-              <li><a href="upload/notice/${t_dto.getAttach_2()}" download>${t_dto.getAttach_2()}</a></li>
-            </c:if>
-            <c:if test="${not empty t_dto.getAttach_3()}">
-              <li><a href="upload/notice/${t_dto.getAttach_3()}" download>${t_dto.getAttach_3()}</a></li>
-            </c:if>
-          </ul>
-      </div>
-    </div>
+  <div class="notice_view_attach">
+    <c:if test="${not empty t_dto.getAttach_1()}">
+      <span class="attach_button" onclick="toggleAttach()">📎 첨부파일 보기</span>
+      <ul class="attach_list" id="attachList">
+        <c:if test="${not empty t_dto.getAttach_1()}">
+          <li><a href="attach/notice/${t_dto.getAttach_1()}" download>${t_dto.getAttach_1()}</a></li>
+        </c:if>
+        <c:if test="${not empty t_dto.getAttach_2()}">
+          <li><a href="attach/notice/${t_dto.getAttach_2()}" download>${t_dto.getAttach_2()}</a></li>
+        </c:if>
+        <c:if test="${not empty t_dto.getAttach_3()}">
+          <li><a href="attach/notice/${t_dto.getAttach_3()}" download>${t_dto.getAttach_3()}</a></li>
+        </c:if>
+      </ul>
+    </c:if>
+  </div>
+</div>
+
   </div>
 
   <div class="notice_view_content">${t_dto.getContent()}</div>
