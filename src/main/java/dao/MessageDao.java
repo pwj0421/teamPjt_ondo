@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,16 +19,19 @@ public class MessageDao {
 	
 
 	//메세지 요청 저장하기 > match > match_main
-	public int saveMessage(String senderId, String receiverId, String message) {
+	public int saveMessage(String no, String senderId, String receiverId, String message) {
 	    int result = 0;
-	    String sql = "INSERT INTO ondo_message_request (sender_id, receiver_id, greeting_message) VALUES (?, ?, ?)";
+	    String sql = "INSERT INTO ondo_message_request (request_id, sender_id, receiver_id, greeting_message) \r\n"
+	    		+ "VALUES "
+	    		+ "(?, ?, ?, ?)";
 
 	    try {
 	        con = DBConnection.getConnection();
 	        ps = con.prepareStatement(sql);
-	        ps.setString(1, senderId);
-	        ps.setString(2, receiverId);
-	        ps.setString(3, message);
+	        ps.setString(1, no);
+	        ps.setString(2, senderId);
+	        ps.setString(3, receiverId);
+	        ps.setString(4, message);
 
 	        result = ps.executeUpdate();
 	    } catch (Exception e) {
@@ -40,7 +44,35 @@ public class MessageDao {
 	    return result;
 	}
 
-	
+	//번호 받기
+	public int getNo(String no, String table) {
+        int requestNo = 0;
+        String sql = "SELECT NVL(MAX("+no+"), 0) + 1 AS next_request_id "
+                   + "FROM "+table;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                requestNo = rs.getInt("next_request_id");
+            }
+        } catch (Exception e) {
+            System.out.println("getNo() 오류: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return requestNo;
+    }
+
 	 // senderId가 보낸 메시지 수신자 ID 리스트 가져오기 match > match_main 
 	public List<String> getSentMessageReceiverIds(String senderId) {
 	    List<String> receiverIds = new ArrayList<>();
@@ -94,8 +126,8 @@ public class MessageDao {
 					else if(gender.equals("M"))gender="여자";
 				String age = rs.getString("m_age");
 				String country = rs.getString("m_country");
-					if(gender.equals("KR"))gender="대한민국";
-					else if(gender.equals("JP"))gender="일본";
+					if(country.equals("KR"))country="대한민국";
+					else if(country.equals("JP"))country="일본";
 				String nickname = rs.getString("m_nickname");
 				String profileImg = rs.getString("m_image");
 					if(profileImg == null) profileImg = "basic_profile.png";
@@ -137,8 +169,8 @@ public class MessageDao {
 						else if(gender.equals("M"))gender="남자";
 					String age = rs.getString("m_age");
 					String country = rs.getString("m_country");
-						if(country.equals("KR"))gender="대한민국";
-						else if(country.equals("JP"))gender="일본";
+						if(country.equals("KR"))country="대한민국";
+						else if(country.equals("JP"))country="일본";
 					String nickname = rs.getString("m_nickname");
 					String profileImg = rs.getString("m_image");
 						if(profileImg == null) profileImg = "basic_profile.png";
@@ -200,7 +232,226 @@ public class MessageDao {
 			return result;
 		}
 
-		
-	
+		//대화방 생성시 그리팅 메세지를 첫 대화로 등록하기
+		public int insertGreetingMessage(int no, String requestId, String greetingMsg) {
+		    int result = 0;
+		    Connection con = null;
+		    PreparedStatement ps = null;
+		    ResultSet rs = null;
+
+		    try {
+		        con = DBConnection.getConnection();
+
+		        // requestId로 room_id와 sender_id 가져오기
+		        String sql = "SELECT r.room_id, q.sender_id \r\n"
+		            + "FROM ondo_message_room r \r\n"
+		            + "JOIN ondo_message_request q ON r.request_id = q.request_id \r\n"
+		            + " WHERE r.request_id = ? ";
+		        ps = con.prepareStatement(sql);
+		        ps.setString(1, requestId);
+		        rs = ps.executeQuery();
+
+		        if (rs.next()) {
+		            String roomId = rs.getString("room_id");
+		            String senderId = rs.getString("sender_id");
+
+		            rs.close();
+		            ps.close();
+
+		            // greeting message 저장
+		            String insertSql = "INSERT INTO ondo_message (message_id, room_id, sender_id, content) VALUES (?, ?, ?, ?)";
+		            ps = con.prepareStatement(insertSql);
+		            ps.setInt(1, no);
+		            ps.setString(2, roomId);
+		            ps.setString(3, senderId);
+		            ps.setString(4, greetingMsg);
+
+		            result = ps.executeUpdate();
+		        }
+
+		    } catch (Exception e) {
+		        System.out.println("insertGreetingMessage() 오류: " + e.getMessage());
+		    } finally {
+		        DBConnection.closeDB(con, ps, rs);
+		    }
+
+		    return result;
+		}
+		//룸 생성
+		public int createRoom(int no, String requestId, String partnerId, String myId) {
+			int result = 0;
+		    String sql = "INSERT INTO ondo_message_room "
+		               + "(room_id,request_id, partner_id, my_id) "
+		               + "VALUES (?, ?, ?, ?)";
+
+		    try {
+		        con = DBConnection.getConnection();
+		        ps = con.prepareStatement(sql);
+		        ps.setInt(1, no);
+		        ps.setString(2, requestId);
+		        ps.setString(3, partnerId);
+		        ps.setString(4, myId);
+
+		        result = ps.executeUpdate();
+		        System.out.println("메시지룸 생성 성공! RoomNumber = " + no);
+		    } catch (Exception e) {
+		        System.out.println("createMessageRoom() 오류: " + e.getMessage());
+		    } finally {
+		        try {
+		            if (ps != null) ps.close();
+		            if (con != null) con.close();
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        }
+		    }
+
+		    return result;
+		}
+
+		//메세지 리스트
+		public List<MessageDto> getMessageRoomList(String loginId) {
+		    List<MessageDto> list = new ArrayList<>();
+
+		    String sql = 
+		        "WITH LAST_MSG AS ( " +
+		        "    SELECT ROOM_ID, CONTENT, SENDER_ID, TO_CHAR(SENT_AT,'YYYY-MM-DD HH24:MI') AS LAST_TIME " +
+		        "    FROM ( " +
+		        "        SELECT ROOM_ID, CONTENT, SENDER_ID, SENT_AT, " +
+		        "               ROW_NUMBER() OVER (PARTITION BY ROOM_ID ORDER BY SENT_AT DESC) AS RN " +
+		        "        FROM ONDO_MESSAGE " +
+		        "    ) " +
+		        "    WHERE RN = 1 " +
+		        ") " +
+		        "SELECT R.ROOM_ID, " +
+		        "       CASE WHEN R.PARTNER_ID = ? THEN R.MY_ID ELSE R.PARTNER_ID END AS PARTNER_ID, " +
+		        "       M.M_NICKNAME, " +
+		        "       M.M_IMAGE, " +
+		        "       L.CONTENT, " +
+		        "       L.LAST_TIME " +
+		        "FROM ONDO_MESSAGE_ROOM R " +
+		        "JOIN ONDO_MEMBER M ON M.M_ID = CASE WHEN R.PARTNER_ID = ? THEN R.MY_ID ELSE R.PARTNER_ID END " +
+		        "LEFT JOIN LAST_MSG L ON L.ROOM_ID = R.ROOM_ID " +
+		        "WHERE R.PARTNER_ID = ? OR R.MY_ID = ? " +
+		        "ORDER BY L.LAST_TIME DESC NULLS LAST";
+
+		    try {
+		        con = DBConnection.getConnection();
+		        ps = con.prepareStatement(sql);
+		        // 파라미터 세팅
+		        ps.setString(1, loginId); // CASE문 안 nickname 매칭용
+		        ps.setString(2, loginId); // JOIN ONDO_MEMBER
+		        ps.setString(3, loginId); // WHERE
+		        ps.setString(4, loginId); // WHERE
+
+		        rs = ps.executeQuery();
+
+		        while (rs.next()) {
+		            String roomId = rs.getString("ROOM_ID");
+		            String partnerId = rs.getString("PARTNER_ID");
+		            String nickname = rs.getString("M_NICKNAME");
+		            String profileImg = rs.getString("M_IMAGE");
+		            	if(profileImg == null) profileImg = "basic_profile.png";
+		            String lastMsg = rs.getString("CONTENT");
+		            String lastTime = rs.getString("LAST_TIME");
+
+		            if (lastMsg != null && lastMsg.length() > 30) {
+		                lastMsg = lastMsg.substring(0, 30) + "...";
+		            }
+
+		            MessageDto dto = new MessageDto(null, roomId, partnerId, loginId);
+		            dto.setNickname(nickname);
+		            dto.setProfileImg(profileImg);
+		            dto.setLastMsg(lastMsg != null ? lastMsg : "최근 대화가 없습니다.");
+		            dto.setLastTime(lastTime != null ? lastTime : "-");
+
+		            list.add(dto);
+		        }
+
+		    } catch (Exception e) {
+		        System.out.println("getMessageRoomList() 오류: " + e.getMessage());
+		        e.printStackTrace();
+		    } finally {
+		        DBConnection.closeDB(con, ps, rs);
+		    }
+
+		    return list;
+		}
+
+
+
+
+    // 특정 room의 모든 메시지 가져오기
+    public List<MessageDto> getMessagesByRoomId(String roomId) {
+        List<MessageDto> messages = new ArrayList<>();
+        String sql = "SELECT ROOM_ID, SENDER_ID, CONTENT, SENT_AT " +
+                     "FROM ONDO_MESSAGE " +
+                     "WHERE ROOM_ID = ? " +
+                     "ORDER BY SENT_AT ASC"; // 시간 순 정렬
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, roomId);
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                MessageDto dto = new MessageDto(
+                    null, // request_id 필요 없으므로 null
+                    rs.getString("SENDER_ID"),
+                    null, // receiver_id는 필요 없으므로 null
+                    rs.getString("CONTENT"),
+                    rs.getString("SENT_AT"),
+                    null, null, null, null, null
+                );
+
+                // DTO 필드 맞춤
+                dto.setLastMsg(rs.getString("CONTENT"));
+                dto.setLastTime(rs.getString("SENT_AT"));
+
+                messages.add(dto);
+            }
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try { if(rs != null) rs.close(); } catch(Exception e) {}
+            try { if(ps != null) ps.close(); } catch(Exception e) {}
+            try { if(con != null) con.close(); } catch(Exception e) {}
+        }
+
+        return messages;
+    }
+
+
+ // 메시지 저장
+    public int insertMessage(String roomId, String senderId, String content) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        int result = 0;
+        String sql = "INSERT INTO ONDO_MESSAGE (ROOM_ID, SENDER_ID, CONTENT, SENT_AT) "
+                   + "VALUES (?, ?, ?, SYSDATE)";
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, roomId);
+            ps.setString(2, senderId);
+            ps.setString(3, content);
+
+            result = ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(ps != null) ps.close();
+                if(con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
 	
 }

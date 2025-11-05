@@ -3,7 +3,8 @@ package dto;
 public class MessageDto {
 
 	private String request_id, sender_id, receiver_id, greetingMsg, request_date, gender,age,country,nickname,profileImg;
-
+	private String roomId, partnerId, myId, lastMsg, lastTime;
+	
 	//receiveRequestList  mypage > request_list
 	public MessageDto(String request_id, String sender_id, String receiver_id, String greetingMsg, String request_date,
 			String gender, String age, String country, String nickname, String profileImg) {
@@ -20,8 +21,65 @@ public class MessageDto {
 		this.profileImg = profileImg;
 	}
 
+	//message_room create
+	public MessageDto(String request_id, String sender_id, String receiver_id) {
+		this.request_id = request_id;
+		this.sender_id = sender_id;
+		this.receiver_id = receiver_id;
+	}
+	
+	
+	//room 리스트 조회 > mypage > messageRoomList
+	public MessageDto(String request_id, String roomId, String partnerId, String myId) {
+		this.request_id = request_id;
+		this.roomId = roomId;
+		this.partnerId = partnerId;
+		this.myId = myId;
+	}
+
+
 	public String getRequest_id() {
 		return request_id;
+	}
+
+	public String getLastMsg() {
+		return lastMsg;
+	}
+
+	public void setLastMsg(String lastMsg) {
+		this.lastMsg = lastMsg;
+	}
+
+	public String getLastTime() {
+		return lastTime;
+	}
+
+	public void setLastTime(String lastTime) {
+		this.lastTime = lastTime;
+	}
+
+	public String getRoomId() {
+		return roomId;
+	}
+
+	public void setRoomId(String roomId) {
+		this.roomId = roomId;
+	}
+
+	public String getPartnerId() {
+		return partnerId;
+	}
+
+	public void setPartnerId(String partnerId) {
+		this.partnerId = partnerId;
+	}
+
+	public String getMyId() {
+		return myId;
+	}
+
+	public void setMyId(String myId) {
+		this.myId = myId;
 	}
 
 	public void setRequest_id(String request_id) {
