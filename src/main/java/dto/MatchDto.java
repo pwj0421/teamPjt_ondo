@@ -8,6 +8,8 @@ public class MatchDto {
 
 	private ArrayList<InterestDto> interestDto;
 	
+	private String gender, country, introduction;
+	
 	// MATCH MAIN
 	// MatchDao.java : getMatchMyInfo()
 	// MatchMyInfo.java
@@ -25,6 +27,21 @@ public class MatchDto {
 		this.interestDto = interestDto;
 	}
 	
+	// MATCH VIEW
+	// MatchDao.java : getMatchView()
+	// MatchView.java
+	public MatchDto(String memberId, String image, String nickname, String gender, String country, String tagline, String introduction, ArrayList<InterestDto> interestDto) {
+		super();
+		this.memberId = memberId;
+		this.image = image;
+		this.nickname = nickname;
+		this.gender = gender;
+		this.country = country;
+		this.tagline = tagline;
+		this.introduction = introduction;
+		this.interestDto = interestDto;
+	}
+
 	public String getMemberId() {
 		return memberId;
 	}
@@ -44,5 +61,16 @@ public class MatchDto {
 	public ArrayList<InterestDto> getInterestDto() {
 		return interestDto;
 	}
-	
+
+	public String getGender() {
+		return gender;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public String getIntroduction() {
+		return introduction;
+	}
 }

@@ -15,7 +15,9 @@ public class MatchInfoUpdate implements CommonExecute {
 		String id = CommonUtil.getSessionInfo(request, "id");
 		String nickName = request.getParameter("m_nickName");
 		String tagline = request.getParameter("m_tagline");
+		tagline = tagline.replaceAll("'", "&#39;");
 		String introduction = request.getParameter("m_introduction");
+		introduction = introduction.replaceAll("'", "&#39;");
 		String updated = CommonUtil.getTodayTime();
 
 		int result = dao.matchInfoUpdate(id, nickName, tagline, introduction, updated);
