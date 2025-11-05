@@ -15,6 +15,7 @@ import command.member.InterestList;
 import command.member.MatchInfoInterestUpdate;
 import command.member.MatchInfoUpdate;
 import command.member.MatchInfoView;
+import command.member.MemberChangePassword;
 import command.member.MemberDeleteAccount;
 import command.member.MemberInfo;
 import command.member.MemberLogin;
@@ -143,6 +144,10 @@ public class Member extends HttpServlet {
 		} else if(gubun.equals("newPassword")) {
 			
 			viewPage ="member/member_newPassword.jsp";
+		} else if(gubun.equals("changePassword")) {
+			CommonExecute member = new MemberChangePassword();
+			member.execute(request);
+			viewPage ="common_alert.jsp";
 		}
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
