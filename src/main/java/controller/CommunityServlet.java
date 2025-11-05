@@ -63,7 +63,9 @@ public class CommunityServlet extends HttpServlet {
             insertPost(request, response);
         } else if ("delete".equals(gubun)) {   // ✅ 게시글 삭제 추가
             deletePost(request, response);
-        }else {
+        }  else if ("update".equals(gubun)) {
+            updatePost(request, response);
+        } else {
             doGet(request, response);
         }
     }
@@ -196,4 +198,24 @@ public class CommunityServlet extends HttpServlet {
                 response.sendRedirect("Community?t_gubun=view&post_id=" + post_id + "&error=delete_failed");
             }
     }
+        
+        //게시글 업데이트
+        private void updatePost(HttpServletRequest request, HttpServletResponse response)
+                throws ServletException, IOException {
+            String idParam = request.getParameter("post_id");
+            if (idParam == null || idParam.isEmpty()) {
+                // post_id 안 넘어오면 리스트로 돌려보내기
+                response.sendRedirect("Community?t_gubun=list");
+                return;
+            }
+
+            int postId = Integer.parseInt(idParam);
+            ComuPostDao dao = new ComuPostDao();
+            ComuPostDto post = dao.getPostById(postId);
+
+            request.setAttribute("post", post);
+            RequestDispatcher rd = request.getRequestDispatcher("Community/comu_update.jsp");
+            rd.forward(request, response);
+        }
+
 }
