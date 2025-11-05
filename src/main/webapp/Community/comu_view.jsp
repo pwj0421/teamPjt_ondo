@@ -2,6 +2,10 @@
 <%@ page import="java.util.List, dao.ComuAttachmentDao, dto.ComuAttachmentDto, dao.ComuPostDao, dto.ComuPostDto" %>
 <%@ include file="../common_header.jsp" %>	
 <%@ include file="../menu/quickMenu.jsp" %>
+<%
+    dto.ComuPostDto post = (dto.ComuPostDto) request.getAttribute("post");
+%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -66,6 +70,12 @@
 	  comu.action = "Community";
 	  comu.submit();
   }
+  function goUpdate(){
+		comu.t_gubun.value="update";
+		comu.method = "post";
+		comu.action = "Community";
+		comu.submit();
+	}
 </script>
 <form name="comu">
 	<input type="hidden" name="t_gubun">
@@ -75,7 +85,7 @@
   <!-- 하단 버튼 -->
   <div class="view_buttons">
     <button class="back_btn" onclick="">목록으로</button>
-    <button class="edit_btn" onclick="">수정</button>
+    <button class="edit_btn" onclick="goUpdate()">수정</button>
     <button class="delete_btn" onclick="goDelete()">삭제</button>
   </div>
   

@@ -144,5 +144,25 @@ public class ComuPostDao {
 
         return result;
     }
+    
+    public boolean updatePost(int postId, String title, String content) {
+        boolean result = false;
+        String sql = "UPDATE ondo_comu_posts SET title = ?, content = ?, update_at = SYSDATE WHERE post_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, title);
+            pstmt.setString(2, content);
+            pstmt.setInt(3, postId);
+
+            int rows = pstmt.executeUpdate();
+            result = rows > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
 }
