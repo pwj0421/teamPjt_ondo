@@ -1,0 +1,39 @@
+@charset "UTF-8";
+
+.tabs {
+	display: flex;
+}
+
+.tab {
+	width: 500px;
+	height: 50px;
+	border: 1px solid #D3D3D3;
+	border-radius: 10px 10px 0 0;
+	background: #f9f9f9;
+	cursor: pointer;   
+	font-size: 20px;
+}
+
+.tab.active {
+	background-color: white;
+	font-weight: bold;
+	border-bottom: none;
+}
+
+.match_noResult {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-bottom: none; /* 아래쪽 선 제거 */
+  border-radius: 15px;
+  padding: 12px 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 0; /* 아래 여백 제거 */
+  margin-top: 15px; 
+  height: 500px;
+  font-size: 20px;
+  
+}
