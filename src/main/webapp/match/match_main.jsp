@@ -42,7 +42,7 @@
 
 </head>
 <body>
-<div class="match_main_container">
+<div class="match_main_container" style="height: 1000px;">
 
   <!-- 내 프로필 -->
   <div class="match_myprofile">
@@ -63,6 +63,9 @@
         <c:forEach items="${myInfoDto.getInterestDto()}" var="dto">
             <span>${dto.getItem_name()}</span>
         </c:forEach>
+    </div>
+    <div class="profile_edit_btn">
+        <button type="button" onclick="goPage('Message','myRequest')">내 요청목록</button>
     </div>
     <div class="profile_edit_btn">
         <button type="button" onclick="goPage('Member','matchInfo')">내 정보 수정하기</button>
@@ -104,13 +107,22 @@
             </div>
         </div>
 
-        <div class="selected_categories_box">
-            <div style="display:flex; align-items:center; flex-wrap:wrap; gap:8px;">
-                <p>검색할 카테고리:</p>
-                <div class="selected_categories"></div>
-            </div>
-            <button onclick="goMatchList()" class="search_btn">매칭</button>
-        </div>
+        <div class="selected_categories_box" 
+		     style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; position: relative; padding-right: 100px; box-sizing: border-box;">
+		    
+		    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+		        <p style="margin: 0;">검색할 카테고리:</p>
+		        <div class="selected_categories"></div>
+		    </div>
+		
+		    <button onclick="goMatchList()" 
+		            class="search_btn" 
+		            style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+		                   width: 70px; height: 36px; flex-shrink: 0;
+		                   border: none; border-radius: 5px; color: white; cursor: pointer;">
+		        매칭
+		    </button>
+		</div>
     </div>
 	
 	<!-- 탭 버튼 -->
@@ -141,8 +153,12 @@
     <form>
         <input type="hidden" id="sender_id" value="${myInfoDto.getMemberId()}">
         
+        <c:if test="${match_dtos == null}">
+		    <div class="match_noResult">😄 카테고리, 일반/튜터 선택 후 매칭버튼을 눌러주세요.</div>
+		</c:if>
+        
         <c:if test="${match_dtos.size() == 0}">
-        	<div class="match_noResult">😔 매칭 결과가 없습니다 </div>
+        	<div class="match_noResult">😔 매칭 결과가 없습니다.</div>
         </c:if>
         
         <!-- 일반 탭 -->
@@ -167,7 +183,7 @@
 					    </c:otherwise>
 					</c:choose>
                     <div class="profile_info">
-                        <p class="nickname">${dto.getNickname()}</p>
+                        <p class="nickname"><a href="javascript:openProfilePopup('${dto.getMemberId()}')">${dto.getNickname()}</a></p>
                         <p class="intro">${dto.getTagline()}</p>
                         <div class="interest_box_container">
                             <c:forEach items="${dto.getInterestDto()}" var="interest">
@@ -191,7 +207,6 @@
                             <c:set var="isSent" value="true"/>
                         </c:if>
                     </c:forEach>
-
                     <c:choose>
                         <c:when test="${isSent}">
                             <button type="button" class="message_btn disabled" disabled>이미 요청됨</button>
@@ -211,15 +226,23 @@
                 <div class="match_item">
                     <input type="hidden" name="receiver_id" value="${dto.getMemberId()}">
                     <c:choose>
-                        <c:when test="${empty dto.getImage()}">
-                            <img src="attach/member_profile/basic_profile.png" alt="프로필" class="profile_img">
-                        </c:when>
-                        <c:otherwise>
-                            <img src="attach/member_profile/${dto.getImage()}" alt="프로필" class="profile_img">
-                        </c:otherwise>
-                    </c:choose>
+					    <c:when test="${empty dto.getImage()}">
+					        <img src="attach/member_profile/basic_profile.png"
+					             alt="프로필"
+					             class="profile_img"
+					             style="cursor:pointer;"
+					             onclick="openProfilePopup('${dto.getMemberId()}')">
+					    </c:when>
+					    <c:otherwise>
+					        <img src="attach/member_profile/${dto.getImage()}"
+					             alt="프로필"
+					             class="profile_img"
+					             style="cursor:pointer;"
+					             onclick="openProfilePopup('${dto.getMemberId()}')">
+					    </c:otherwise>
+					</c:choose>
                     <div class="profile_info">
-                        <p class="nickname">${dto.getNickname()}</p>
+                        <p class="nickname"><a href="javascript:openProfilePopup('${dto.getMemberId()}')">${dto.getNickname()}</a></p>
                         <p class="intro">${dto.getTagline()}</p>
                         <div class="interest_box_container">
                             <c:forEach items="${dto.getInterestDto()}" var="interest">

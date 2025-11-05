@@ -203,7 +203,7 @@ public class MatchDao {
 				String country = rs.getString("m_country");
 				if(country.equals("KR")) country ="대한민국";
                 else if(country.equals("JP")) country = "일본";
-				
+				 
 				String tagline = rs.getString("m_tagline");
 				
 				String introduction = rs.getString("m_introduction");
