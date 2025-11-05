@@ -55,25 +55,28 @@
 
 
 <script>
-  // 첨부파일 토글
-  const toggleBtn = document.getElementById('toggleFilesBtn');
-  const fileList = document.getElementById('fileList');
-
-  toggleBtn.addEventListener('click', () => {
-    if(fileList.style.display === 'none') {
-      fileList.style.display = 'flex';
-    } else {
-      fileList.style.display = 'none';
-    }
-  });
+  function goDelete(no){
+	  const postId = document.comu.post_id.value;
+      if (!postId) {
+          alert("게시글 번호가 없습니다.");
+          return;
+      }
+	  comu.t_gubun.value="delete";
+	  comu.method = "post";
+	  comu.action = "Community";
+	  comu.submit();
+  }
 </script>
-
+<form name="comu">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="post_id" value="${post.getPost_id()}">
+</form>
 
   <!-- 하단 버튼 -->
   <div class="view_buttons">
     <button class="back_btn" onclick="">목록으로</button>
     <button class="edit_btn" onclick="">수정</button>
-    <button class="delete_btn"onclick="">삭제</button>
+    <button class="delete_btn" onclick="goDelete()">삭제</button>
   </div>
   
 <div class="like_area">

@@ -126,4 +126,23 @@ public class ComuPostDao {
             e.printStackTrace();
         }
     }
+
+    public boolean deletePost(int postId) {
+        boolean result = false;
+        String sql = "DELETE FROM ondo_comu_posts WHERE post_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, postId);
+            int rows = pstmt.executeUpdate();
+
+            result = rows > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
 }
