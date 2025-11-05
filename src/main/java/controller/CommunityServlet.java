@@ -94,6 +94,8 @@ public class CommunityServlet extends HttpServlet {
         ComuPostDao dao = new ComuPostDao();
         ComuPostDto post = dao.getPostById(post_id);
 
+        request.setAttribute("post", post);
+        
         if (post == null) {
             response.sendRedirect("Community?t_gubun=list");
             return;
@@ -111,8 +113,8 @@ public class CommunityServlet extends HttpServlet {
 //        request.setAttribute("commentList", commentList);
 //        request.setAttribute("attachments", attachments);
 
-//        RequestDispatcher rd = request.getRequestDispatcher("Community/comu_view.jsp");
-//       rd.forward(request, response);
+       	  RequestDispatcher rd = request.getRequestDispatcher("Community/comu_view.jsp");
+          rd.forward(request, response);
     	}
 
     // 게시글 작성 처리
@@ -163,6 +165,7 @@ public class CommunityServlet extends HttpServlet {
             }
         }
 
-        response.sendRedirect("Community?t_gubun=list");
+        RequestDispatcher rd = request.getRequestDispatcher("Community/comu_list.jsp");
+        rd.forward(request, response);
     }
 }
