@@ -15,17 +15,19 @@
 <div class="free_container">
 
   <!-- 게시글 헤더 -->
-  <h2 class="board_title"><%= ((ComuPostDto)request.getAttribute("post")).getTitle() %></h2>
+  <h2 class="board_title">
+  	${post.getTitle()}  
+  </h2>
 
 <div class="view_meta">
   <span class="author_cell">
-    작성자: <%= ((ComuPostDto)request.getAttribute("post")).getM_name() %>
+    작성자: ${post.getM_name()}
   </span>
   <span class="date_cell">
-    작성일: <%= ((ComuPostDto)request.getAttribute("post")).getCreate_at() %>
+    작성일: ${post.getCreate_at()}
   </span>
   <span class="view_cell">
-    조회수: <%= ((ComuPostDto)request.getAttribute("post")).getHit() %>
+    조회수: ${post.getHit()}
   </span>
 </div>
 
@@ -33,21 +35,13 @@
 <!-- 게시글 내용 -->
 <div class="view_content">
   <p>
-    <%= ((ComuPostDto)request.getAttribute("post")).getContent() %>
+    ${post.getContent()}
   </p>
 
   <div class="attached_images">
-    <% 
-      List<ComuAttachmentDto> attachments = (List<ComuAttachmentDto>) request.getAttribute("attachments");
-      for(ComuAttachmentDto a : attachments){
-        if(a.getFile_type().matches("png|jpg|jpeg|gif")){
-    %>
-        <img src="<%= request.getContextPath() + "/" + a.getFile_path() %>" 
-             alt="첨부 이미지" class="post_image">
-    <% 
-        }
-      } 
-    %>
+
+       
+   
   </div>
 </div>
 
