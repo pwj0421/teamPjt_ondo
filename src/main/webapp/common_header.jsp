@@ -33,6 +33,11 @@
 		}
 	
 	function goSearchHeader(svl, page){
+		var searchTxt = mainSearch.indexHeaderSearch.value
+		if(searchTxt == ""){
+			alert("검색어를 입력해주세요.");
+			return;
+		}
 		mainSearch.t_gubun.value=page;
 		mainSearch.method="POST";
 		mainSearch.action=svl;
