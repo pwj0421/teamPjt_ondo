@@ -22,7 +22,7 @@ public class MemberSave implements CommonExecute {
 		
 			MemberDao dao = new MemberDao();
 			
-			String savePath = request.getSession().getServletContext().getRealPath("/") + "image/";
+			String savePath = request.getSession().getServletContext().getRealPath("/") + "attach/member_profile";
 			
 			
 			File dir = new File(savePath);
