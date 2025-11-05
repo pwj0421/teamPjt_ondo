@@ -829,8 +829,6 @@ function changeStep(to) {
     document.querySelectorAll(".step").forEach(s => s.classList.remove("active"));
     document.querySelector(".step:nth-child(" + to + ")").classList.add("active");
 
-
-
  // ✅ 2단계로 이동할 때 자동 적용
     if (to === 2) setTimeout(applyAddressMode, 100);
     if (to === 6) {
