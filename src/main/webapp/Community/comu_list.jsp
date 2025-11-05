@@ -164,7 +164,7 @@
       <tr>
         <td class="number_cell"><%= dto.getPost_id() %></td>
         <td class="title">
-          <a href="javascript:goView('<%dto.getPost_id()%>')">
+          <a href="javascript:goView('<%=dto.getPost_id()%>');">
               <%= dto.getTitle() %>
           </a>
         </td>
@@ -177,7 +177,8 @@
           </button>
         </td>
       </tr>
-<% } } %>
+<% } 
+       } %>
 </tbody>
   </table>
 
