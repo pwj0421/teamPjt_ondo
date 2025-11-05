@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.community.CommunityUpdate;
+import common.CommonExecute;
+
 /**
  * Servlet implementation class FreeComu
  */
@@ -28,6 +31,7 @@ public class Community extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
 		String gubun = request.getParameter("t_gubun");
 		if(gubun == null) gubun = "list";
 		
@@ -35,7 +39,7 @@ public class Community extends HttpServlet {
 		String viewPage="";
 		
 		if(gubun.equals("list")) {
-			viewPage = "Community/community_list.jsp";
+			viewPage = "Community/comuList.jsp";
 			
 		}else if(gubun.equals("view")){
 			viewPage = "Community/community_view.jsp";
@@ -43,6 +47,12 @@ public class Community extends HttpServlet {
 		
 		}else if(gubun.equals("write")) {
 			viewPage = "Community/community_write.jsp";
+		}else if(gubun.equals("updateForm")) {
+			viewPage = "Community/community_update.jsp";
+		}else if(gubun.equals("DBUpdate")) {
+			CommonExecute comu = new CommunityUpdate();
+			comu.execute(request);
+			viewPage = "common_alert_view.jsp";
 		}
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);

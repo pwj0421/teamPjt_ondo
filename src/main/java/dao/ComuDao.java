@@ -2,6 +2,8 @@ package dao;
 
 import java.sql.*;
 import java.util.*;
+
+import common.DBConnection;
 import dto.ComuDto;
 
 public class ComuDao {
@@ -76,15 +78,20 @@ public class ComuDao {
 
     // 글 수정
     public int updatePost(ComuDto dto) {
-        String sql = "UPDATE free_board SET title=?, content=?, update_at=NOW() WHERE post_id=?";
+        String sql = "update ondo_comu_posts\r\n"
+        		+ "set title = ?\r\n"
+        		+ ", content = ?\r\n"
+        		+ ", update_at = to_date(?,'yyyy-MM-dd hh24:mi:ss'\r\n"
+        		+ "where post_id = ?";
         int result = 0;
 
         try {
-            connect();
-            pstmt = conn.prepareStatement(sql);
+        	conn = DBConnection.getConnection();
+        	pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, dto.getTitle());
             pstmt.setString(2, dto.getContent());
-            pstmt.setInt(3, dto.getPost_id());
+            pstmt.setString(3, dto.getUpdate_at());
+            pstmt.setInt(4, dto.getPost_id());
             result = pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
