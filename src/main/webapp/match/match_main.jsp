@@ -184,7 +184,16 @@
 					</c:choose>
                     <div class="profile_info">
                         <p class="nickname"><a href="javascript:openProfilePopup('${dto.getMemberId()}')">${dto.getNickname()}</a></p>
-                        <p class="intro">${dto.getTagline()}</p>
+                        <p class="intro">
+                        	<c:choose>
+                        		<c:when test="${empty dto.getTagline()}">
+                        			한 줄 소개가 없습니다.
+                        		</c:when>
+                        		<c:otherwise>
+                        			${dto.getTagline()}
+                        		</c:otherwise>
+                        	</c:choose>
+                        </p>
                         <div class="interest_box_container">
                             <c:forEach items="${dto.getInterestDto()}" var="interest">
                                 <c:choose>
