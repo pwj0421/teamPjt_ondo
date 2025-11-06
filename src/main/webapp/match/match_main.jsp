@@ -12,6 +12,8 @@
 <title>검색</title>
 <link rel="stylesheet" href="../CSS/sub.css">
 <link rel="stylesheet" href="CSS/match.css">
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script type="text/javascript">
@@ -183,8 +185,27 @@
 					    </c:otherwise>
 					</c:choose>
                     <div class="profile_info">
-                        <p class="nickname"><a href="javascript:openProfilePopup('${dto.getMemberId()}')">${dto.getNickname()}</a></p>
-                        <p class="intro">${dto.getTagline()}</p>
+                        <p class="nickname">
+                        	<c:choose>
+                        		<c:when test="${dto.getCountry() eq 'KR'}">
+                        			<span class="fi fi-kr flag-frame"></span>
+                        		</c:when>
+                        		<c:otherwise>
+                        			<span class="fi fi-jp flag-frame"></span>
+                        		</c:otherwise>
+                        	</c:choose>
+                        	<a href="javascript:openProfilePopup('${dto.getMemberId()}')">${dto.getNickname()}</a>
+                        </p>
+                        <p class="intro">
+                        	<c:choose>
+                        		<c:when test="${empty dto.getTagline()}">
+                        			한 줄 소개가 없습니다.
+                        		</c:when>
+                        		<c:otherwise>
+                        			${dto.getTagline()}
+                        		</c:otherwise>
+                        	</c:choose>
+                        </p>
                         <div class="interest_box_container">
                             <c:forEach items="${dto.getInterestDto()}" var="interest">
                                 <c:choose>
@@ -242,7 +263,17 @@
 					    </c:otherwise>
 					</c:choose>
                     <div class="profile_info">
-                        <p class="nickname"><a href="javascript:openProfilePopup('${dto.getMemberId()}')">${dto.getNickname()}</a></p>
+                   		<p class="nickname">
+                        	<c:choose>
+                        		<c:when test="${dto.getCountry() eq 'KR'}">
+                        			<span class="fi fi-kr flag-frame"></span>
+                        		</c:when>
+                        		<c:otherwise>
+                        			<span class="fi fi-jp flag-frame"></span>
+                        		</c:otherwise>
+                        	</c:choose>
+                        	<a href="javascript:openProfilePopup('${dto.getMemberId()}')">${dto.getNickname()}</a>
+                        </p>
                         <p class="intro">${dto.getTagline()}</p>
                         <div class="interest_box_container">
                             <c:forEach items="${dto.getInterestDto()}" var="interest">
