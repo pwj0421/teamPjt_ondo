@@ -47,9 +47,10 @@ public class NoticeDao {
 	public int noticeSave(NoticeDto dto) {
 		int result=0;
 		String sql="insert into ondo_notice\r\n"
-				+ "(n_no, n_title, n_content, n_reg_id, n_reg_date, n_important, n_type)\r\n"
-				+ "values\r\n"
-				+ "('"+dto.getNo()+"','"+dto.getTitle()+"','"+dto.getContent()+"','user001',to_date('"+dto.getReg_date()+"','yyyy-MM-dd hh24:mi:ss'),'"+dto.getImportant()+"','"+dto.getType()+"')";
+				+ "(n_no, n_title, n_content, n_reg_id, n_reg_date, n_important, n_type, \r\n"
+				+ " n_attach_1, n_attach_2, n_attach_3)\r\n"
+				+ "values"
+				+ "('"+dto.getNo()+"','"+dto.getTitle()+"','"+dto.getContent()+"','user001',to_date('"+dto.getReg_date()+"','yyyy-MM-dd hh24:mi:ss'),'"+dto.getImportant()+"','"+dto.getType()+"','"+dto.getAttach_1()+"','"+dto.getAttach_2()+"','"+dto.getAttach_3()+"')";
 		
 		try {
 			con = DBConnection.getConnection();
@@ -66,14 +67,18 @@ public class NoticeDao {
 	}
 
 	//목록 --페이징&검색조건시 수정 필요
-	public ArrayList<NoticeDto> getNoticeList(String work, String search) {
+	public ArrayList<NoticeDto> getNoticeList(String work, String search, int start, int end) {
 		ArrayList<NoticeDto> dtos = new ArrayList<NoticeDto>();
-		String sql = "select n.n_no, n.n_title, m.m_name, to_char(n.n_reg_date, 'yy-MM-dd') as n_reg_date, \r\n"
-				+ "       n.n_hit, n.n_type, n.n_important, n.n_attach_1, n.n_attach_2, n.n_attach_3\r\n"
-				+ "    from ondo_notice n, ondo_member m\r\n"
-				+ "    where n.n_reg_id = m.m_id\r\n"
-				+ "    and "+work+" like '%"+search+"%'\r\n"
-				+ "    order by n.n_no desc";
+		String sql = "select * from (\r\n"
+				+ "    select rownum as rnum, tbl.* \r\n"
+				+ "    from(\r\n"
+				+ "        select n.n_no, n.n_title, m.m_name, to_char(n.n_reg_date, 'yy-MM-dd') as n_reg_date, \r\n"
+				+ "           n.n_hit, n.n_type, n.n_important, n.n_attach_1, n.n_attach_2, n.n_attach_3\r\n"
+				+ "        from ondo_notice n, ondo_member m\r\n"
+				+ "        where n.n_reg_id = m.m_id\r\n"
+				+ "        and "+work+" like '%"+search+"%'\r\n"
+				+ "        order by n.n_no desc)tbl)\r\n"
+				+ "WHERE RNUM >="+start+" and rnum <= "+end+"";
 		
 		try {
 			con = DBConnection.getConnection();
@@ -107,7 +112,7 @@ public class NoticeDao {
 	//상세보기
 	public NoticeDto getNoticeView(String no) {
 		NoticeDto dto = null;
-		String sql="select n.n_no, n.n_title, n.n_content, n.n_reg_id, m.m_name, to_char(n.n_reg_date, 'yyyy-MM-dd') as n_reg_date, \r\n"
+		String sql="select n.n_no, n.n_title, n.n_content, n.n_reg_id, m.m_name, m.m_image, to_char(n.n_reg_date, 'yyyy-MM-dd') as n_reg_date, \r\n"
 				+ "       n.n_hit, n.n_type, n.n_attach_1, n.n_attach_2, n.n_attach_3,n.n_important\r\n"
 				+ "    from ondo_notice n, ondo_member m\r\n"
 				+ "    where n.n_reg_id = m.m_id\r\n"
@@ -125,13 +130,15 @@ public class NoticeDao {
 				String reg_date = rs.getString("n_reg_date");
 				int hit = rs.getInt("n_hit");
 				String type = rs.getString("n_type");
+				String profileImg = rs.getString("m_image");
+					if(profileImg == null) profileImg= "basic_profile.png";
 				String important = rs.getString("n_important"); //수정할떄 불러와야함
 				String attach_1 = rs.getString("n_attach_1");
 				String attach_2 = rs.getString("n_attach_2");
 				String attach_3 = rs.getString("n_attach_3");
 				
 				//위에 dto 선언을 해줬음
-				dto = new NoticeDto(no, title, content, reg_id, reg_name, reg_date, 
+				dto = new NoticeDto(no, title, content, reg_id, profileImg,reg_name, reg_date, 
 									type, important, attach_1, attach_2, attach_3, hit);
 				
 			}
@@ -201,7 +208,7 @@ public class NoticeDao {
 	public int noticeUpdate(NoticeDto dto) {
 		int result=0;
 		String sql="update ondo_notice\r\n"
-				+ "set n_title='"+dto.getTitle()+"', n_content='"+dto.getContent()+"', n_important='"+dto.getImportant()+"', n_type='"+dto.getType()+"', n_attach_1='"+dto.getAttach_1()+"', n_attach_2='"+dto.getAttach_2()+"', n_attach_3='"+dto.getAttach_3()+"'\r\n"
+				+ "set n_title='"+dto.getTitle()+"', n_content='"+dto.getContent()+"', n_important='"+dto.getImportant()+"', n_type='"+dto.getType()+"'\r\n"
 				+ "where n_no='"+dto.getNo()+"'";
 		
 		try {
@@ -261,6 +268,84 @@ public class NoticeDao {
 		}
 		
 		return count;
+	}
+
+	//중요글 최대 3개
+	public ArrayList<NoticeDto> getImportantList() {
+		ArrayList<NoticeDto> dtos = new ArrayList<NoticeDto>();
+		String sql="SELECT *\r\n"
+				+ "FROM (\r\n"
+				+ "   select n.n_no, n.n_title, m.m_name, to_char(n.n_reg_date, 'yy-MM-dd') as n_reg_date, \r\n"
+				+ "           n.n_hit, n.n_type, n.n_important, n.n_attach_1, n.n_attach_2, n.n_attach_3\r\n"
+				+ "        from ondo_notice n, ondo_member m\r\n"
+				+ "        where n.n_reg_id = m.m_id\r\n"
+				+ "        and n_important = '1'\r\n"
+				+ "    ORDER BY n_reg_date DESC\r\n"
+				+ ")\r\n"
+				+ "WHERE ROWNUM <= 3";
+		
+		try {
+	        con = DBConnection.getConnection();
+	        ps = con.prepareStatement(sql);
+	        rs = ps.executeQuery();
+	        while (rs.next()) {
+	        	String no = rs.getString("n_no"); 
+				String title = rs.getString("n_title"); 
+				String name = rs.getString("m_name"); 
+				String reg_date = rs.getString("n_reg_date");
+				int hit = rs.getInt("n_hit");
+				String type = rs.getString("n_type");
+				String important = rs.getString("n_important");
+				String attach_1 = rs.getString("n_attach_1");
+				String attach_2 = rs.getString("n_attach_2");
+				String attach_3 = rs.getString("n_attach_3");
+				
+				NoticeDto dto = new NoticeDto(no, title, name, reg_date, important, type, attach_1, attach_2, attach_3, hit);
+				dtos.add(dto);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        System.out.println("getImportantNoticeList() 오류: " + sql);
+	    } finally {
+	        DBConnection.closeDB(con, ps, rs);
+	    }
+		
+		return dtos;
+	}
+	
+	// 최신 공지사항 5개 가져오기 (index 전용)
+	public ArrayList<NoticeDto> getNoticeIndex() {
+		ArrayList<NoticeDto> dtos = new ArrayList<>();
+		String sql = "SELECT *\r\n"
+				+ "FROM (\r\n"
+				+ "    SELECT ROWNUM AS rnum, tbl.*\r\n"
+				+ "    FROM (\r\n"
+				+ "        SELECT n.n_no, n.n_title, n.n_reg_id, m.m_name, TO_CHAR(n.n_reg_date, 'yyyy-MM-dd') AS n_reg_date\r\n"
+				+ "        FROM ondo_notice n\r\n"
+				+ "        JOIN ondo_member m ON n.n_reg_id = m.m_id\r\n"
+				+ "        ORDER BY n.n_reg_date DESC\r\n"
+				+ "    ) tbl\r\n"
+				+ ")\r\n"
+				+ "WHERE rnum <= 5";
+		try {
+	        con = DBConnection.getConnection();
+	        ps = con.prepareStatement(sql);
+	        rs = ps.executeQuery();
+	        while (rs.next()) {
+	            String no = rs.getString("n_no");
+	            String title = rs.getString("n_title");
+	            String reg_name = rs.getString("m_name"); 
+				String reg_date = rs.getString("n_reg_date");
+	            
+	            NoticeDto dto = new NoticeDto(no, title, reg_name, reg_date);
+	            dtos.add(dto);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        DBConnection.closeDB(con, ps, rs);
+	    }
+	    return dtos;
 	}
 
 

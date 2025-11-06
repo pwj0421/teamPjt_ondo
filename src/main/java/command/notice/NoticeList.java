@@ -50,7 +50,12 @@ public class NoticeList implements CommonExecute {
 		int order = totalCount - (current_page - 1) * list_setup_count;
 		request.setAttribute("order", order);
 		
-		ArrayList<NoticeDto> dtos = dao.getNoticeList(select, search);
+		//중요글
+		ArrayList<NoticeDto> Idtos =  dao.getImportantList();
+		request.setAttribute("Idtos", Idtos);
+		
+		//일반글
+		ArrayList<NoticeDto> dtos = dao.getNoticeList(select, search, start, end);
 		request.setAttribute("dtos", dtos);
 		
 		String pageDisplay = N_CommonUtil.getPageDisplay(current_page, total_page, pageNumber_count);

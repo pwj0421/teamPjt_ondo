@@ -74,7 +74,7 @@
           </div>
         </c:if>
       </div>
-      <button type="button" class="add_attach_btn" onclick="addAttach()">+ 파일 추가</button>
+      <button type="button" class="add_attach_btn" onclick="addAttach()">* 파일 수정 불가</button>
     </div>
 
     <div class="notice_write_buttons">
@@ -95,14 +95,14 @@
     const currentCount = container.querySelectorAll('.attach_wrapper').length;
 
     if (currentCount >= MAX_ATTACH) {
-      alert("첨부파일은 최대 " + MAX_ATTACH + "개까지만 추가할 수 있습니다.");
+      alert("등록된 첨부파일은 수정할 수 없습니다.");
       return;
     }
 
     const div = document.createElement('div');
     div.className = 'attach_wrapper';
     div.innerHTML = `
-      <input type="file" name="attach[]" onchange="previewFile(this)">
+      <input type="file" name="attach" onchange="previewFile(this)">
       <span class="file_name"></span>
       <button type="button" onclick="removeAttach(this)">삭제</button>
     `;

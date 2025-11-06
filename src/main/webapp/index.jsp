@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -220,16 +221,43 @@
       </div>
 
       <!-- 공지사항 -->
-      <div class="pv_card pv_notice">
-        <h3 class="pv_card_title">📢 공지사항</h3>
-        <ul class="pv_list">
-          <li><a href="#">서버 점검 안내</a><span>관리자</span><span>2025-10-23</span></li>
-          <li><a href="#">10월 이벤트 안내</a><span>관리자</span><span>2025-10-20</span></li>
-          <li><a href="#">신규 기능 업데이트</a><span>관리자</span><span>2025-10-18</span></li>
-          <li><a href="#">회원 등급 안내</a><span>관리자</span><span>2025-10-15</span></li>
-          <li><a href="#">이용약관 변경</a><span>관리자</span><span>2025-10-12</span></li>
-        </ul>
-      </div>
+	<div class="pv_card pv_notice">
+	  <h3 class="pv_card_title">📢 최근 공지사항</h3>
+	  <ul class="pv_list">
+	    <c:forEach items="${NoticeIndex}" var="dto">
+	      <li>
+	        <c:choose>
+	          <c:when test="${dto.getNo() eq t_dto.getNo()}">
+	            <span class="current_notice">
+	              <c:choose>
+	                <c:when test="${fn:length(dto.getTitle()) > 14}">
+	                  ${fn:substring(dto.getTitle(), 0, 14)}...
+	                </c:when>
+	                <c:otherwise>
+	                  ${dto.getTitle()}
+	                </c:otherwise>
+	              </c:choose>
+	            </span>
+	          </c:when>
+	          <c:otherwise>
+	            <a href="Notice?t_gubun=view&n_no=${dto.getNo()}">
+	              <c:choose>
+	                <c:when test="${fn:length(dto.getTitle()) > 14}">
+	                  ${fn:substring(dto.getTitle(), 0, 14)}...
+	                </c:when>
+	                <c:otherwise>
+	                  ${dto.getTitle()}
+	                </c:otherwise>
+	              </c:choose>
+	            </a>
+	          </c:otherwise>
+	        </c:choose>
+	        <span>${dto.getReg_name()}</span>
+	        <span>${dto.getReg_date()}</span>
+	      </li>
+	    </c:forEach>
+	  </ul>
+	</div>
 
       <!-- 👤 내정보 -->
       <div class="pv_card my_profile_card">
