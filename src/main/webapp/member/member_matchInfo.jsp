@@ -14,6 +14,49 @@ body {
   margin: 0;
   padding: 0;
 }
+
+/* 기존 스타일 유지 */
+body {
+  background: #fff;
+  font-family: 'Pretendard', sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* ✅ 선택된 카테고리 영역 전체 박스 정리 */
+.mp_selected_categories_box {
+  display: flex;
+  flex-direction: column;  /* 한 줄 강제 정렬 방지 */
+  gap: 8px;                /* 문장과 태그 간격 */
+}
+
+/* ✅ 선택된 태그 컨테이너 */
+.mp_selected_categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-start; /* 세로 기준 위쪽 정렬 */
+}
+
+/* ✅ 각 태그 스타일 */
+.mp_selected_categories span {
+  background-color: #f3ece7;
+  border-radius: 16px;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.mp_selected_categories span:hover {
+  background-color: #e0d5cb;
+}
 </style>
 
 <script>
@@ -171,12 +214,10 @@ body {
 			<div class="mp_match_searchBox">
 			
 		    	<div class="mp_selected_categories_box">
-		        	<div style="display:flex; align-items:center; flex-wrap:wrap; gap:8px;">
-		          		<p style="font-weight:600;">내 카테고리:</p>
-		          			<div class="mp_selected_categories"></div>
-		        	</div>
-		        	<button onclick="goInterestUpdate()" class="mp_search_btn">저장</button>
-		      	</div>
+				  <p style="font-weight:600; margin-bottom: 10px;">내 카테고리</p>
+				  <div class="mp_selected_categories"></div>
+				  <button onclick="goInterestUpdate()" class="mp_search_btn">저장</button>
+				</div>
 			
 				<form name="interest">
 					<input type="hidden" name="t_gubun">

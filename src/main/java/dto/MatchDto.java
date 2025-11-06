@@ -17,11 +17,12 @@ public class MatchDto {
 	// MATCH LIST
 	// MatchDao.java : getMatchList()
 	// MatchList.java
-	public MatchDto(String memberId, String image, String nickname, String tagline,
+	public MatchDto(String memberId, String image, String country, String nickname, String tagline,
 			ArrayList<InterestDto> interestDto) {
 		super();
 		this.memberId = memberId;
 		this.image = image;
+		this.country = country;
 		this.nickname = nickname;
 		this.tagline = tagline;
 		this.interestDto = interestDto;
