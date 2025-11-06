@@ -1,10 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.List, dao.ComuPostDao, dto.ComuPostDto" %>
-<%
-    ComuPostDao dao = new ComuPostDao();
-    List<ComuPostDto> postList = dao.getPostList();
-%>
 <%@ include file="../common_header.jsp" %>	
 <%@ include file="../menu/quickMenu.jsp" %>
 
@@ -28,6 +24,19 @@
 		comu.method = "post";
 		comu.action = "Community";
 		comu.submit();
+	}
+	
+	function goSearch(){
+		searchComu.method = "post";
+		searchComu.action = "Community";
+		searchComu.submit();
+	}
+	
+	function goComuPage(page){
+		searchComu.t_nowPage.value=page;
+		searchComu.method = "post";
+		searchComu.action = "Community";
+		searchComu.submit();
 	}
 </script>
 <form name="comu">
@@ -137,11 +146,16 @@
 
   <div class="board_header">
     <h2 class="board_title">자유게시판</h2>
-    <button type="button" 
-        class="write_btn"
-        onclick="goWrite()">
-  		글쓰기
-	</button>
+    <c:if test="${empty sessionId}">
+	   
+	</c:if>
+	<c:if test="${not empty sessionId}">
+		<button type="button" 
+	        class="write_btn"
+	        onclick="goWrite()">
+	  		글쓰기
+		</button>
+	</c:if>
   </div>
 
   <!-- 게시글 리스트 -->
@@ -157,48 +171,46 @@
       </tr>
     </thead>
     <tbody>
-<% if(postList == null || postList.isEmpty()) { %>
-    <tr><td colspan="6">등록된 게시글이 없습니다.</td></tr>
-<% } else {
-       for(ComuPostDto dto : postList) { %>
+    
+    <c:forEach items="${postList }" var="dto">
       <tr>
-        <td class="number_cell"><%= dto.getPost_id() %></td>
+        <td class="number_cell">${dto.getPost_id()}</td>
         <td class="title">
-          <a href="javascript:goView('<%=dto.getPost_id()%>');">
-              <%= dto.getTitle() %>
+          <a href="javascript:goView('${dto.getPost_id()}');">
+              ${dto.getTitle()}
           </a>
         </td>
-        <td class="author_cell"><%= dto.getM_name() %></td>
-        <td class="date_cell"><%= dto.getCreate_at() %></td>
-        <td class="view_cell"><%= dto.getHit() %></td>
+        <td class="author_cell">${dto.getM_name()}</td>
+        <td class="date_cell">${dto.getCreate_at()}</td>
+        <td class="view_cell">${dto.getHit()}</td>
         <td class="favorite_cell">
-          <button class="favorite_btn" title="즐겨찾기">
+          <!-- <button class="favorite_btn" title="즐겨찾기">
             <img src="../image/bookMark_before.png" alt="북마크" class="icon_img">
-          </button>
+          </button> -->
         </td>
       </tr>
-<% } 
-       } %>
+    </c:forEach>
 </tbody>
   </table>
 
   <!-- 페이지네이션 -->
   <div class="pagination">
-    <a href="#" class="active">1</a>
-    <a href="#">2</a>
-    <a href="#">3</a>
-    <a href="#">></a>
+    ${pageDisplay }
   </div>
 
   <!-- 검색 영역 -->
-  <div class="search_box">
-  	<select>
-  		<option>게시글</option>
-  		<option>작성자</option>
-  	</select>
-    <input type="text" class="search_title" placeholder="검색">
-    <button type="button" class="search_btn">검색</button>
-  </div>
+  <form name="searchComu">
+  	<input type="hidden" name="t_nowPage">
+  
+	  <div class="search_box">
+	  	<select name="t_select">
+	  		<option value="title" <c:if test="${t_select eq 'title' }"> selected</c:if>>제목</option>
+	  		<option value="content" <c:if test="${t_select eq 'content' }"> selected</c:if> >내용</option>
+	  	</select>
+	    <input type="text" name="t_search" value="${t_search }" class="search_title" placeholder="검색">
+	    <button type="button" onclick="goSearch()" class="search_btn">검색</button>
+	  </div>
+  </form>
 
 </div>
 
