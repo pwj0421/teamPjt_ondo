@@ -54,7 +54,7 @@ public class MatchDao {
 	    
 		String sql = "SELECT *\r\n"
 				   + "FROM (\r\n"
-				   + "    SELECT DISTINCT i.member_id, m.m_image, m.m_nickname, m.m_tagline\r\n"
+				   + "    SELECT DISTINCT i.member_id, m.m_image, m.m_country, m.m_nickname, m.m_tagline\r\n"
 				   + "    FROM ondo_member_interest i\r\n"
 				   + "    JOIN ondo_member m\r\n"
 				   + "      ON i.member_id = m.m_id\r\n"
@@ -74,6 +74,7 @@ public class MatchDao {
 	        while(rs.next()) {
 	            String matchId = rs.getString("member_id");
 	            String image = rs.getString("m_image");
+	            String country = rs.getString("m_country");
 	            String nickname = rs.getString("m_nickname");
 	            String tagline = rs.getString("m_tagline");
 
@@ -111,7 +112,7 @@ public class MatchDao {
 	                else return 0;
 	            });
 	            
-	            MatchDto dto = new MatchDto(matchId, image, nickname, tagline, interests);
+	            MatchDto dto = new MatchDto(matchId, image, country, nickname, tagline, interests);
 	            dtos.add(dto);
 	        }
 
@@ -166,7 +167,7 @@ public class MatchDao {
 	        	    }
 	            }
 	            
-	            dto = new MatchDto(id, image, nickname, tagline, interests);
+	            dto = new MatchDto(id, image, "", nickname, tagline, interests);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
