@@ -73,6 +73,14 @@ public class NoticeDto {
 		this.attach_3 = attach_3;
 	}
 	
+	//인덱스 공지
+	public NoticeDto(String no, String title, String reg_name, String reg_date) {
+		super();
+		this.no = no;
+		this.title = title;
+		this.reg_name = reg_name;
+		this.reg_date = reg_date;
+	}
 	
 
 	public String getNo() {

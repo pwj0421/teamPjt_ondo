@@ -10,12 +10,32 @@
 <title>공지사항 작성</title>
 <script type="text/javascript">
 	function goSave(){
-		if(checkValue(noti.title,"제목 입력!")) return;
-		if(checkValue(noti.content,"내용 입력!")) return;
+		// 제목, 내용 체크
+		if (checkValue(noti.title, "제목 입력!")) return;
+		if (checkValue(noti.content, "내용 입력!")) return;
 		
+		// 첨부파일 유효성 검사
+		const attachInputs = document.querySelectorAll('input[type="file"][name="attach"]');
+		let hasEmptyFile = false;
+
+		// 첨부 영역이 존재할 때만 검사
+		if (attachInputs.length > 0) {
+			attachInputs.forEach(input => {
+				if (!input.files || input.files.length === 0) {
+					hasEmptyFile = true;
+				}
+			});
+		}
+
+		if (hasEmptyFile) {
+			alert("추가된 모든 파일 칸에 파일을 선택해주세요.");
+			return;
+		}
+
+		// 전송 설정
 		noti.t_gubun.value = "save";
 		noti.method = "post";
-		noti.action = "Notice?t_gubun=save"; // ✅ multipart 전송 시 핵심 수정
+		noti.action = "Notice?t_gubun=save"; // multipart 전송용
 		noti.submit();
 	}
 </script>
@@ -34,14 +54,14 @@
   <div class="form_row">
   <label style="margin-right:10px;">중요도</label>
   <select name="important" required style="width:120px; margin-right:30px;">
-    <option value="">선택</option>
+<!--      <option value="">선택</option>		-->
+	<option value="0" <c:if test="${t_dto.getImportant() eq '0'}">selected</c:if>>일반</option>
     <option value="1" <c:if test="${t_dto.getImportant() eq '1'}">selected</c:if>>중요</option>
-    <option value="0" <c:if test="${t_dto.getImportant() eq '0'}">selected</c:if>>일반</option>
   </select>
 
   <label style="margin-right:10px;">공지 종류</label>
   <select name="type" required style="width:120px;">
-    <option value="">선택</option>
+<!-- 	 <option value="">선택</option> 		-->
     <option value="notice">공지</option>
     <option value="update">업데이트</option>
     <option value="info">안내</option>
@@ -54,7 +74,7 @@
     </div>
 
     <div class="form_section notice_write_attach">
-      <label>첨부파일</label>
+      <label>첨부파일 (등록 후 수정 불가)</label>
       <div id="attachContainer"></div>
       <button type="button" class="add_attach_btn" onclick="addAttach()">+ 파일 추가</button>
     </div>
@@ -85,12 +105,15 @@
     const attachNum = currentCount + 1;
     const div = document.createElement('div');
     div.className = 'attach_wrapper';
-    div.innerHTML = `
-      <input type="file" name="attach_${attachNum}" onchange="previewFile(this)">
-      <span class="file_name"></span>
-      <button type="button" onclick="removeAttach(this)">삭제</button>
-    `;
-    container.appendChild(div);
+    
+   // alert(attachNum);
+
+	    div.innerHTML = `
+	      <input type="file" name="attach" onchange="previewFile(this)">
+	      <span class="file_name"></span>
+	      <button type="button" onclick="removeAttach(this)">삭제</button>
+	    `;
+	    container.appendChild(div);
 
     // 3개가 되면 버튼 숨김
     if (attachNum >= MAX_ATTACH) {

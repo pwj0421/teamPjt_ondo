@@ -208,7 +208,7 @@ public class NoticeDao {
 	public int noticeUpdate(NoticeDto dto) {
 		int result=0;
 		String sql="update ondo_notice\r\n"
-				+ "set n_title='"+dto.getTitle()+"', n_content='"+dto.getContent()+"', n_important='"+dto.getImportant()+"', n_type='"+dto.getType()+"', n_attach_1='"+dto.getAttach_1()+"', n_attach_2='"+dto.getAttach_2()+"', n_attach_3='"+dto.getAttach_3()+"'\r\n"
+				+ "set n_title='"+dto.getTitle()+"', n_content='"+dto.getContent()+"', n_important='"+dto.getImportant()+"', n_type='"+dto.getType()+"'\r\n"
 				+ "where n_no='"+dto.getNo()+"'";
 		
 		try {
@@ -311,6 +311,41 @@ public class NoticeDao {
 	    }
 		
 		return dtos;
+	}
+	
+	// 최신 공지사항 5개 가져오기 (index 전용)
+	public ArrayList<NoticeDto> getNoticeIndex() {
+		ArrayList<NoticeDto> dtos = new ArrayList<>();
+		String sql = "SELECT *\r\n"
+				+ "FROM (\r\n"
+				+ "    SELECT ROWNUM AS rnum, tbl.*\r\n"
+				+ "    FROM (\r\n"
+				+ "        SELECT n.n_no, n.n_title, n.n_reg_id, m.m_name, TO_CHAR(n.n_reg_date, 'yyyy-MM-dd') AS n_reg_date\r\n"
+				+ "        FROM ondo_notice n\r\n"
+				+ "        JOIN ondo_member m ON n.n_reg_id = m.m_id\r\n"
+				+ "        ORDER BY n.n_reg_date DESC\r\n"
+				+ "    ) tbl\r\n"
+				+ ")\r\n"
+				+ "WHERE rnum <= 5";
+		try {
+	        con = DBConnection.getConnection();
+	        ps = con.prepareStatement(sql);
+	        rs = ps.executeQuery();
+	        while (rs.next()) {
+	            String no = rs.getString("n_no");
+	            String title = rs.getString("n_title");
+	            String reg_name = rs.getString("m_name"); 
+				String reg_date = rs.getString("n_reg_date");
+	            
+	            NoticeDto dto = new NoticeDto(no, title, reg_name, reg_date);
+	            dtos.add(dto);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        DBConnection.closeDB(con, ps, rs);
+	    }
+	    return dtos;
 	}
 
 
