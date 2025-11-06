@@ -74,6 +74,9 @@ function goDelete(){
 <form name="work">
 	<input type="hidden" name="t_gubun">
 	<input type="hidden" name="n_no" value="${t_dto.getNo()}">
+	<input type="hidden" name="n_del_attach_1" value="${t_dto.getAttach_1()}">
+	<input type="hidden" name="n_del_attach_2" value="${t_dto.getAttach_2()}">
+	<input type="hidden" name="n_del_attach_3" value="${t_dto.getAttach_3()}">
 </form>
 <div class="notice_view">
   <c:if test="${t_dto.getType() eq 'notice'}">
