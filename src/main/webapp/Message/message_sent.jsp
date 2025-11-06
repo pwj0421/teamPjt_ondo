@@ -4,6 +4,11 @@
 <%@ include file="../menu/quickMenu.jsp" %>
 
 <div class="mp_mypage_container">
+	<!-- 왼쪽 메뉴 -->
+    <div class="chat_side_menu">
+        <%@ include file="../menu/chat_menu.jsp" %>
+    </div>
+	
     <!-- 메인 콘텐츠 -->
     <div class="chat_main_content">
 
@@ -57,6 +62,10 @@
 /* 메인 콘텐츠 */
 .chat_main_content {
     flex: 1;
+    border: 1px solid #e0e0e0; /* ← 이 한 줄 추가 */
+    border-radius: 16px;
+    padding: 20px;
+    background: #fff;
 }
 
 /* 요청 없을 때 박스 */
