@@ -60,22 +60,11 @@ public class Message extends HttpServlet {
                 break;
 
             case "Messagelist":
-                CommonExecute msgRoom = new MessageRoomList();
-                msgRoom.execute(request);
+               // CommonExecute msgRoom = new MessageRoomList();
+               // msgRoom.execute(request);
                 viewPage = "Message/message_list.jsp";
                 break;
 
-            case "getRoomMessages": // AJAX용 메시지 불러오기
-                request.setAttribute("response", response); // execute에서 response 접근
-                CommonExecute roomMsg = new MessageGetRoomMessages();
-                roomMsg.execute(request);
-                return; // JSON 바로 반환, JSP 포워딩 없음
-
-            case "sendMessage": // AJAX용 메시지 저장
-                request.setAttribute("response", response);
-                CommonExecute sendMsg = new MessageSend();
-                sendMsg.execute(request);
-                return; // JSON/텍스트 바로 반환
         }
 
         RequestDispatcher rd = request.getRequestDispatcher(viewPage);
