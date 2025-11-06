@@ -47,8 +47,8 @@ ${post.getContent()}
 
 
 <!-- 첨부파일 다운로드 버튼 -->
-<div class="view_files">
-  <button class="file_btn" id="toggleFilesBtn">첨부파일 보기</button>
+<!-- <div class="view_files">
+  <button class="file_btn" id="toggleFilesBtn">첨부파일 보기</button> -->
   
   <!-- 첨부파일 리스트 (이미지 제외) -->
  
@@ -56,15 +56,12 @@ ${post.getContent()}
 
 <script>
   function goDelete(no){
-	  const postId = document.comu.post_id.value;
-      if (!postId) {
-          alert("게시글 번호가 없습니다.");
-          return;
-      }
-	  comu.t_gubun.value="delete";
-	  comu.method = "post";
-	  comu.action = "Community";
-	  comu.submit();
+	  if(confirm("삭제하시겠습니까?")){
+		  comu.t_gubun.value="delete";
+		  comu.method = "post";
+		  comu.action = "Community";
+		  comu.submit();
+	  }
   }
   function goUpdate(){
 		comu.t_gubun.value="update";
@@ -91,26 +88,26 @@ ${post.getContent()}
     <button class="delete_btn" onclick="goDelete()">삭제</button>
   </div>
   
-<div class="like_area">
+<!-- <div class="like_area">
   <button class="like_btn" onclick="increaseLike(this)">
     👍 추천
     <span class="like_count">0</span>
   </button>
 </div>
-	
+ -->	
   <!-- 댓글 영역 -->
-  <div class="comments_section">
-    <h3 class="comments_title">댓글</h3>
+  <!-- <div class="comments_section">
+    <h3 class="comments_title">댓글</h3> -->
 
    <!-- 댓글 작성 -->
-    <div class="comment_write">
+  <!--   <div class="comment_write">
       <input type="text" class="comment_input" placeholder="댓글을 입력하세요">
       <button class="comment_btn">등록</button>
     </div>
-  </div>
+  </div> -->
   
     <!-- 댓글 리스트 -->
-    <div class="comment_list">
+    <!-- <div class="comment_list">
       <div class="comment_item">
         <span class="comment_author">유저B</span>
         <span class="comment_date">2025-10-20</span>
@@ -125,7 +122,7 @@ ${post.getContent()}
 
       </div>
     </div>
-
+ -->
  
 
 </div>

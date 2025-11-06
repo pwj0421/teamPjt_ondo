@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import common.CommonUtil;
+import common.N_CommonUtil;
 import dao.ComuPostDao;
 import dao.ComuCommentDao;
 
@@ -37,53 +38,85 @@ public class CommunityServlet extends HttpServlet {
     	request.setCharacterEncoding("utf-8");
         String gubun = request.getParameter("t_gubun");
         if (gubun == null) gubun = "list";
+        
+        String viewPage = "";
 
-        switch (gubun) {
-            case "list":
-                listPosts(request, response);
-                break;
-            case "view":
-                viewPost(request, response);
-                break;
-            case "write":
-                RequestDispatcher rd = request.getRequestDispatcher("Community/comu_write.jsp");
-                rd.forward(request, response);
-                break;
-            default:
-                listPosts(request, response);
-                break;
-        }
+        if (gubun.equals("list")) {
+        	listPosts(request, response);
+        	viewPage = "Community/comu_list.jsp";
+        } else if (gubun.equals("write")) {
+        	viewPage = "Community/comu_write.jsp";
+        } else if ("insert".equals(gubun)) {
+            insertPost(request, response);
+            viewPage = "common_alert.jsp";
+        } else if (gubun.equals("view")) {
+        	viewPost(request, response);
+        	viewPage = "Community/comu_view.jsp";
+        } else if ("delete".equals(gubun)) {   // ✅ 게시글 삭제 추가
+            deletePost(request, response);
+            viewPage = "common_alert.jsp";
+        }  else if ("update".equals(gubun)) {
+            updatePost(request, response);
+            viewPage = "Community/comu_update.jsp";
+        }  else if ("updateProc".equals(gubun)) {
+            updatePostProc(request, response);
+            viewPage = "Community/comu_alert_view.jsp";
+        }  
+        
+        RequestDispatcher rd = request.getRequestDispatcher(viewPage);
+        rd.forward(request, response);
+        
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	request.setCharacterEncoding("utf-8");
-    	String gubun = request.getParameter("t_gubun");
-        if ("insert".equals(gubun)) {
-            insertPost(request, response);
-        } else if ("delete".equals(gubun)) {   // ✅ 게시글 삭제 추가
-            deletePost(request, response);
-        }  else if ("update".equals(gubun)) {
-            updatePost(request, response);
-        }  else if ("updateProc".equals(gubun)) {
-            updatePostProc(request, response);
-        }  else {
-            doGet(request, response);
-        }
+        doGet(request, response);
     }
 
     // 게시글 리스트
     private void listPosts(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ComuPostDao dao = new ComuPostDao();
-        List<ComuPostDto> postList = dao.getPostList();
         
-        System.out.println("게시글 수: " + postList.size());
+        String select = request.getParameter("t_select");
+        String search = request.getParameter("t_search");
+        
+		if(select == null) {
+			select = "title";
+			search = "";
+		}
+		request.setAttribute("t_select", select);
+		request.setAttribute("t_search", search);
+		
+		/* paging 설정 start*/
+		int totalCount = dao.getTotalCount(select, search);
+		int list_setup_count = 5; // 한 페이지당 출력 행수 
+		int pageNumber_count = 3; // 한 페이지당 출력 페이지 갯수
+		
+		String nowPage = request.getParameter("t_nowPage"); // 현재 클릭한 페이지 번호
+		int current_page = 0; // 현재페이지 번호
+		int total_page = 0; // 전체 페이지 수
+		
+		if(nowPage == null || nowPage.equals("")) current_page = 1; // null => 1로 초기화
+		else current_page = Integer.parseInt(nowPage);
+		
+		total_page = totalCount / list_setup_count; // 몫 : 2
+		int rest = 	totalCount % list_setup_count; // 나머지 : 1
+		if(rest !=0) total_page = total_page + 1; // 3
+		
+		int start = (current_page -1) * list_setup_count + 1;
+		int end   = current_page * list_setup_count;
+		/* paging 설정 end*/
+		
+		request.setAttribute("totalCount", totalCount);
+        
+        List<ComuPostDto> postList = dao.getPostList(select, search, start, end);
         
         request.setAttribute("postList", postList);
-
-        RequestDispatcher rd = request.getRequestDispatcher("Community/comu_list.jsp");
-        rd.forward(request, response);
+        
+        String pageDisplay = CommonUtil.getComuPageDisplay(current_page, total_page, pageNumber_count);
+		request.setAttribute("pageDisplay", pageDisplay);
+        
     }
 
     // 게시글 상세보기
@@ -92,51 +125,27 @@ public class CommunityServlet extends HttpServlet {
 
         String postIdParam = request.getParameter("post_id");
         
-        if (postIdParam == null) {
-            response.sendRedirect("Community?t_gubun=list");
-            return;
-        }
-
         int post_id = Integer.parseInt(postIdParam);
         ComuPostDao dao = new ComuPostDao();
-       
         
-            dao.increaseHit(post_id);
-           
+        //조회수 증가
+        dao.increaseHit(post_id);
         
         ComuPostDto post = dao.getPostById(post_id);
        
-        if (post == null) {
-            response.sendRedirect("Community?t_gubun=list");
-            return;
-        }
-        
         request.setAttribute("post", post);
 
-
-       	  RequestDispatcher rd = request.getRequestDispatcher("Community/comu_view.jsp");
-          rd.forward(request, response);
-    	
-    	}
+	}
     
 
     // 게시글 작성 처리
     private void insertPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
-
-        // 세션에서 로그인한 사용자 ID 가져오기
-        String m_id = (String) CommonUtil.getSessionInfo(request, "id");
-        if (m_id == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
-        
         ComuPostDao dao = new ComuPostDao();
         
-        
         int no = dao.getComuNo();
+        String m_id = (String) CommonUtil.getSessionInfo(request, "id");
         String title = request.getParameter("title");
         String content = request.getParameter("content");
 
@@ -146,63 +155,45 @@ public class CommunityServlet extends HttpServlet {
         dto.setTitle(title);
         dto.setContent(content);
 
-        dao.insertPost(dto); // 게시글 DB 저장
-
+        int result = dao.insertPost(dto); // 게시글 DB 저장
         
-
-        RequestDispatcher rd = request.getRequestDispatcher("Community/comu_list.jsp");
-        rd.forward(request, response);
+        String msg = result == 1 ? "게시글 등록성공." : "게시글 등록 실패.";
+        request.setAttribute("t_msg", msg);
+        request.setAttribute("t_url", "Community");
+        
     }
         
         // ✅ 게시글 삭제 처리 (POST 방식)
         private void deletePost(HttpServletRequest request, HttpServletResponse response)
                 throws ServletException, IOException {
 
-            request.setCharacterEncoding("UTF-8");
-
             String postIdParam = request.getParameter("post_id");
-            if (postIdParam == null || postIdParam.isEmpty()) {
-                response.sendRedirect("Community?t_gubun=list");
-                return;
-            }
 
             int post_id = Integer.parseInt(postIdParam);
 
             ComuPostDao dao = new ComuPostDao();
             boolean isDeleted = dao.deletePost(post_id);
 
-            if (isDeleted) {
-                System.out.println("게시글 삭제 성공: " + post_id);
-                response.sendRedirect("Community?t_gubun=list");
-            } else {
-                System.out.println("게시글 삭제 실패: " + post_id);
-                response.sendRedirect("Community?t_gubun=view&post_id=" + post_id + "&error=delete_failed");
-            }
+            String msg = isDeleted == true ? "게시글 삭제성공." : "게시글 삭제 실패";
+            request.setAttribute("t_msg", msg);
+            request.setAttribute("t_url", "Community");
+            
     }
         
         //게시글 업데이트 열기
         private void updatePost(HttpServletRequest request, HttpServletResponse response)
                 throws ServletException, IOException {
             String idParam = request.getParameter("post_id");
-            if (idParam == null || idParam.isEmpty()) {
-                // post_id 안 넘어오면 리스트로 돌려보내기
-                response.sendRedirect("Community?t_gubun=list");
-                return;
-            }
 
             int postId = Integer.parseInt(idParam);
             ComuPostDao dao = new ComuPostDao();
             ComuPostDto post = dao.getPostById(postId);
 
             request.setAttribute("post", post);
-            RequestDispatcher rd = request.getRequestDispatcher("Community/comu_update.jsp");
-            rd.forward(request, response);
         }
         
         private void updatePostProc(HttpServletRequest request, HttpServletResponse response)
                 throws ServletException, IOException {
-
-            request.setCharacterEncoding("UTF-8");
 
             int postId = Integer.parseInt(request.getParameter("post_id"));
             String title = request.getParameter("title");
@@ -210,10 +201,13 @@ public class CommunityServlet extends HttpServlet {
 
             ComuPostDao dao = new ComuPostDao();
             boolean result = dao.updatePost(postId, title, content); // ✅ DB 실제 수정 호출
+            
+            String msg = result == true? "게시글 수정완료." : "게시글 수정실패.";
+            request.setAttribute("t_msg", msg);
+            request.setAttribute("t_url", "Community");
+            request.setAttribute("post_id", postId);
+            request.setAttribute("t_gubun", "view");
 
-            System.out.println("update result: " + result); // 로그 찍기 (true/false 확인)
-
-            response.sendRedirect("Community?t_gubun=view&post_id=" + postId);
         }
 
 

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dto.ComuPostDto;
+import dto.NoticeDto;
 import common.DBConnection; // DBConnection 클래스에서 Connection 가져오기
 
 public class ComuPostDao {
@@ -42,13 +43,20 @@ public class ComuPostDao {
     }
      
     // 게시글 리스트
-    public List<ComuPostDto> getPostList() {
+    public List<ComuPostDto> getPostList(String select, String search, int start, int end) {
         List<ComuPostDto> list = new ArrayList<>();
-        String sql = "SELECT p.post_id, m.m_name, p.title, p.create_at, p.hit " +
-                "FROM ondo_comu_posts p " +
-                "JOIN ondo_member m ON p.m_id = m.m_id " +
-                "ORDER BY p.post_id DESC";
-        System.out.println(sql);
+        String sql = "select * \r\n"
+        		+ "from (\r\n"
+        		+ "    select rownum as rnum, tbi.*\r\n"
+        		+ "    from (\r\n"
+        		+ "    SELECT p.post_id, m.m_name, p.title, p.create_at, p.hit \r\n"
+        		+ "    FROM ondo_comu_posts p JOIN ondo_member m \r\n"
+        		+ "    ON p.m_id = m.m_id\r\n"
+        		+ "    where 1=1\r\n"
+        		+ "    and "+select+" like '%' || '"+search+"' || '%'\r\n"
+        		+ "    ORDER BY p.post_id DESC\r\n"
+        		+ "    ) tbi\r\n"
+        		+ ") where rnum >= "+start+" and rnum <= "+end;
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -121,8 +129,9 @@ public class ComuPostDao {
     
     
     // 게시글 삽입
-    public void insertPost(ComuPostDto dto) {
-        String sql = "INSERT INTO ondo_comu_posts(post_id, m_id, title, content, create_at, update_at, hit) VALUES (?, ?, ?, ?, SYSDATE, SYSDATE, 0)";
+    public int insertPost(ComuPostDto dto) {
+        int result = 0;
+    	String sql = "INSERT INTO ondo_comu_posts(post_id, m_id, title, content, create_at, update_at, hit) VALUES (?, ?, ?, ?, SYSDATE, SYSDATE, 0)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, new String[]{"post_id"})) {
@@ -131,7 +140,7 @@ public class ComuPostDao {
             ps.setString(2, dto.getM_id());
             ps.setString(3, dto.getTitle());
             ps.setString(4, dto.getContent());
-            ps.executeUpdate();
+            result = ps.executeUpdate();
 
             // 방금 등록한 post_id 가져오기
             ResultSet rs = ps.getGeneratedKeys();
@@ -142,6 +151,8 @@ public class ComuPostDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
+        return result;
     }
 
     public boolean deletePost(int postId) {
@@ -182,6 +193,34 @@ public class ComuPostDao {
         }
         return result;
     }
+
+	public int getTotalCount(String select, String search) {
+		int result = 0;
+		String sql = "select count(*) as count\r\n"
+					+ "from ondo_comu_posts\r\n"
+					+ "where "+select+" like '%' || '"+search+"' || '%'";
+			
+		try {
+			conn = DBConnection.getConnection();
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				result = rs.getInt("count");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			String method = Thread.currentThread().getStackTrace()[1].getClassName();
+			System.out.println(method+"에서 오류 발생");
+			System.out.println(sql);
+		} finally {
+			DBConnection.closeDB(conn, ps, rs);
+		}
+		
+		
+		return result;
+	}
     
    
 
