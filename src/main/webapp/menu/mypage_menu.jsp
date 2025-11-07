@@ -105,7 +105,7 @@ window.addEventListener("DOMContentLoaded", function(){
       <a href="javascript:goPage('Member','newPassword')">비밀번호 변경</a>
     </div>
   </div>
-
+<!-- 
   <div class="menu-item">
     <button onclick="toggleSubMenu('msgMenu')">메시지</button>
     <div class="sub-menu" id="msgMenu">
@@ -114,4 +114,6 @@ window.addEventListener("DOMContentLoaded", function(){
       <a href="javascript:goPage('Message','Messagelist')">쪽지함</a>
     </div>
   </div>
+  
+   -->
 </div>
