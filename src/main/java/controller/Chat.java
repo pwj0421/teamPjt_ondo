@@ -9,6 +9,8 @@ import command.message.MessageChatContentExecute;
 import command.message.MessageChatList;
 import command.message.MessageMyRequest;
 import command.message.MessageReceiveList;
+import command.message.RequestStateCancel;
+import command.message.RequestStateUpdate;
 import common.CommonExecute;
 
 @WebServlet("/Chat")
@@ -60,6 +62,19 @@ public class Chat extends HttpServlet {
 
             menuTap = "MessageList";
             viewPage = "Message/message_chat.jsp";
+            break;
+            
+            
+        case "stateUpdate":
+            CommonExecute state = new RequestStateUpdate();
+            state.execute(request);
+            viewPage = "common_alert_view.jsp";
+            break;
+
+        case "requestCancel":
+            CommonExecute cancel = new RequestStateCancel();
+            cancel.execute(request);
+            viewPage = "common_alert_view.jsp";
             break;
 
     }
