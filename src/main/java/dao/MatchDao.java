@@ -45,21 +45,25 @@ public class MatchDao {
 	
 	// MATCH LIST
 	// MatchList.java
-	public ArrayList<MatchDto> getMatchList(String id, ArrayList<Integer> searches) {
+	public ArrayList<MatchDto> getMatchList(String id, String tab, ArrayList<Integer> searches) {
 	    ArrayList<MatchDto> dtos = new ArrayList<>();
 	    	    
-	    String joinedIds = searches.stream()
-	    						   .map(String::valueOf)
-	    						   .collect(Collectors.joining(","));
+	    String searchIds = searches.stream()
+	    						  .map(String::valueOf)
+	    						  .collect(Collectors.joining(","));
 	    
-		String sql = "SELECT * FROM ( " +
-				  	 "SELECT DISTINCT i.member_id, m.m_image, m.m_nickname, m.m_tagline " +
-				  	 "FROM ondo_member_interest i " +
-				  	 "JOIN ondo_member m ON i.member_id = m.m_id " +
-				  	 "WHERE i.item_id IN (" + joinedIds + ") " +
-				  	 "AND i.member_id <> ? " +
-				  	 "ORDER BY dbms_random.value ) " +
-				  	 "WHERE rownum <= 4";
+		String sql = "SELECT *\r\n"
+				   + "FROM (\r\n"
+				   + "    SELECT DISTINCT i.member_id, m.m_image, m.m_country, m.m_nickname, m.m_tagline\r\n"
+				   + "    FROM ondo_member_interest i\r\n"
+				   + "    JOIN ondo_member m\r\n"
+				   + "      ON i.member_id = m.m_id\r\n"
+				   + "    WHERE i.item_id IN ("+searchIds+")\r\n"
+				   + "    AND i.member_id <> ?\r\n"
+				   + "    AND m.m_type = '"+tab+"'\r\n"
+				   + "    ORDER BY dbms_random.value\r\n"
+				   + ")\r\n"
+				   + "WHERE rownum <= 4";
 
 		try {
 	        con = DBConnection.getConnection();
@@ -70,6 +74,7 @@ public class MatchDao {
 	        while(rs.next()) {
 	            String matchId = rs.getString("member_id");
 	            String image = rs.getString("m_image");
+	            String country = rs.getString("m_country");
 	            String nickname = rs.getString("m_nickname");
 	            String tagline = rs.getString("m_tagline");
 
@@ -107,7 +112,7 @@ public class MatchDao {
 	                else return 0;
 	            });
 	            
-	            MatchDto dto = new MatchDto(matchId, image, nickname, tagline, interests);
+	            MatchDto dto = new MatchDto(matchId, image, country, nickname, tagline, interests);
 	            dtos.add(dto);
 	        }
 
@@ -162,7 +167,7 @@ public class MatchDao {
 	        	    }
 	            }
 	            
-	            dto = new MatchDto(id, image, nickname, tagline, interests);
+	            dto = new MatchDto(id, image, "", nickname, tagline, interests);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -174,6 +179,71 @@ public class MatchDao {
 		return dto;
 	}
 	
+	// 매치 리스트 상세보기
+	// MatchView.java
+	public MatchDto getMatchView(String id) {
+		MatchDto dto = null;
+		String sql = "SELECT m_image, m_nickname, m_gender, m_country, m_tagline, m_introduction\r\n"
+				   + "FROM ondo_member\r\n"
+				   + "WHERE m_id = '"+id+"'";
+		
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				String image = rs.getString("m_image");
+				if(image == null) image = "basic_profile.png";
+				
+				String nickname = rs.getString("m_nickname");
+				
+				String gender = rs.getString("m_gender");
+				if(gender.equals("F")) gender = "여자";
+                else if(gender.equals("M")) gender = "남자";
+				
+				String country = rs.getString("m_country");
+				if(country.equals("KR")) country ="대한민국";
+                else if(country.equals("JP")) country = "일본";
+				 
+				String tagline = rs.getString("m_tagline");
+				
+				String introduction = rs.getString("m_introduction");
+				
+				ArrayList<InterestDto> interests = new ArrayList<>();
+	            String sql2 = "SELECT m.item_id, i.item_name\r\n"
+	            			+ "FROM ondo_member_interest m\r\n"
+	            			+ "JOIN ondo_interest_item i\r\n"
+	            			+ "  ON m.item_id = i.item_id\r\n"
+	            			+ "WHERE member_id = ? ";
+	            
+	            try (PreparedStatement ps2 = con.prepareStatement(sql2)) {
+	                ps2.setString(1, id);
+	                try (ResultSet rs2 = ps2.executeQuery()) {
+	                    while(rs2.next()) {
+	                    	int item_id = rs2.getInt("item_id");
+	                    	String item_name = rs2.getString("item_name");
+	                    	
+	                    	InterestDto interest = new InterestDto(item_id, item_name);
+	                    	interests.add(interest);
+	                    } 
+	                    
+	                } catch(Exception e) {
+	        	        e.printStackTrace();
+	        	        System.out.println("getMatchMyInfo() 오류2 : " + sql2);
+	        	    }
+	            }
+	            
+	            dto = new MatchDto(id, image, nickname, gender, country, tagline, introduction, interests);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("getMatchMyInfo() 오류 : "+ sql);
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		
+		return dto;
+	}
 	
 	
 	

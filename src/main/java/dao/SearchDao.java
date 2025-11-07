@@ -45,7 +45,7 @@ public class SearchDao {
 				
 				String n_content = highlightSnippet(content, search, 50); // 앞뒤 10자
 				
-				NoticeDto dto = new NoticeDto(n_no, n_title, n_content, "", n_name, reg_date, "", "", "", "", "", n_hit);
+				NoticeDto dto = new NoticeDto(n_no, n_title, n_content, n_name, reg_date, n_hit);
 				dtos.add(dto);
 			}
 			

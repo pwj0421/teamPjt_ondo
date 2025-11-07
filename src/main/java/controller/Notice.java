@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import command.notice.NoticeDelete;
+import command.notice.NoticeIndex;
 import command.notice.NoticeList;
 import command.notice.NoticeSave;
 import command.notice.NoticeUpdate;
@@ -83,6 +84,11 @@ public class Notice extends HttpServlet {
 			noti.execute(request);
 			viewPage = "common_alert.jsp";
 		}
+//		} else if(gubun.equals("index")) {
+//		    CommonExecute notice = new NoticeIndex();
+//		    notice.execute(request);
+//		    viewPage = "index.jsp";
+//		}
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
 		rd.forward(request, response);
