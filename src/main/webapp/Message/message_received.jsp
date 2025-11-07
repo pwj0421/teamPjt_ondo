@@ -195,10 +195,17 @@
         </c:if>
     </div>
 </div>
-
+<form name="msgReqList">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="state">
+	<input type="hidden" name="partnerId">
+	<input type="hidden" name="requestId">
+	<input type="hidden" name="greetingMsg">
+	<input type="hidden" name="locate" value="chatReceived">
+</form>
 <script>
 function updateState(requestId, senderId, state, gubun, greetingMsg) {
-    if (state === "rejected") {
+    if (state == "rejected") {
         if (confirm("거절 시 해당 회원은 나에게 다시 요청을 보낼 수 없습니다. 정말 거절하시겠습니까?")) {
             msgReqList.t_gubun.value = gubun;
             msgReqList.state.value = state;
@@ -208,11 +215,9 @@ function updateState(requestId, senderId, state, gubun, greetingMsg) {
             msgReqList.method = "post";
             msgReqList.action = "Chat";
             msgReqList.submit();
-        } else {
-            alert("취소되었습니다.");
-        }
+        } 
     } else {
-        msgReqList.t_gubun.value = gubun;
+    	msgReqList.t_gubun.value = gubun;
         msgReqList.state.value = state;
         msgReqList.partnerId.value = senderId;
         msgReqList.requestId.value = requestId;

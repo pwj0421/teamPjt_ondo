@@ -46,7 +46,7 @@ public class RequestStateUpdate implements CommonExecute {
 		
 		request.setAttribute("t_msg", msg);
 		request.setAttribute("t_gubun", locate);
-		request.setAttribute("t_url", "Message");
+		request.setAttribute("t_url", "Chat");
 	}
 
 }

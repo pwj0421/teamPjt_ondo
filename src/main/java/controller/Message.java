@@ -27,26 +27,7 @@ public class Message extends HttpServlet {
         String viewPage = "";
 
         switch(gubun) {
-            case "requestlist":
-                CommonExecute msgRequest = new MessageReceiveList();
-                msgRequest.execute(request);
-                viewPage = "Message/request_list.jsp";
-                break;
-
-            case "messageRequest":
-                CommonExecute msgReq = new MessageRequest();
-                msgReq.execute(request);
-                String result_msg = (String)request.getAttribute("t_msg"); 
-                response.setContentType("text/plain; charset=UTF-8");
-                response.getWriter().write(result_msg.equals("전송성공") ? "SUCCESS" : "FAIL");
-                return;
-
-            case "myRequest":
-                CommonExecute myReq = new MessageMyRequest();
-                myReq.execute(request);
-                viewPage = "Message/my_request.jsp";
-                break;
-
+          
             case "stateUpdate":
                 CommonExecute state = new RequestStateUpdate();
                 state.execute(request);
@@ -59,11 +40,7 @@ public class Message extends HttpServlet {
                 viewPage = "common_alert_view.jsp";
                 break;
 
-            case "Messagelist":
-               // CommonExecute msgRoom = new MessageRoomList();
-               // msgRoom.execute(request);
-                viewPage = "Message/message_list.jsp";
-                break;
+           
 
         }
 
