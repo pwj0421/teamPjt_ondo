@@ -20,21 +20,21 @@
                     나와 대화중인 친구 : <strong>${r_dto.size()}명</strong>
                 </div>
                 <div class="chat_friend_items" id="friendList">
-                    <c:forEach items="${r_dto}" var="dto" varStatus="status">
-                        <div class="chat_friend_card ${status.index == 0 ? 'active' : ''}"
-                             data-roomid="${dto.roomId}" 
-                             onclick="selectFriend(this, '${dto.partnerId}', '${dto.partnerNickname}', '${dto.roomId}')">
-                            <img class="friend_profile_img" 
-                                 src="attach/member_profile/${dto.partnerImage != null ? dto.partnerImage : 'basic_profile.png'}" 
-                                 alt="프로필">
-                            <div class="friend_info">
-                                <div class="friend_name">${dto.partnerNickname}</div>
-                                <div class="friend_preview">
-                                    <c:out value="${dto.content != null ? dto.content : '최근 메시지 없음'}"/>
-                                </div>
-                            </div>
-                        </div>
-                    </c:forEach>
+                   <c:forEach items="${r_dto}" var="dto" varStatus="status">
+					    <div class="chat_friend_card"
+					         data-roomid="${dto.roomId}" 
+					         onclick="selectFriend(this, '${dto.partnerId}', '${dto.partnerNickname}', '${dto.roomId}')">
+					        <img class="friend_profile_img" 
+					             src="attach/member_profile/${dto.partnerImage != null ? dto.partnerImage : 'basic_profile.png'}" 
+					             alt="프로필">
+					        <div class="friend_info">
+					            <div class="friend_name">${dto.partnerNickname}</div>
+					            <div class="friend_preview">
+					                <c:out value="${dto.content != null ? dto.content : '최근 메시지 없음'}"/>
+					            </div>
+					        </div>
+					    </div>
+					</c:forEach>
                 </div>
 
                 <!-- 페이징 -->
@@ -50,20 +50,11 @@
             <!-- 오른쪽: 채팅창 -->
             <div class="chat_room_box">
                 <div class="chat_header" id="chatHeader">
-                    <c:choose>
-                        <c:when test="${not empty r_dto}">
-                            ${r_dto[0].partnerNickname}
-                        </c:when>
-                        <c:otherwise>채팅방 없음</c:otherwise>
-                    </c:choose>
+                    채팅방 없음
                 </div>
 
                 <div class="chat_content" id="chatContent">
-                    <c:forEach items="${msg_dto}" var="msg">
-                        <div class="chat_msg ${msg.senderId == sessionScope.m_id ? 'right' : 'left'}">
-                            <span>${msg.content}</span>
-                        </div>
-                    </c:forEach>
+                    <div class="loading">대화할 친구를 선택하세요.</div>
                 </div>
 
                 <div class="chat_input_box">
