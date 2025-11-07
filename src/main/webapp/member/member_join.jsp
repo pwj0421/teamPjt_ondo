@@ -721,9 +721,9 @@
 		    <input type="text" name="m_email1" placeholder="이메일" style="width:53%">&nbsp;@
 		    <select id="m_email2" name="m_email2" class="custom-select" style="width:40%">
 		       <option value="">선택</option>
-		       <option value="naver">naver.com</option>
-		       <option value="daum">daum.net</option>
-		       <option value="google">gmail.com</option>
+		       <option value="naver.com">naver.com</option>
+		       <option value="daum.com">daum.net</option>
+		       <option value="google.com">gmail.com</option>
 		     </select>
 		    <input type="text" name="m_age" placeholder="나이" onkeyup="onlyNumber(this)">
 	

@@ -423,6 +423,52 @@ public class MemberDao {
 		   return result;
 	   }
 
+	   public boolean checkUserMatch(String name, String email) {
+		   boolean match = false;
+		   String sql = "SELECT COUNT(*) AS cnt "
+				   	+ "FROM ondo_member "
+				   	+ "WHERE m_name = ? "
+				   	+ "AND (m_email1 || '@' || m_email2) = ?";;
+		   try {
+			   conn = DBConnection.getConnection();
+			   pstmt = conn.prepareStatement(sql);
+			   pstmt.setString(1, name);
+			   pstmt.setString(2, email);
+			   rs = pstmt.executeQuery();
+			   if(rs.next() && rs.getInt("cnt") > 0) {
+				   match = true;
+			   }
+			   
+		   } catch(Exception e) {
+			   e.printStackTrace();
+			   System.out.println("checkUserMatch() 오류 : " + sql);
+		   } finally {
+			   DBConnection.closeDB(conn, pstmt, rs);
+		   }
+		   
+		return match;
+	   }
+
+	   public String getIdByEmail(String email) {
+		   String id = null;
+		    String sql = "SELECT m_id FROM ondo_member WHERE (m_email1 || '@' || m_email2) = ?";
+		    try {
+		        conn = DBConnection.getConnection();
+		        pstmt = conn.prepareStatement(sql);
+		        pstmt.setString(1, email);
+		        rs = pstmt.executeQuery();
+		        if (rs.next()) {
+		            id = rs.getString("m_id");
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        System.out.println("getIdByEmail() 오류 : " + sql);
+		    } finally {
+		        DBConnection.closeDB(conn, pstmt, rs);
+		    }
+		    return id;
+		}
+
 	   
 	   
 }
