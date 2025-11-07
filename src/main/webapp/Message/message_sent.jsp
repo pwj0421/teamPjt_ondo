@@ -48,7 +48,22 @@
 
     </div>
 </div>
+<form name="MyRequest">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="requestId">
 
+</form>
+<script>
+function requestCancel(requestNo, gubun){
+    if(confirm("요청을 취소하시겠습니까?")){
+        MyRequest.t_gubun.value = gubun;
+        MyRequest.requestId.value = requestNo;
+        MyRequest.method = "post";
+        MyRequest.action = "Chat";
+        MyRequest.submit();
+    }
+}
+</script>
 <style>
 /* 전체 레이아웃 */
 .mp_mypage_container {
@@ -184,15 +199,5 @@
 }
 </style>
 
-<script>
-function requestCancel(requestNo, gubun){
-    if(confirm("요청을 취소하시겠습니까?")){
-        MyRequest.t_gubun.value = gubun;
-        MyRequest.requestNo.value = requestNo;
-        MyRequest.method = "post";
-        MyRequest.action = "Chat";
-        MyRequest.submit();
-    }
-}
-</script>
+
 <%@ include file="../common_footer.jsp" %>
