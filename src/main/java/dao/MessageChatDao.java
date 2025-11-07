@@ -65,27 +65,35 @@ public class MessageChatDao {
     
     //메세지 컨테이너
     // 특정 방의 전체 메시지
-    public List<MessageChatDto> getMessageListByRoomId(String roomId) {
-        List<MessageChatDto> list = new ArrayList<>();
+    public ArrayList<MessageChatDto> getMessageListByRoomId(String roomId) {
+    	ArrayList<MessageChatDto> dtos = new ArrayList<>();
         String sql = "SELECT message_id, content, sender_id, to_char(sent_at, 'hh24:mi') as sent_At \r\n"
         		+ "        FROM ondo_message WHERE room_id = "+roomId+" ORDER BY sent_at ASC";
-        System.out.println("ddddd :::: "+sql);
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, roomId);
-            try (ResultSet rs = ps.executeQuery()) {
+        
+        try {
+	        con = DBConnection.getConnection();
+	        ps = con.prepareStatement(sql);
+	        rs = ps.executeQuery();
+
                 while(rs.next()) {
-                    MessageChatDto dto = new MessageChatDto();
-                    dto.setMessageId(rs.getString("message_id"));
-                    dto.setContent(rs.getString("content"));
-                    dto.setSenderId(rs.getString("sender_id"));
-                    dto.setSentAt(rs.getTimestamp("sent_at"));
-                    list.add(dto);
+
+                    String content = rs.getString("content");
+                    String messsageId = rs.getString("message_Id");
+                    String sentAt = rs.getString("sent_at");
+                    String senderId = rs.getString("sender_id");
+
+                    
+                    MessageChatDto dto = new MessageChatDto(roomId, messsageId, content, senderId, sentAt);
+                    dtos.add(dto);
                 }
-            }
+  
         } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return list;
+	        e.printStackTrace();
+	        System.out.println("getMessageListByRoomId() 오류 : " + sql);
+	    } finally {
+	        DBConnection.closeDB(con, ps, rs);
+	    }
+        
+        return dtos;
     }
 }

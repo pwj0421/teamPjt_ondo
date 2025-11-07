@@ -23,6 +23,10 @@ public class Chat extends HttpServlet {
         request.setCharacterEncoding("utf-8");
         String gubun = request.getParameter("t_gubun");
         if (gubun == null) gubun = "chatReceived";
+        
+        request.setAttribute("response", response);
+
+        
         String viewPage="";
         String menuTap ="chatReceived";
         switch(gubun) {
@@ -58,8 +62,10 @@ public class Chat extends HttpServlet {
                     CommonExecute chatContent = new MessageChatContentExecute();
                     chatContent.execute(request);
                 }
+                
+             
             }
-
+            
             menuTap = "MessageList";
             viewPage = "Message/message_chat.jsp";
             break;
@@ -76,6 +82,11 @@ public class Chat extends HttpServlet {
             cancel.execute(request);
             viewPage = "common_alert_view.jsp";
             break;
+            
+        case "messageChatAjax":
+            CommonExecute ajax = new command.message.MessageChatAjaxExecute();
+            ajax.execute(request);
+            return; // 매우 중요: 여기서 메서드 종료해서 rd.forward 하지 않도록
 
     }
         request.setAttribute("menuTap", menuTap);  

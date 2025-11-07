@@ -1,6 +1,5 @@
 package dto;
 
-import java.util.Date;
 
 public class MessageChatDto {
     private String roomId;
@@ -11,7 +10,7 @@ public class MessageChatDto {
     private String messageId;
     private String content;
     private String senderId;
-    private Date sentAt;
+    private String sentAt;
 
     private String partnerNickname;
     private String partnerImage;
@@ -19,7 +18,20 @@ public class MessageChatDto {
     // 기본 생성자
     public MessageChatDto() {}
 
-    // getter & setter
+    
+    //메세지리스트
+    public MessageChatDto(String roomId, String messageId, String content, String senderId, String sentAt) {
+		super();
+		this.roomId = roomId;
+		this.messageId = messageId;
+		this.content = content;
+		this.senderId = senderId;
+		this.sentAt = sentAt;
+	}
+
+
+
+	// getter & setter
     public String getRoomId() { return roomId; }
     public void setRoomId(String roomId) { this.roomId = roomId; }
 
@@ -41,8 +53,8 @@ public class MessageChatDto {
     public String getSenderId() { return senderId; }
     public void setSenderId(String senderId) { this.senderId = senderId; }
 
-    public Date getSentAt() { return sentAt; }
-    public void setSentAt(Date sentAt) { this.sentAt = sentAt; }
+    public String getSentAt() { return sentAt; }
+    public void setSentAt(String sentAt) { this.sentAt = sentAt; }
 
     public String getPartnerNickname() { return partnerNickname; }
     public void setPartnerNickname(String partnerNickname) { this.partnerNickname = partnerNickname; }
