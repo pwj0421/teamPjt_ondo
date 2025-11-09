@@ -20,21 +20,21 @@
                     나와 대화중인 친구 : <strong>${r_dto.size()}명</strong>
                 </div>
                 <div class="chat_friend_items" id="friendList">
-                    <c:forEach items="${r_dto}" var="dto" varStatus="status">
-                        <div class="chat_friend_card ${status.index == 0 ? 'active' : ''}"
-                             data-roomid="${dto.roomId}" 
-                             onclick="selectFriend(this, '${dto.partnerId}', '${dto.partnerNickname}', '${dto.roomId}')">
-                            <img class="friend_profile_img" 
-                                 src="attach/member_profile/${dto.partnerImage != null ? dto.partnerImage : 'basic_profile.png'}" 
-                                 alt="프로필">
-                            <div class="friend_info">
-                                <div class="friend_name">${dto.partnerNickname}</div>
-                                <div class="friend_preview">
-                                    <c:out value="${dto.content != null ? dto.content : '최근 메시지 없음'}"/>
-                                </div>
-                            </div>
-                        </div>
-                    </c:forEach>
+                   <c:forEach items="${r_dto}" var="dto" varStatus="status">
+					    <div class="chat_friend_card"
+					         data-roomid="${dto.roomId}" 
+					         onclick="selectFriend(this, '${dto.partnerId}', '${dto.partnerNickname}', '${dto.roomId}')">
+					        <img class="friend_profile_img" 
+					             src="attach/member_profile/${dto.partnerImage != null ? dto.partnerImage : 'basic_profile.png'}" 
+					             alt="프로필">
+					        <div class="friend_info">
+					            <div class="friend_name">${dto.partnerNickname}</div>
+					            <div class="friend_preview">
+					                <c:out value="${dto.content != null ? dto.content : '최근 메시지 없음'}"/>
+					            </div>
+					        </div>
+					    </div>
+					</c:forEach>
                 </div>
 
                 <!-- 페이징 -->
@@ -50,20 +50,13 @@
             <!-- 오른쪽: 채팅창 -->
             <div class="chat_room_box">
                 <div class="chat_header" id="chatHeader">
-                    <c:choose>
-                        <c:when test="${not empty r_dto}">
-                            ${r_dto[0].partnerNickname}
-                        </c:when>
-                        <c:otherwise>채팅방 없음</c:otherwise>
-                    </c:choose>
+                    채팅방 없음
                 </div>
+
                 <div class="chat_content" id="chatContent">
-                    <c:forEach items="${msg_dto}" var="msg">
-                        <div class="chat_msg ${msg.senderId == sessionScope.m_id ? 'right' : 'left'}">
-                            <span>${msg.content}</span>
-                        </div>
-                    </c:forEach>
+                    <div class="loading">대화할 친구를 선택하세요.</div>
                 </div>
+
                 <div class="chat_input_box">
                     <input type="text" id="chatInput" placeholder="메시지를 입력하세요">
                     <button onclick="sendMessage()">전송</button>
@@ -76,7 +69,7 @@
 
 <!-- CSS -->
 <style>
-/* 컨테이너 */
+/* ===== 전체 컨테이너 ===== */
 .mp_mypage_container {
     display: flex;
     width: 100%;
@@ -85,7 +78,7 @@
     gap: 40px;
 }
 
-/* 메인 콘텐츠 */
+/* ===== 메인 콘텐츠 ===== */
 .chat_main_content { 
     flex: 1; 
     border: 1px solid #e0e0e0; 
@@ -94,8 +87,13 @@
     background: #fff; 
 }
 
-/* 채팅방 레이아웃 */
-.chat_room_wrapper { display:flex; gap:20px; width:100%; min-height:70vh; }
+/* ===== 채팅방 레이아웃 ===== */
+.chat_room_wrapper { 
+    display:flex; 
+    gap:20px; 
+    width:100%; 
+    min-height:70vh; 
+}
 
 /* ===== 왼쪽 친구 리스트 ===== */
 .chat_friend_list {
@@ -173,46 +171,145 @@
 .chat_paging button.active { background: #c89f6d; color: #fff; }
 
 /* ===== 오른쪽 채팅창 ===== */
-.chat_room_box { width:70%; background:#fff; border-radius:12px; padding:20px; display:flex; flex-direction:column; }
-.chat_header { font-weight:600; font-size:18px; color:#c89f6d; border-bottom:1px solid #eee; padding-bottom:10px; margin-bottom:15px; }
-.chat_content { flex:1; overflow-y:auto; padding:10px; background:#fafafa; border-radius:8px; display:flex; flex-direction:column; gap:8px; }
-.chat_msg { max-width:70%; padding:8px 12px; border-radius:15px; word-break:break-word; }
-.chat_msg.left { background:#eee; align-self:flex-start; border-top-left-radius:0; }
-.chat_msg.right { background:#c89f6d; color:#fff; align-self:flex-end; border-top-right-radius:0; }
-.chat_input_box { display:flex; margin-top:10px; }
-.chat_input_box input { flex:1; padding:8px 12px; border-radius:8px; border:1px solid #ddd; margin-right:10px; }
-.chat_input_box button { padding:8px 16px; border-radius:8px; border:none; background:#c89f6d; color:#fff; font-weight:600; cursor:pointer; }
-.chat_input_box button:hover { background:#b38a5a; }
+.chat_room_box {
+  width: 70%;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat_header {
+  font-weight: 600;
+  font-size: 18px;
+  color: #c89f6d;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+/* ===== 메시지 영역 ===== */
+.chat_content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  background: #fafafa;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chat_msg {
+  max-width: 70%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  word-break: break-word;
+  font-size: 14px;
+  line-height: 1.4;
+  position: relative;
+  display: inline-block;
+}
+
+/* 왼쪽: 상대방 */
+.chat_msg.left {
+  background: #eee;
+  color: #333;
+  align-self: flex-start;
+  border-top-left-radius: 0;
+}
+
+/* 오른쪽: 본인 */
+.chat_msg.right {
+  background: #c89f6d;
+  color: #fff;
+  align-self: flex-end;
+  border-top-right-radius: 0;
+}
+
+/* ===== 입력창 ===== */
+.chat_input_box {
+  display: flex;
+  margin-top: 10px;
+}
+
+.chat_input_box input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-right: 10px;
+}
+
+.chat_input_box button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #c89f6d;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chat_input_box button:hover {
+  background: #b38a5a;
+}
+
+/* 로딩 / 에러 메시지 */
+.chat_content .loading {
+  text-align:center;
+  padding:20px;
+  color:#999;
+  font-size:14px;
+}
+.chat_content .error {
+  text-align:center;
+  padding:20px;
+  color:#d9534f;
+  font-size:14px;
+}
 </style>
 
 <!-- JS -->
 <script>
-const loginUserId = '<%= session.getAttribute("m_id") %>';
-const allMessages = [
-<c:forEach items="${msg_dto}" var="msg" varStatus="status">
-{roomId:'${msg.roomId}', senderId:'${msg.senderId}', content:'${msg.content}'}<c:if test="${!status.last}">,</c:if>
-</c:forEach>
-];
+const loginUserId = '${sessionId}';
 
+// 대화 상대 클릭 시 실행
 function selectFriend(element, friendId, friendNickname, roomId){
+    // 왼쪽 active 표시 변경
     document.querySelectorAll('.chat_friend_card').forEach(el=>el.classList.remove('active'));
     element.classList.add('active');
 
+    // 헤더 변경
     document.getElementById('chatHeader').innerText = friendNickname;
 
+    // 대화창 비우고 로딩 표시
     const content = document.getElementById('chatContent');
-    content.innerHTML = '';
+    content.innerHTML = '<div class="loading">메시지를 불러오는 중...</div>';
 
-    allMessages.filter(m=>m.roomId===roomId).forEach(msg=>{
-        const div = document.createElement('div');
-        div.className='chat_msg '+(msg.senderId===loginUserId?'right':'left');
-        div.innerHTML=`<span>${msg.content}</span>`;
-        content.appendChild(div);
+    // AJAX로 메시지 불러오기
+    fetch('<%=request.getContextPath()%>/Chat?t_gubun=messageChatAjax&roomId=' + roomId)
+    .then(res => res.json())
+    .then(messages => {
+        const content = document.getElementById('chatContent');
+        content.innerHTML = '';
+        messages.forEach(msg => {
+            const div = document.createElement('div');
+            div.className = 'chat_msg ' + (msg.senderId === loginUserId ? 'right' : 'left');
+            div.innerHTML = '<span>'+msg.content+'</span>';
+            content.appendChild(div);
+        });
+        content.scrollTop = content.scrollHeight;
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById('chatContent').innerHTML = '<div class="error">메시지를 불러오지 못했습니다.</div>';
     });
 
-    content.scrollTop=content.scrollHeight;
 }
 
+// 메시지 전송 (임시 프론트 반영용)
 function sendMessage(){
     const input=document.getElementById('chatInput');
     if(input.value.trim()==='') return;
