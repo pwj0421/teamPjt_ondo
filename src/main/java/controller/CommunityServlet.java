@@ -1,8 +1,6 @@
 package controller;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -12,16 +10,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
 import common.CommonUtil;
-import common.N_CommonUtil;
 import dao.ComuPostDao;
-import dao.ComuCommentDao;
-
 import dto.ComuPostDto;
-import dto.ComuCommentDto;
-import dto.ComuAttachmentDto;
 
 @WebServlet("/Community")
 @MultipartConfig(

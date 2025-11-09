@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import common.CommonExecute;
 import command.notice.NoticeIndex;
+import command.search.ComuHitList;
+import command.search.ComuIndexList;
+import command.search.SearchList;
 
 /**
  * Servlet implementation class Index
@@ -34,6 +37,18 @@ public class Index extends HttpServlet {
 		//인덱스 공지사항
 		CommonExecute execute = new NoticeIndex();
         execute.execute(request); // 공지사항 데이터 가져오기
+
+        //인덱스 자유게시판 인기글
+        CommonExecute comuHot = new ComuHitList();
+        comuHot.execute(request);
+        
+        //인덱스 자유게시판 최신글
+        CommonExecute comuList = new ComuIndexList();
+        comuList.execute(request);
+        
+        //인덱스 최근 검색어
+        CommonExecute serachList = new SearchList();
+        serachList.execute(request);
 		
 		RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
 		rd.forward(request, response);

@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import common.CommonExecute;
+import common.CommonUtil;
 import dao.SearchDao;
+import dto.ComuPostDto;
 import dto.NoticeDto;
 
 public class SerachTotalList implements CommonExecute {
@@ -21,12 +23,20 @@ public class SerachTotalList implements CommonExecute {
 		
 		SearchDao dao = new SearchDao();
 		
+		//검색어 이력 저장 또는 저장된 이력의 검색수(hit) 증가
+		String nowDate = CommonUtil.getTodayTime();
+		int result = dao.mergeSearchTxt(search, nowDate);
+		if(result < 1) {
+			System.out.println("검색어 저장 오류!");
+		}
+		
 		//공지사항 검색
 		ArrayList<NoticeDto> notiDtos = dao.selectNoticeHeaderSearchList(search);
 		request.setAttribute("notiDtos", notiDtos);
 		
 		//자유게시판 검색
-		//ArrayList<CommunityDto> comuDtos = dao.selectComuHeaderSearchList(search);
+		ArrayList<ComuPostDto> comuDtos = dao.selectComuHeaderSearchList(search);
+		request.setAttribute("comuDtos", comuDtos);
 		
 		//매칭 회원 검색
 		//ArrayList<MemberDto> MemDtos = dao.selectMemHeaderSearchList(search);
