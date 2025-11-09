@@ -12,8 +12,11 @@ public class ComuPostDto {
     private int hit;
 
     private String m_name; // 작성자 이름 (join 용)
-
-    // Getter & Setter
+    
+    public ComuPostDto() {
+	}
+    
+	// Getter & Setter
     public int getPost_id() { return post_id; }
     public void setPost_id(int post_id) { this.post_id = post_id; }
 
@@ -37,4 +40,25 @@ public class ComuPostDto {
 
     public String getM_name() { return m_name; }
     public void setM_name(String m_name) { this.m_name = m_name; }
+	
+    //인덱스 인기글, 자유게시판 리스트 content-> create_at
+    public ComuPostDto(int post_id, String title, String content, int hit, String m_name) {
+		this.post_id = post_id;
+		this.title = title;
+		this.content = content;
+		this.hit = hit;
+		this.m_name = m_name;
+	}
+
+    //통합검색 자유게시판 검색 m_id -> reg_date
+	public ComuPostDto(int post_id, String m_id, String title, String content, int hit, String m_name) {
+		super();
+		this.post_id = post_id;
+		this.m_id = m_id;
+		this.title = title;
+		this.content = content;
+		this.hit = hit;
+		this.m_name = m_name;
+	}
+    
 }

@@ -1,13 +1,16 @@
 package dao;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import dto.ComuPostDto;
-import dto.NoticeDto;
+import common.CommonUtil;
 import common.DBConnection; // DBConnection 클래스에서 Connection 가져오기
+import dto.ComuPostDto;
 
 public class ComuPostDao {
 
@@ -220,6 +223,84 @@ public class ComuPostDao {
 		
 		
 		return result;
+	}
+
+	//인덱스 인기글 리스트
+	public ArrayList<ComuPostDto> selectIndexHitList() {
+		ArrayList<ComuPostDto> dtos = new ArrayList<ComuPostDto>();
+		
+		String sql = "SELECT p.post_id, m.m_name, p.title, content, p.hit\r\n"
+				+ "FROM ondo_comu_posts p JOIN ondo_member m\r\n"
+				+ "ON p.m_id = m.m_id\r\n"
+				+ "order by hit desc";
+			
+		try {
+			conn = DBConnection.getConnection();
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				int postId = rs.getInt(1);
+				String name = rs.getString(2);
+				String title = rs.getString(3);
+				String content = rs.getString(4);
+				int hit = rs.getInt(5);
+				
+				content = CommonUtil.highlightSnippet(content, "", 30);
+				
+				ComuPostDto dto = new ComuPostDto(postId, title, content, hit, name);
+				dtos.add(dto);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			String method = Thread.currentThread().getStackTrace()[1].getClassName();
+			System.out.println(method+"에서 오류 발생");
+			System.out.println(sql);
+		} finally {
+			DBConnection.closeDB(conn, ps, rs);
+		}
+
+		return dtos;
+	}
+
+	public ArrayList<ComuPostDto> selectIndexComuList() {
+		ArrayList<ComuPostDto> dtos = new ArrayList<ComuPostDto>();
+		
+		String sql = "SELECT p.post_id, m.m_name, p.title, to_char(create_at,'yyyy-MM-dd') as create_at, p.hit\r\n"
+				+ "FROM ondo_comu_posts p JOIN ondo_member m\r\n"
+				+ "ON p.m_id = m.m_id\r\n"
+				+ "order by create_at desc";
+			
+		try {
+			conn = DBConnection.getConnection();
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				int postId = rs.getInt(1);
+				String name = rs.getString(2);
+				String title = rs.getString(3);
+				String createAt = rs.getString(4);
+				int hit = rs.getInt(5);
+				
+				//content = CommonUtil.highlightSnippet(content, "", 30);
+				title = CommonUtil.highlightSnippet(title, "", 8);
+				
+				ComuPostDto dto = new ComuPostDto(postId, title, createAt, hit, name);
+				dtos.add(dto);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			String method = Thread.currentThread().getStackTrace()[1].getClassName();
+			System.out.println(method+"에서 오류 발생");
+			System.out.println(sql);
+		} finally {
+			DBConnection.closeDB(conn, ps, rs);
+		}
+
+		return dtos;
 	}
     
    

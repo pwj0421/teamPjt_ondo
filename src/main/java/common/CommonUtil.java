@@ -2,9 +2,13 @@ package common;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.text.StringEscapeUtils;
 
 public class CommonUtil {
 	//오늘 날짜 (yyyy-MM-dd)
@@ -91,5 +95,37 @@ public class CommonUtil {
 			return strList;
 		}			
 			
+		// Apache Commons Text 필요: org.apache.commons:commons-text
+		// 내용 / 검색어 / 잘라낼 글자수
+		public static String highlightSnippet(String content, String q, int ctx) {
+		    if (content == null) content = "";
+		    String escContent = StringEscapeUtils.escapeHtml4(content); // 본문 이스케이프
+		    if (q == null || q.isEmpty()) {
+		        // 검색어 없으면 앞부분만 잘라서
+		        int end = Math.min(escContent.length(), 2*ctx);
+		        return escContent.substring(0, end) + (escContent.length() > end ? "..." : "");
+		    }
+
+		    String escQ = StringEscapeUtils.escapeHtml4(q); // 검색어도 이스케이프
+		    Pattern p = Pattern.compile(Pattern.quote(escQ), Pattern.CASE_INSENSITIVE);
+		    Matcher m = p.matcher(escContent);
+
+		    if (!m.find()) {
+		        // 매치 없으면 앞부분만
+		        int end = Math.min(escContent.length(), 2*ctx);
+		        return escContent.substring(0, end) + (escContent.length() > end ? "..." : "");
+		    }
+		    int s = Math.max(0, m.start() - ctx);
+		    int e = Math.min(escContent.length(), m.end() + ctx);
+
+		    StringBuilder sb = new StringBuilder();
+		    
+		    if (s > 0) sb.append("...");
+		    sb.append(escContent, s, m.start());
+		    sb.append("<strong>").append(escContent, m.start(), m.end()).append("</strong>");
+		    sb.append(escContent, m.end(), e);
+		    if (e < escContent.length()) sb.append("...");
+		    return sb.toString();
+		}
 }
 

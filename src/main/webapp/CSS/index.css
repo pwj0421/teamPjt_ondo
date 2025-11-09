@@ -188,6 +188,10 @@ header.scrolled .header_search {
   margin-bottom: 10px;
 }
 
+.keyword_bar a {
+  flex: 1; text-decoration: none; color: #333; font-weight: 500;
+}
+
 .keyword_box {
 	font-family: "Jua";
  	padding:10px;
@@ -277,6 +281,10 @@ header.scrolled .header_search {
   display: flex;
   justify-content: space-between;
   gap: 20px;
+}
+
+.pv_popular_list a {
+  flex: 1; text-decoration: none; color: #333; font-weight: 500;
 }
 
 .pv_post_card {

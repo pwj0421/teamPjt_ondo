@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List, dto.ComuAttachmentDto, dao.ComuPostDao, dto.ComuPostDto" %>
+<%@ page import="java.util.List, dao.ComuPostDao, dto.ComuPostDto" %>
 <%@ include file="../common_header.jsp" %>	
 <%@ include file="../menu/quickMenu.jsp" %>
 <%
