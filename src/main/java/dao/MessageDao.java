@@ -121,8 +121,8 @@ public class MessageDao {
 				String greetingMsg = rs.getString("greeting_message"); 
 				String request_date = rs.getString("requested_At");
 				String gender = rs.getString("m_gender");
-					if(gender.equals("F"))gender="남자";
-					else if(gender.equals("M"))gender="여자";
+					if(gender.equals("F"))gender="여자";
+					else if(gender.equals("M"))gender="남자";
 				String age = rs.getString("m_age");
 				String country = rs.getString("m_country");
 					if(country.equals("KR"))country="대한민국";
