@@ -33,6 +33,7 @@ public class Match extends HttpServlet {
         	viewPage = "common_alert.jsp";
         	
         } else {
+        	
 	        if (gubun.equals("main")) {
 	        	// 나의 정보
 	            CommonExecute myInfo = new MatchMyInfo();
@@ -45,13 +46,13 @@ public class Match extends HttpServlet {
 	            // 나의 관심사
 	            CommonExecute Interests = new command.match.InterestList();
 	            Interests.execute(request);
-	
+	            
+	            viewPage = "match/match_main.jsp";
+	            
 	            // 탭
 	            String tab = request.getParameter("t_tab");
 	            if(tab == null) tab = "NORMAL";
 	            request.setAttribute("t_tab", tab);
-	            
-	            viewPage = "match/match_main.jsp";
 	            
 	        } else if (gubun.equals("list")) {
 	            // 나의 정보
