@@ -186,10 +186,11 @@
                 </c:forEach>
             </div>
 
-            <!-- 페이징 -->
+            <!-- 페이징
             <div class="friend_paging">
                 <span class="active">1</span>
             </div>
+             -->
         </c:if>
     </div>
 </div>
