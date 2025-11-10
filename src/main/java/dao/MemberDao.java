@@ -507,6 +507,42 @@ public class MemberDao {
 		    return result;
 		}
 
+		public MemberDto getIndexMyInfo(String sessionId) {
+			MemberDto dto = null;
+			String sql = "select m_gender, m_country, m_age, m_nickname,m_tagline, m_image\r\n"
+					+ "from ondo_member\r\n"
+					+ "where m_id = '"+sessionId+"'";
+			
+			try {
+		        conn = DBConnection.getConnection();
+		        pstmt = conn.prepareStatement(sql);
+		        rs = pstmt.executeQuery();
+
+		        if (rs.next()) {
+		            // ✅ 1️⃣ 결과값 먼저 꺼내기
+		            String gender = rs.getString("m_gender");
+		            if(gender.equals("F")) gender = "여자";
+		            else if(gender.equals("M")) gender = "남성";
+		            String country = rs.getString("m_country");
+		            if(country.equals("KR")) country = "한국";
+		            else if(country.equals("JP")) country = "일본";
+		            int age = rs.getInt("m_age");
+		            String nickname = rs.getString("m_nickname");
+		            String tagline = rs.getString("m_tagline");
+		            String profile = rs.getString("m_image");
+
+		            dto = new MemberDto(nickname, profile,gender, country,tagline, age);
+		        }
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        System.out.println("getMemberInfo(id, pw) 오류: " + sql);
+		    } finally {
+		        DBConnection.closeDB(conn, pstmt, rs);
+		    }
+			return dto;
+		}
+
 	   
 	   
 }

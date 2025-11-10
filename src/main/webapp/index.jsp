@@ -296,11 +296,13 @@
       <div class="pv_card my_profile_card">
         <h3 class="pv_card_title">👤 내 정보</h3>
         <div class="profile_box">
-          <img src="image/basic_profile.png" alt="프로필 이미지" class="profile_img">
+          <img src="image/${p_dto.getM_image()}" class="profile_img">
           <div class="profile_text">
-            <p class="nickname">혜민</p>
-            <p class="intro">“오늘도 일본어 공부 중 🇯🇵”</p>
+            <p class="nickname">${p_dto.getM_nickname()}</p>
+            <p class="intro">${p_dto.getM_tagline()}</p>
+            <p class="intro">${p_dto.getM_country()} | ${p_dto.getM_gender()} | ${p_dto.getM_age()}</p>
           </div>
+          <button type="button" class="login_btn" onclick="goPage('Member','myInfo')">내 정보 수정하기</button>
         </div>
 
         <%-- 로그인 세션 체크 (예시: userName) --%>

@@ -13,6 +13,10 @@ public class MemberDto {
 	
 	private List<String> purposeCode;
 	
+	
+	
+	
+	
 	// 탈퇴해원 체크용
 	public MemberDto(String m_id, String m_name, String m_password, 
             String m_type, String m_quit, String m_image) {
@@ -25,7 +29,19 @@ public class MemberDto {
 			}
 	
 	
-	
+	//인덱스 프로필
+	public MemberDto(String m_nickname, String m_image, String m_gender, String m_country, String m_tagline, int m_age) {
+		super();
+		this.m_nickname = m_nickname;
+		this.m_image = m_image;
+		this.m_gender = m_gender;
+		this.m_country = m_country;
+		this.m_tagline = m_tagline;
+		this.m_age = m_age;
+	}
+
+
+
 	//내정보 수정
 	public MemberDto(String m_id, String m_name, String m_country, String m_zipcode, String m_address,
 			String m_address_detail, String m_tel1, String m_tel2, String m_tel3, 
