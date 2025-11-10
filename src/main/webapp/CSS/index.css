@@ -181,32 +181,48 @@ header.scrolled .header_search {
 	font-size:20px;
 	color:#c89f6d;
 }
+/* 🔹 키워드 영역 */
 .keyword_bar {
   display: flex;
-  justify-content: center;
-  gap: 50px;
-  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 35px;
+  margin-top: 10px;
+  margin-left:300px;
 }
 
-.keyword_bar a {
-  flex: 1; text-decoration: none; color: #333; font-weight: 500;
+/* 🔹 a태그 (링크) */
+.keyword_box_link {
+  display: inline-block; /* ✅ block → inline-block으로 변경 */
+  text-decoration: none;
+  color: inherit; /* 텍스트 색상 상속 */
 }
 
+/* 🔹 키워드 박스 (원래 디자인 그대로 유지) */
 .keyword_box {
-	font-family: "Jua";
- 	padding:10px;
-  	height: 40px;       /* 세로 길이, 1:2 비율 */
-  	background-color: #f0f0f0;
-  	border-radius: 12px;
-  	display: flex;
-  	align-items: center;
-  	justify-content: center;
-  	cursor: pointer;
-  	transition: background-color 0.3s;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 17px;
+  color: #555;
+  transition: 0.2s;
 }
 
 .keyword_box:hover {
-  	background-color: #e0e0e0;
+  background: #c89f6d;
+  color: #fff;
+  border-color: #c89f6d;
+}
+
+/* keyword_box 감싸는 a태그 기본 초기화 */
+.keyword_box_link {
+	width : 150px;
+  display: block;
+  text-decoration: none;  /* 밑줄 제거 */
+  color: inherit;          /* 글자색 div 그대로 */
+}
+.keyword_box_link:hover {
+  opacity: 0.9;           /* 살짝 hover 효과만 */
 }
 /* 바로가기 아이콘 */
 .sub_bar {

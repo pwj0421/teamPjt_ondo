@@ -179,7 +179,7 @@
   
 	<div class="keyword_bar">
 		<c:forEach items="${searchList }" var="dto" begin="0" end="4">
-			<a href="javascript:goKeywordSearch('${dto.getS_keyword() }')">
+			<a class="keyword_box_link" href="javascript:goKeywordSearch('${dto.getS_keyword() }')">
 				<div class="keyword_box">#${dto.getS_snipKeyword() }</div>
 			</a>
 		</c:forEach>
