@@ -176,7 +176,9 @@
                         <div class="friend_nickname">${dto.getNickname()}</div>
                         <div class="friend_intro">${dto.getGreetingMsg()}</div>
                         <div class="friend_subinfo">${dto.getCountry()} | ${dto.getGender()} | ${dto.getAge()}</div>
+                        
                         <div class="friend_button_box">
+                        	<button type="button" class="friend_accept" onclick="openProfilePopup('${dto.getSender_id()}')">정보자세히보기</button>
                             <button type="button" class="friend_accept"
                                 onclick="updateState('${dto.getRequest_id()}','${dto.getSender_id()}','accepted','stateUpdate','${dto.getGreetingMsg()}')">수락</button>
                             <button type="button" class="friend_reject"
@@ -203,6 +205,67 @@
 	<input type="hidden" name="locate" value="chatReceived">
 </form>
 <script>
+
+//상세보기 팝업창
+function openProfilePopup(memberId) {
+  // 원하는 크기
+  const width = 800;
+  const height = 1000;
+
+  // 화면(현재 브라우저 윈도우) 기준 중앙 위치 계산 (듀얼모니터/브라우저 위치 보정)
+  const left = Math.round(window.screenX + (window.outerWidth - width) / 2);
+  const top  = Math.round(window.screenY + (window.outerHeight - height) / 2);
+
+  // ① 기존과 다르게 '고유한' 이름을 만든다 -> 기존 창 재사용 문제 회피
+  const winName = "profilePopup_" + Date.now(); // 혹은 Math.random()
+
+  // ② features 문자열: 콤마로만 구분, 공백 NO
+  const features = 
+    `width=${width},height=${height},left=${left},top=${top},` +
+    `resizable=yes,scrollbars=yes,menubar=no,toolbar=no,status=no,location=no`;
+
+  // ③ 팝업 먼저 연다 (빈 URL)
+  const popup = window.open("", winName, features);
+
+  // 팝업 차단 검사
+  if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+      alert("팝업이 차단되었거나 열리지 않았습니다. 브라우저의 팝업 설정을 확인해주세요.");
+      return;
+  }
+
+  // ④ 폼을 동적으로 생성해서 POST로 전송 (Match 서블릿)
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = "Match";      // 필요하면 contextPath 포함: `${pageContext.request.contextPath}/Match`
+  form.target = winName;     // 여기서도 popup 이름과 일치시킴
+
+  // hidden: t_gubun=view
+  const gubun = document.createElement("input");
+  gubun.type = "hidden"; gubun.name = "t_gubun"; gubun.value = "view";
+  form.appendChild(gubun);
+
+  // hidden: memberId
+  const mid = document.createElement("input");
+  mid.type = "hidden"; mid.name = "memberId"; mid.value = memberId;
+  form.appendChild(mid);
+
+  document.body.appendChild(form);
+  form.submit();
+  form.remove();
+
+  // ⑤ (선택) 브라우저가 허용하는 경우 위치/크기 강제 보정
+  try {
+      // resizeTo/moveTo는 브라우저가 허용할 때만 동작
+      popup.focus();
+      popup.resizeTo(width, height);
+      popup.moveTo(left, top);
+  } catch (e) {
+      // 일부 브라우저는 보안을 이유로 예외를 던질 수 있음 — 무시해도 됨
+      // console.log("resize/move not allowed:", e);
+  }
+}
+
+
 function updateState(requestId, senderId, state, gubun, greetingMsg) {
     if (state == "rejected") {
         if (confirm("거절 시 해당 회원은 나에게 다시 요청을 보낼 수 없습니다. 정말 거절하시겠습니까?")) {
