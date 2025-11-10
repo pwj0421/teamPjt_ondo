@@ -74,7 +74,7 @@
     </div>
 
     <div class="form_section notice_write_attach">
-      <label>첨부파일 (등록 후 수정 불가)</label>
+      <label>첨부파일 (*등록 후 수정 불가)</label>
       <div id="attachContainer"></div>
       <button type="button" class="add_attach_btn" onclick="addAttach()">+ 파일 추가</button>
     </div>
@@ -86,7 +86,7 @@
 
   </form>
 </div>
-
+<%@ include file="../common_footer.jsp" %>
 <script>
   const MAX_ATTACH = 3;
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB

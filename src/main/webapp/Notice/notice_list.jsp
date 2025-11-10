@@ -159,11 +159,14 @@
 
   <div class="notice_pagination">
     ${pageDisplay}
-    
   </div>
-  <button class="notice_write_btn" onclick="goWriteForm()">글쓰기</button>
+  
+  <c:if test="${sessionScope.sessionLevel eq 'admin'}">
+    <button class="notice_write_btn" onclick="goWriteForm()">글쓰기</button>
+  </c:if>
 </div>
 
+<%@ include file="../common_footer.jsp" %>
 
 </body>
 </html>

@@ -76,6 +76,13 @@
 			document.getElementById("indexHeaderSearchTxt").value = searchTxt;
 		}
 	}
+	function goView(no) {
+		noti.t_gubun.value = "view";
+		noti.n_no.value = no;
+		noti.method="post";
+		noti.action="Notice";
+		noti.submit();
+	}
 </script>
 <body>
 <form name="index">
@@ -221,6 +228,10 @@
       </div>
 
       <!-- 공지사항 -->
+    <form name="noti">
+	  <input type="hidden" name="t_gubun">
+	  <input type="hidden" name="n_no">
+	</form>
 	<div class="pv_card pv_notice">
 	  <h3 class="pv_card_title">📢 최근 공지사항</h3>
 	  <ul class="pv_list">
@@ -240,7 +251,7 @@
 	            </span>
 	          </c:when>
 	          <c:otherwise>
-	            <a href="Notice?t_gubun=view&n_no=${dto.getNo()}">
+	            <a href="javascript:goView('${dto.getNo()}')">
 	              <c:choose>
 	                <c:when test="${fn:length(dto.getTitle()) > 14}">
 	                  ${fn:substring(dto.getTitle(), 0, 14)}...
