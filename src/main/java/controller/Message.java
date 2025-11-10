@@ -27,7 +27,15 @@ public class Message extends HttpServlet {
         String viewPage = "";
 
         switch(gubun) {
-          
+        	case "messageRequest" :
+        		CommonExecute msgRequest = new MessageRequest();
+    			msgRequest.execute(request);
+    			    
+    			    // AJAX 전용 응답
+    			    String result_msg = (String)request.getAttribute("t_msg"); // "전송성공" 또는 "전송실패"
+    			    response.setContentType("text/plain; charset=UTF-8");
+    			    response.getWriter().write(result_msg.equals("전송성공") ? "SUCCESS" : "FAIL");
+        		return;
             case "stateUpdate":
                 CommonExecute state = new RequestStateUpdate();
                 state.execute(request);
