@@ -16,6 +16,7 @@ import command.member.MatchInfoInterestUpdate;
 import command.member.MatchInfoUpdate;
 import command.member.MatchInfoView;
 import command.member.MemberChangePassword;
+import command.member.MemberCheckUserExist;
 import command.member.MemberDeleteAccount;
 import command.member.MemberInfo;
 import command.member.MemberLogin;
@@ -47,6 +48,8 @@ public class Member extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		System.out.println("[DEBUG] Member 서블릿 실행됨 → gubun=" + request.getParameter("t_gubun"));
 		request.setCharacterEncoding("utf-8");
 		String sessionId = CommonUtil.getSessionInfo(request, "id");
 		String gubun = request.getParameter("t_gubun");
@@ -148,7 +151,10 @@ public class Member extends HttpServlet {
 			CommonExecute member = new MemberChangePassword();
 			member.execute(request);
 			viewPage ="common_alert.jsp";
-		}
+			
+		} else if(gubun.equals("findAccount")) {
+			viewPage = "member/member_findaccount.jsp";
+		} 
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
 		rd.forward(request, response);

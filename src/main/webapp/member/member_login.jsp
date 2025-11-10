@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="../common_header.jsp" %>  
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/member_login.css">
 </head>
 <body>
-
+<%@ include file="../common_header.jsp" %>  
 <!-- 로그인 폼 상단 고정 (헤더 아래) -->
 <div class="login-container" style="display:flex; justify-content:center;">
   <div class="login-box">
@@ -28,7 +28,7 @@
 
     <div class="sub-links">
       <a href="<%= request.getContextPath() %>/Member?t_gubun=join">회원가입</a> |
-      <a href="#">비밀번호 찾기</a>
+      <a href="<%= request.getContextPath() %>/Member?t_gubun=findAccount">아이디 및 비밀번호 찾기</a>
     </div>
   </div>
 </div>
