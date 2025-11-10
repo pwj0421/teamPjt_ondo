@@ -96,4 +96,26 @@ public class MessageChatDao {
         
         return dtos;
     }
+    
+
+    	//메세지 보내기
+        public int insertMessage(String no, String roomId, String senderId, String content) {
+            int result = 0;
+            String sql = "insert into ondo_message\r\n"
+            		+ "        (message_id, room_id, content, sender_id)\r\n"
+            		+ "        values\r\n"
+            		+ "        ("+no+","+roomId+",'"+content+"', '"+senderId+"')";
+            
+            try {
+                con= DBConnection.getConnection();           
+                ps = con.prepareStatement(sql);
+                result = ps.executeUpdate();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                DBConnection.closeDB(con, ps, rs);
+            }
+            System.out.println(":::"+sql);
+            return result;
+        }
 }
