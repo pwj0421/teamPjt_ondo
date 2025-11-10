@@ -41,8 +41,6 @@
                 <div class="chat_paging">
                     <button>&lt;</button>
                     <button class="active">1</button>
-                    <button>2</button>
-                    <button>3</button>
                     <button>&gt;</button>
                 </div>
             </div>
