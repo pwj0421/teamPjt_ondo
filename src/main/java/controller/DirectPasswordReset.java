@@ -12,16 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 import dao.MemberDao;
 
 /**
- * Servlet implementation class UserCheck
+ * Servlet implementation class DirectPasswordReset
  */
-@WebServlet("/UserCheck")
-public class UserCheck extends HttpServlet {
+@WebServlet("/DirectPasswordReset")
+public class DirectPasswordReset extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UserCheck() {
+    public DirectPasswordReset() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,31 +31,28 @@ public class UserCheck extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/plain; charset=UTF-8");
+		response.setContentType("text/plain; charset=UTF-8");
 
-        String name = request.getParameter("m_name");
-        String id = request.getParameter("m_id");
-        String email = request.getParameter("m_email");
+		String id = request.getParameter("m_id");
+		String newPassword = request.getParameter("newPassword");
 
-        MemberDao dao = new MemberDao();
-        boolean exist = false;
+		PrintWriter out = response.getWriter();
 
-        try {
-            if (id != null && !id.isEmpty()) {
-                // 비밀번호 찾기용 (아이디 + 이메일)
-                exist = dao.checkMemberByIdEmail(id, email);
-            } else {
-                // 아이디 찾기용 (이름 + 이메일)
-                exist = dao.checkMemberByNameEmail(name, email);
-            }
+		try {
+			MemberDao dao = new MemberDao();
+			int result = dao.resetPassword(id, newPassword);
 
-            PrintWriter out = response.getWriter();
-            out.print(exist ? "EXIST" : "NOT_EXIST");
-            out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.getWriter().print("ERROR");
-        }
+			if (result > 0) {
+				out.print("비밀번호가 성공적으로 변경되었습니다. 다시 로그인해주세요.");
+			} else {
+				out.print("해당 아이디를 찾을 수 없습니다.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			out.print("비밀번호 변경 중 오류가 발생했습니다.");
+		} finally {
+			out.close();
+		}
 	}
 
 	/**

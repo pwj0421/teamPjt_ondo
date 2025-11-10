@@ -5,8 +5,10 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import common.DBConnection;
 import dto.MemberDto;
@@ -177,7 +179,6 @@ public class MemberDao {
 		   String sql = "SELECT m_id, m_type, m_age, m_password, m_nickname, m_image, m_name, m_gender, m_country,\n" +
 	                 "m_zipcode, m_address, m_address_detail, m_email1, m_email2,\n" +
 	                 "m_tel_country_code, m_tel1, m_tel2, m_tel3,\n" +
-	                 "m_purpose,\n" +
 	                 "m_recommender, TO_CHAR(m_reg, 'YYYY-MM-DD hh24:mi:ss') AS m_reg,\n" +
 	                 "TO_CHAR(m_updated, 'YYYY-MM-DD hh24:mi:ss') AS m_updated\n" +
 	                 "FROM ondo_member " +
@@ -423,7 +424,7 @@ public class MemberDao {
 		   return result;
 	   }
 
-	   public boolean checkUserMatch(String name, String email) {
+	   public boolean checkMemberByNameEmail(String name, String email) {
 		   boolean match = false;
 		   String sql = "SELECT COUNT(*) AS cnt "
 				   	+ "FROM ondo_member "
@@ -450,7 +451,7 @@ public class MemberDao {
 	   }
 
 	   public String getIdByEmail(String email) {
-		   String id = null;
+		    String id = null;
 		    String sql = "SELECT m_id FROM ondo_member WHERE (m_email1 || '@' || m_email2) = ?";
 		    try {
 		        conn = DBConnection.getConnection();
@@ -467,6 +468,43 @@ public class MemberDao {
 		        DBConnection.closeDB(conn, pstmt, rs);
 		    }
 		    return id;
+		}
+
+	   public boolean checkMemberByIdEmail(String m_id, String m_email) {
+		   boolean exist = false;
+	        String sql = "SELECT m_id FROM ondo_member WHERE m_id = ? AND (m_email1 || '@' || m_email2) = ?";
+	        try {
+	        	conn = DBConnection.getConnection();
+		        pstmt = conn.prepareStatement(sql);
+	            pstmt.setString(1, m_id);
+	            pstmt.setString(2, m_email);
+	            ResultSet rs = pstmt.executeQuery();
+	            exist = rs.next();
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        return exist;    
+	   }
+	
+		public int resetPassword(String id, String newPassword) {
+			int result = 0;
+		    String sql = "UPDATE ondo_member SET m_password = ? WHERE m_id = ?";
+		    try {
+		    	conn = DBConnection.getConnection();
+		        pstmt = conn.prepareStatement(sql);
+		        
+		        String encPw = encryptSHA256(newPassword);
+		        
+		        pstmt.setString(1, encPw); // 암호화 적용 시 encryptSHA256(newPassword)
+		        pstmt.setString(2, id);
+		        result = pstmt.executeUpdate();
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    } finally {
+		        DBConnection.closeDB(conn, pstmt, rs);
+		    }
+		    return result;
 		}
 
 	   

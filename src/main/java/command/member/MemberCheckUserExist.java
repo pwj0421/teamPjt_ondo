@@ -18,7 +18,7 @@ public class MemberCheckUserExist implements CommonExecute {
 			String name = request.getParameter("m_name");
 			String email = request.getParameter("m_email");
 			
-			boolean exist = dao.checkUserMatch(name, email);
+			boolean exist = dao.checkMemberByIdEmail(name, email);
 			
 			HttpServletResponse response = (HttpServletResponse) request.getAttribute("response");
 			    

@@ -41,7 +41,7 @@ public class MailSender {
 	        }
 	        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
             message.setSubject(subject);
-            message.setText(content);
+            message.setContent(content, "text/html; charset=UTF-8");
             
 	        // 3. 메일 발송
 	        Transport.send(message);

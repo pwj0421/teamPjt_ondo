@@ -48,6 +48,8 @@ public class Member extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		System.out.println("[DEBUG] Member 서블릿 실행됨 → gubun=" + request.getParameter("t_gubun"));
 		request.setCharacterEncoding("utf-8");
 		String sessionId = CommonUtil.getSessionInfo(request, "id");
 		String gubun = request.getParameter("t_gubun");
@@ -152,7 +154,6 @@ public class Member extends HttpServlet {
 			
 		} else if(gubun.equals("findAccount")) {
 			viewPage = "member/member_findaccount.jsp";
-			
 		} 
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);

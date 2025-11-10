@@ -63,12 +63,12 @@
   margin-bottom: 20px;
 }
 
-#findIdResult {
-  font-family: 'Jua', sans-serif;  /* 헤더랑 통일 */
+.result-box {
+  font-family: 'Jua', sans-serif;
   font-size: 16px;
   line-height: 1.5;
-  color: #c89f6d; /* 포인트 컬러 */
-  background-color: #fffaf5; /* 따뜻한 배경톤 */
+  color: #333;
+  background-color: #fffaf5;
   border: 1px solid #f0d9c5;
   border-radius: 10px;
   padding: 12px;
@@ -77,6 +77,8 @@
   width: 100%;
   box-sizing: border-box;
 }
+
+
 #auth-section {
   display: flex;
   justify-content: center;
@@ -99,110 +101,251 @@
 </style>
 </head>
 <script type="text/javascript">
-function checkUser() {
-	  const name = document.findIdForm.m_name.value.trim();
-	  const email = document.findIdForm.m_email.value.trim();
-	  if (!name || !email) {
-	    alert("이름과 이메일을 모두 입력하세요.");
-	    return;
-	  }
-
-	  $.ajax({
-	    type: "POST",
-	    url: "UserCheck",
-	    data: { m_name: name, m_email: email },
-	    success: function (data) {
-	      const result = data.trim();
-	      if (result === "EXIST") {
-	    	$("#findIdResult")
-		    	.html("회원 정보가 확인되었습니다.<br>이메일 인증을 진행해주세요.")
-		    	.show();
-	        // 인증 입력칸 & 전송버튼 표시
-	        $("#auth-section").show();
-	        $("#authCodeInput").show();
-	        $("#sendBtn").show();
-	        $("#verifyBtn").hide();
-
-	      } else {
-	        $("#findIdResult")
-	        	.text("입력하신 정보와 일치하는 회원이 없습니다.")
-	        	.show();
-	        $("#auth-section").hide();
-	      }
-	    },
-	    error: function () {
-	      alert("서버 통신 오류");
-	    }
-	  });
-	}
-
-
-	function sendAuthCode() {
-	  const email = document.findIdForm.m_email.value.trim();
-	  if (!email) {
-	    alert("이메일을 입력하세요.");
-	    return;
-	  }
-
-	  $.ajax({
-	    type: "POST",
-	    url: "SendAuthCode",
-	    data: { m_email: email },
-	    success: function (data) {
-	      const result = data.trim();
-	      if (result === "SUCCESS") {
-	        alert("인증번호가 이메일로 전송되었습니다.");
-	        $("#findIdResult").text("메일로 전송된 인증번호를 입력하세요.").css("color", "#444");
-	        // 버튼 전환
-	        $("#sendBtn").hide();
-	        $("#verifyBtn").show();
-	      } else {
-	        alert("인증번호 전송 중 문제가 발생했습니다. 관리자에게 문의하세요.");
-	      }
-	    },
-	    error: function () {
-	      alert("서버 통신 오류. 관리자에게 문의하세요.");
-	    }
-	  });
-	}
-
-
-	function verifyAuthCode() {
+	function checkUser() {
+		  const name = document.findIdForm.m_name.value.trim();
 		  const email = document.findIdForm.m_email.value.trim();
-		  const code = $("#authCodeInput").val().trim();
-
-		  if (!code) {
-		    alert("인증번호를 입력하세요.");
+		  if (!name || !email) {
+		    Swal.fire("입력 오류", "이름과 이메일을 모두 입력하세요.", "warning");
 		    return;
 		  }
-
+	
 		  $.ajax({
 		    type: "POST",
-		    url: "VerifyAuthCode",
-		    data: { m_email: email, auth_code: code },
+		    url: "UserCheck",
+		    data: { m_name: name, m_email: email },
 		    success: function (data) {
 		      const result = data.trim();
-
-		      // ✅ 기존 박스 아래 결과 표시 (부드럽게 등장)
-		      $("#findIdResult").html(result).css({
-		        color: "#333",
-		        fontWeight: "600",
-		        marginTop: "15px",
-		        background: "#faf8f4",
-		        borderRadius: "10px",
-		        padding: "10px"
-		      }).hide().fadeIn(300);
-		      
-		  	  // ✅ 인증 성공 시 입력칸/버튼 숨기기
-		      if (result.includes("아이디") || result.includes("완료") || result.includes("성공")) {
-		        $("#auth-section").hide();
+	
+		      if (result === "EXIST") {
+		        $("#findIdResult")
+		          .html("회원 정보가 확인되었습니다.<br>이메일 인증을 진행해주세요.")
+		          .show();
+	
+		        // ✅ 올바른 영역만 표시
+		        $("#auth-section-id").fadeIn();
+		        $("#authCodeInputId").show();
+		        $("#sendBtnId").show();
+		        $("#verifyBtnId").hide();
+	
+		      } else {
+		        $("#findIdResult")
+		          .text("입력하신 정보와 일치하는 회원이 없습니다.")
+		          .show();
+		        $("#auth-section-id").hide();
 		      }
 		    },
 		    error: function () {
-		      $("#findIdResult").text("인증 확인 중 오류 발생").css("color", "red");
+		      Swal.fire("서버 오류", "회원 확인 중 문제가 발생했습니다.", "error");
 		    }
 		  });
 		}
+
+	// ✅ 통합형 인증번호 전송 함수 (아이디/비밀번호 공용)
+	function sendAuthCode(mode) {
+	  let name = "", id = "", email = "";
+	
+	  if (mode === "id") {
+	    name = document.findIdForm.m_name.value.trim();
+	    email = document.findIdForm.m_email.value.trim();
+	    if (!name || !email) {
+	      Swal.fire("입력 오류", "이름과 이메일을 모두 입력하세요.", "warning");
+	      return;
+	    }
+	  } else if (mode === "password") {
+	    id = document.findPwForm.m_id.value.trim();
+	    email = document.findPwForm.m_email.value.trim();
+	    if (!id || !email) {
+	      Swal.fire("입력 오류", "아이디와 이메일을 모두 입력하세요.", "warning");
+	      return;
+	    }
+	  }
+	
+	  $.ajax({
+	    type: "POST",
+	    url: "SendAuthCode",
+	    data: mode === "id"
+	      ? { m_name: name, m_email: email, mode: "id" }
+	      : { m_id: id, m_email: email, mode: "password" },
+	    success: function (data) {
+	      const result = data.trim();
+	
+	      if (result === "SUCCESS") {
+	        Swal.fire("인증번호 전송 완료", "입력하신 이메일로 인증번호가 발송되었습니다.", "success");
+	
+	        if (mode === "id") {
+	          $("#findIdResult")
+	            .text("메일로 전송된 인증번호를 입력하세요.")     
+	            .show();
+	          $("#sendBtnId").hide();
+	          $("#verifyBtnId").show();
+	        } else {
+	          $("#findPwResult")
+	            .text("메일로 전송된 인증번호를 입력하세요.")
+	            .show();
+	          $("#sendBtnPw").hide();
+	          $("#verifyBtnPw").show();
+	        }
+	      } else {
+	        Swal.fire("전송 실패", result || "이메일 발송 중 오류가 발생했습니다.", "error");
+	      }
+	    },
+	    error: function () {
+	      Swal.fire("서버 오류", "인증번호 전송 중 문제가 발생했습니다.", "error");
+	    },
+	  });
+	}
+
+	// ✅ 아이디 찾기용 인증 확인 (완성형)
+	function verifyAuthCodeForId() {
+	  const email = document.findIdForm.m_email.value.trim();
+	  const code = $("#authCodeInputId").val().trim();
+
+	  if (!code) {
+	    Swal.fire("입력 오류", "인증번호를 입력하세요.", "warning");
+	    return;
+	  }
+
+	  $.ajax({
+	    type: "POST",
+	    url: "VerifyAuthCode",
+	    data: { m_email: email, auth_code: code, mode: "id" },
+	    success: function (data) {
+	      if (data.includes("아이디")) {
+	        Swal.fire({
+	          icon: "success",
+	          title: "인증 완료",
+	          html: data, // ex) 회원님의 아이디는 abc123 입니다.
+	        });
+
+	        // ✅ 인증 완료 후 깔끔하게 정리
+	        $("#auth-section-id").fadeOut(300);
+	        $("#findIdResult").fadeOut(300, function () {
+	          $(this).text(""); // 문구 지우기
+	        });
+	     	// ✅ 모든 입력 필드 초기화
+	        document.findIdForm.reset(); // ← 폼 전체 초기화
+	      } else {
+	        Swal.fire("오류", data, "error");
+	      }
+	    },
+	    error: function () {
+	      Swal.fire("서버 오류", "인증 확인 중 문제가 발생했습니다.", "error");
+	    },
+	  });
+	}
+
+
+
+	// ✅ 비밀번호 찾기용 인증 확인
+	function verifyAuthCodeForPw() {
+	  const email = document.findPwForm.m_email.value.trim();
+	  const code = $("#authCodeInputPw").val().trim();
+	
+	  if (!code) {
+	    Swal.fire("입력 오류", "인증번호를 입력하세요.", "warning");
+	    return;
+	  }
+	
+	  $.ajax({
+	    type: "POST",
+	    url: "VerifyAuthCode",
+	    data: { m_email: email, auth_code: code, mode: "password" },
+	    success: function (data) {
+	      if (data.trim().includes("SUCCESS") || data.includes("완료")) {
+	        Swal.fire("인증 성공", "이제 새 비밀번호를 입력하세요.", "success");
+	
+	        $("#findPwStep2").fadeOut(300);
+	        $("#findPwStep3").fadeIn(300);
+	        $("#findPwResult").fadeOut(200);
+	        $("#findPwStep3").after(`
+	        	<p id="pwChangeGuide" class="result-box">
+	        		새 비밀번호를 입력한 뒤 <br>[비밀번호 변경] 버튼을 눌러주세요.
+	        	</p>
+	        `);
+	      } else {
+	        Swal.fire("인증 실패", data, "error");
+	      }
+	    },
+	    error: function () {
+	      Swal.fire("서버 오류", "인증 확인 중 오류 발생", "error");
+	    }
+	  });
+	}
+
+	
+	// ✅ 비밀번호 찾기 (아이디+이메일 확인 후 인증메일 전송)
+	function findPassword() {
+	  const id = document.findPwForm.m_id.value.trim();
+	  const email = document.findPwForm.m_email.value.trim();
+	
+	  if (!id || !email) {
+	    Swal.fire("입력 오류", "아이디와 이메일을 모두 입력하세요.", "warning");
+	    return;
+	  }
+	
+	  $.ajax({
+	    type: "POST",
+	    url: "UserCheck",
+	    data: { m_id: id, m_email: email },
+	    success: function (data) {
+	      const result = data.trim();
+	
+	      if (result === "EXIST") {
+	        $("#findPwStep2").fadeIn();
+	        $("#findPwResult")
+	          .html("회원 정보가 확인되었습니다.<br>이메일 인증을 진행해주세요.")
+	          .show();
+	        $("#authCodeInputPw").show();
+	        $("#sendBtnPw").show();
+	        $("#verifyBtnPw").hide();
+	      } else {
+	        Swal.fire("오류", "입력하신 정보와 일치하는 회원이 없습니다.", "error");
+	        $("#findPwStep2").hide();
+	        $("#findPwStep3").hide();
+	        $("#findPwResult").hide();
+	      }
+	    },
+	    error: function () {
+	      Swal.fire("서버 오류", "회원 확인 중 문제가 발생했습니다.", "error");
+	    }
+	  });
+	}
+
+
+
+	// ✅ 비밀번호 변경 (새 비밀번호 최종 저장)
+	function resetPassword() {
+	  const id = document.findPwForm.m_id.value.trim();
+	  const pw1 = $("#newPw1").val().trim();
+	  const pw2 = $("#newPw2").val().trim();
+	
+	  if (!pw1 || !pw2) {
+	    Swal.fire("입력 오류", "비밀번호를 모두 입력하세요.", "warning");
+	    return;
+	  }
+	
+	  if (pw1 !== pw2) {
+	    Swal.fire("불일치", "비밀번호가 일치하지 않습니다.", "error");
+	    return;
+	  }
+	
+	  $.ajax({
+	    type: "POST",
+	    url: "DirectPasswordReset",
+	    data: { m_id: id, newPassword: pw1 },
+	    success: function (data) {
+	      Swal.fire("완료", data, "success");
+	
+	      // ✅ 모든 입력 박스 숨기고 안내문구도 제거
+	      $("#findPwStep3, #pwChangeGuide, #findPwStep2, #findPwResult").fadeOut(300);
+	      document.findPwForm.reset(); // ← form 내 input 전부 초기화
+	      $("#newPw1, #newPw2").val("");
+	    },
+	    error: function () {
+	      Swal.fire("서버 오류", "비밀번호 변경 중 오류가 발생했습니다.", "error");
+	    },
+	  });
+	}
 
 
 </script>
@@ -223,68 +366,47 @@ function checkUser() {
 	    <button type="button" class="login-btn" onclick="checkUser()">아이디 확인</button>
 	
 	    <!-- ② 인증번호 입력 영역 (처음엔 숨김) -->
-		<div id="auth-section" style="display:none; margin-top:15px;">
-		  <input type="text" id="authCodeInput" placeholder="인증번호 입력" style="display:none;">
-		  <button type="button" id="sendBtn" class="login-btn" onclick="sendAuthCode()" style="display:none;">인증번호 전송</button>
-		  <button type="button" id="verifyBtn" class="login-btn" onclick="verifyAuthCode()" style="display:none;">인증번호 확인</button>
+		<div id="auth-section-id" style="display:none; margin-top:15px;">
+		  <input type="text" id="authCodeInputId" placeholder="인증번호 입력">
+		  <button type="button" id="sendBtnId" class="login-btn" onclick="sendAuthCode('id')">인증번호 전송</button>
+		  <button type="button" id="verifyBtnId" class="login-btn" onclick="verifyAuthCodeForId()" style="display:none;">인증번호 확인</button>
 		</div>
-
-
-
+		
 	    <!-- ③ 결과 메시지 표시 영역 -->
-	    <p id="findIdResult" style="margin-top:10px; color:#444; display:none;"></p>
+	    <p class="result-box" id="findIdResult" style="margin-top:10px; color:#444; display:none;"></p>
 	  </form>
 	</div>
 	
   <!-- ✅ 비밀번호 찾기 -->
-  <div class="find-box">
-    <h3>비밀번호 찾기</h3>
-    <form name="findPwForm" onkeydown="if(event.key==='Enter'){ findPassword(); return false; }">
-      <input type="hidden" name="t_gubun" value="findPassword">
-      <input type="text" name="m_id" placeholder="아이디를 입력하세요" required>
-      <input type="text" name="m_email" placeholder="가입 시 등록한 이메일" required>
-      <button type="button" class="login-btn" onclick="findPassword()">비밀번호 찾기</button>
-    </form>
-  </div>
+  <!-- ✅ 비밀번호 찾기 -->
+	<div class="find-box">
+	  <h3>비밀번호 찾기</h3>
+	  <form name="findPwForm" onkeydown="if(event.key==='Enter'){ findPassword(); return false; }">
+	    <input type="hidden" name="t_gubun" value="findPassword">
+	    <input type="text" name="m_id" placeholder="아이디를 입력하세요" required>
+	    <input type="text" name="m_email" placeholder="가입 시 등록한 이메일" required>
+	    <button type="button" class="login-btn" onclick="findPassword()">비밀번호 찾기</button>
+	
+	    <!-- ✅ [STEP 2] 인증번호 입력 (추가) -->
+	    <div id="findPwStep2" style="display:none; margin-top:15px;">
+	      <input type="text" id="authCodeInputPw" placeholder="인증번호 입력">
+	      <button type="button" id="sendBtnPw" class="login-btn" onclick="sendAuthCode('password')">인증번호 전송</button>
+	      <button type="button" id="verifyBtnPw" class="login-btn" onclick="verifyAuthCodeForPw()" style="display:none;">인증번호 확인</button>
+	    </div>
+	
+	    <!-- ✅ 결과 메시지 표시 영역 (아이디 찾기와 동일한 위치로 이동) -->
+	    <p class="result-box" id="findPwResult" style="display:none; margin-top:10px; color:#444;"></p>
+	  </form>
+	
+	  <!-- ✅ [STEP 3] 새 비밀번호 입력 (추가) -->
+	  <div id="findPwStep3" style="display:none; margin-top:15px;">
+	    <input type="password" id="newPw1" placeholder="새 비밀번호">
+	    <input type="password" id="newPw2" placeholder="비밀번호 확인">
+	    <button type="button" class="login-btn" onclick="resetPassword()">비밀번호 변경</button>
+	  </div>
+	</div>
 </div>
 
-
-
-<script>
-function findId() {
-  const form = document.forms['findIdForm'];
-  if (!form.m_name.value.trim()) {
-    alert("이름을 입력하세요.");
-    form.m_name.focus();
-    return;
-  }
-  if (!form.m_email.value.trim()) {
-    alert("이메일을 입력하세요.");
-    form.m_email.focus();
-    return;
-  }
-  form.method = "post";
-  form.action = "Member";
-  form.submit();
-}
-
-function findPassword() {
-  const form = document.forms['findPwForm'];
-  if (!form.m_id.value.trim()) {
-    alert("아이디를 입력하세요.");
-    form.m_id.focus();
-    return;
-  }
-  if (!form.m_email.value.trim()) {
-    alert("이메일을 입력하세요.");
-    form.m_email.focus();
-    return;
-  }
-  form.method = "post";
-  form.action = "Member";
-  form.submit();
-}
-</script>
 
 <%@ include file="../common_footer.jsp" %>  
 </body>
