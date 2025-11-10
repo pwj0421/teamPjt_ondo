@@ -47,3 +47,42 @@
     border: 1px solid #ccc;
     background-color: #f9f9f9;
 }
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  padding: 6px 10px;
+  margin: 4px;
+  font-size: 14px;
+  cursor: default !important;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.tag-close {
+  border: none;
+  background: transparent;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+  width: 20px;         
+  height: 20px;
+  border-radius: 50%;    
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.tag-close:hover {
+  background-color: #e0e0e0;
+  color: #000;
+}
+
+.tag-close:active {
+  background-color: #ccc;
+}
