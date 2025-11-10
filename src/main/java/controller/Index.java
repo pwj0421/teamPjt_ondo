@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import common.CommonExecute;
+import command.member.IndexMyProfile;
 import command.notice.NoticeIndex;
 import command.search.ComuHitList;
 import command.search.ComuIndexList;
@@ -50,6 +51,10 @@ public class Index extends HttpServlet {
         CommonExecute serachList = new SearchList();
         serachList.execute(request);
 		
+        //인덱스 마이프로필
+        CommonExecute myProfile = new IndexMyProfile();
+        myProfile.execute(request);
+        
 		RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
 		rd.forward(request, response);
 	}
