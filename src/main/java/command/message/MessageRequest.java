@@ -16,7 +16,8 @@ public class MessageRequest implements CommonExecute {
         String msg = request.getParameter("greeting_message");
 
         // DB에 메시지 저장
-        int result = dao.saveMessage(senderId, receiverId, msg);
+        int no = dao.getNo("request_id","ondo_message_request");
+        int result = dao.saveMessage(Integer.toString(no), senderId, receiverId, msg);
         
         String result_msg = result == 1? "전송성공" : "전송실패";
 		

@@ -18,6 +18,7 @@ public class MatchList implements CommonExecute {
 		HttpSession session = request.getSession();
 		
 		String id = (String)session.getAttribute("sessionId");
+		String tab = request.getParameter("t_tab");
 		
 		ArrayList<Integer> searches = new ArrayList<Integer>();
 		
@@ -27,9 +28,10 @@ public class MatchList implements CommonExecute {
 		    if(interest != null) searches.add(Integer.parseInt(interest));
 		}
 		
-		ArrayList<MatchDto> dtos = dao.getMatchList(id, searches);
+		ArrayList<MatchDto> dtos = dao.getMatchList(id, tab, searches);
 		
 		request.setAttribute("match_dtos", dtos);
+		request.setAttribute("t_tab", tab);
 		request.setAttribute("interestList", searches);
 	}
 
