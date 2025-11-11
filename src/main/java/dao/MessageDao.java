@@ -18,16 +18,19 @@ public class MessageDao {
 	
 
 	//메세지 요청 저장하기 > match > match_main
-	public int saveMessage(String senderId, String receiverId, String message) {
+	public int saveMessage(String no, String senderId, String receiverId, String message) {
 	    int result = 0;
-	    String sql = "INSERT INTO ondo_message_request (sender_id, receiver_id, greeting_message) VALUES (?, ?, ?)";
+	    String sql = "INSERT INTO ondo_message_request (request_id, sender_id, receiver_id, greeting_message) \r\n"
+	    		+ "VALUES "
+	    		+ "(?, ?, ?, ?)";
 
 	    try {
 	        con = DBConnection.getConnection();
 	        ps = con.prepareStatement(sql);
-	        ps.setString(1, senderId);
-	        ps.setString(2, receiverId);
-	        ps.setString(3, message);
+	        ps.setString(1, no);
+	        ps.setString(2, senderId);
+	        ps.setString(3, receiverId);
+	        ps.setString(4, message);
 
 	        result = ps.executeUpdate();
 	    } catch (Exception e) {
@@ -40,7 +43,35 @@ public class MessageDao {
 	    return result;
 	}
 
-	
+	//번호 받기
+	public int getNo(String no, String table) {
+        int requestNo = 0;
+        String sql = "SELECT NVL(MAX("+no+"), 0) + 1 AS next_request_id "
+                   + "FROM "+table;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                requestNo = rs.getInt("next_request_id");
+            }
+        } catch (Exception e) {
+            System.out.println("getNo() 오류: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return requestNo;
+    }
+
 	 // senderId가 보낸 메시지 수신자 ID 리스트 가져오기 match > match_main 
 	public List<String> getSentMessageReceiverIds(String senderId) {
 	    List<String> receiverIds = new ArrayList<>();
@@ -94,8 +125,8 @@ public class MessageDao {
 					else if(gender.equals("M"))gender="여자";
 				String age = rs.getString("m_age");
 				String country = rs.getString("m_country");
-					if(gender.equals("KR"))gender="대한민국";
-					else if(gender.equals("JP"))gender="일본";
+					if(country.equals("KR"))country="대한민국";
+					else if(country.equals("JP"))country="일본";
 				String nickname = rs.getString("m_nickname");
 				String profileImg = rs.getString("m_image");
 					if(profileImg == null) profileImg = "basic_profile.png";
@@ -137,8 +168,8 @@ public class MessageDao {
 						else if(gender.equals("M"))gender="남자";
 					String age = rs.getString("m_age");
 					String country = rs.getString("m_country");
-						if(country.equals("KR"))gender="대한민국";
-						else if(country.equals("JP"))gender="일본";
+						if(country.equals("KR"))country="대한민국";
+						else if(country.equals("JP"))country="일본";
 					String nickname = rs.getString("m_nickname");
 					String profileImg = rs.getString("m_image");
 						if(profileImg == null) profileImg = "basic_profile.png";
@@ -200,7 +231,82 @@ public class MessageDao {
 			return result;
 		}
 
+		//대화방 생성시 그리팅 메세지를 첫 대화로 등록하기
+		public int insertGreetingMessage(int no, String requestId, String greetingMsg) {
+		    int result = 0;
+		    Connection con = null;
+		    PreparedStatement ps = null;
+		    ResultSet rs = null;
+
+		    try {
+		        con = DBConnection.getConnection();
+
+		        // requestId로 room_id와 sender_id 가져오기
+		        String sql = "SELECT r.room_id, q.sender_id \r\n"
+		            + "FROM ondo_message_room r \r\n"
+		            + "JOIN ondo_message_request q ON r.request_id = q.request_id \r\n"
+		            + " WHERE r.request_id = ? ";
+		        ps = con.prepareStatement(sql);
+		        ps.setString(1, requestId);
+		        rs = ps.executeQuery();
+
+		        if (rs.next()) {
+		            String roomId = rs.getString("room_id");
+		            String senderId = rs.getString("sender_id");
+
+		            rs.close();
+		            ps.close();
+
+		            // greeting message 저장
+		            String insertSql = "INSERT INTO ondo_message (message_id, room_id, sender_id, content) VALUES (?, ?, ?, ?)";
+		            ps = con.prepareStatement(insertSql);
+		            ps.setInt(1, no);
+		            ps.setString(2, roomId);
+		            ps.setString(3, senderId);
+		            ps.setString(4, greetingMsg);
+
+		            result = ps.executeUpdate();
+		        }
+
+		    } catch (Exception e) {
+		        System.out.println("insertGreetingMessage() 오류: " + e.getMessage());
+		    } finally {
+		        DBConnection.closeDB(con, ps, rs);
+		    }
+
+		    return result;
+		}
+		//룸 생성
+		public int createRoom(int no, String requestId, String partnerId, String myId) {
+			int result = 0;
+		    String sql = "INSERT INTO ondo_message_room "
+		               + "(room_id,request_id, partner_id, my_id) "
+		               + "VALUES (?, ?, ?, ?)";
+
+		    try {
+		        con = DBConnection.getConnection();
+		        ps = con.prepareStatement(sql);
+		        ps.setInt(1, no);
+		        ps.setString(2, requestId);
+		        ps.setString(3, partnerId);
+		        ps.setString(4, myId);
+
+		        result = ps.executeUpdate();
+		        System.out.println("메시지룸 생성 성공! RoomNumber = " + no);
+		    } catch (Exception e) {
+		        System.out.println("createMessageRoom() 오류: " + e.getMessage());
+		    } finally {
+		        try {
+		            if (ps != null) ps.close();
+		            if (con != null) con.close();
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        }
+		    }
+
+		    return result;
+		}
+
 		
-	
 	
 }
