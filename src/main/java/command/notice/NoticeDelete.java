@@ -38,17 +38,17 @@ public class NoticeDelete implements CommonExecute {
 			if(!delAttach1.equals("")) {
 				File file = new File(N_CommonUtil.getNoticeDir(request),delAttach1);
 				boolean tf = file.delete();
-				if(!tf) System.out.println("공지사항 게시글 삭제시 첨부파일 삭제 오류");
+				if(!tf) System.out.println("공지사항 게시글 삭제시 첨부파일1 삭제 오류");
 			}
 			if(!delAttach2.equals("")) {
 				File file = new File(N_CommonUtil.getNoticeDir(request),delAttach2);
 				boolean tf = file.delete();
-				if(!tf) System.out.println("공지사항 게시글 삭제시 첨부파일 삭제 오류");
+				if(!tf) System.out.println("공지사항 게시글 삭제시 첨부파일2 삭제 오류");
 			}
 			if(!delAttach3.equals("")) {
 				File file = new File(N_CommonUtil.getNoticeDir(request),delAttach3);
 				boolean tf = file.delete();
-				if(!tf) System.out.println("공지사항 게시글 삭제시 첨부파일 삭제 오류");
+				if(!tf) System.out.println("공지사항 게시글 삭제시 첨부파일3 삭제 오류");
 			}
 		}
 

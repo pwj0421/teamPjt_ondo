@@ -37,6 +37,9 @@
   font-size: 13px;
   font-weight: bold;
 }
+.notice_item {
+  padding: 10px 10px !important;
+}
 
 </style>
 
@@ -159,11 +162,14 @@
 
   <div class="notice_pagination">
     ${pageDisplay}
-    
   </div>
-  <button class="notice_write_btn" onclick="goWriteForm()">글쓰기</button>
+  
+  <c:if test="${sessionScope.sessionLevel eq 'admin'}">
+    <button class="notice_write_btn" onclick="goWriteForm()">글쓰기</button>
+  </c:if>
 </div>
 
+<%@ include file="../common_footer.jsp" %>
 
 </body>
 </html>
