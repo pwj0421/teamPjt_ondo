@@ -12,6 +12,8 @@
 <title>검색</title>
 <link rel="stylesheet" href="../CSS/sub.css">
 <link rel="stylesheet" href="CSS/match.css">
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script type="text/javascript">
@@ -31,11 +33,6 @@
 	
 	function goTab(tab) {
 		match.t_tab.value = tab;
-		match.t_gubun.value = "main";
-		
-		match.method="post";
-		match.action="Match";
-		match.submit();
 	}
 	
 </script>
@@ -55,7 +52,6 @@
     			<img src="attach/member_profile/${myInfoDto.getImage()}" alt="프로필 사진">
     		</c:otherwise>
     	</c:choose>
-        
     </div>
     <div class="profile_nickname">${myInfoDto.getNickname()}</div>
     <div class="profile_intro">${myInfoDto.getTagline()}</div>
@@ -65,7 +61,7 @@
         </c:forEach>
     </div>
     <div class="profile_edit_btn">
-        <button type="button" onclick="goPage('Message','myRequest')">내 요청목록</button>
+        <button type="button" onclick="goPage('Chat','chatReceived')">내 요청목록</button>
     </div>
     <div class="profile_edit_btn">
         <button type="button" onclick="goPage('Member','matchInfo')">내 정보 수정하기</button>
@@ -75,7 +71,7 @@
   <!-- 카테고리 검색 박스 -->
   <div class="match_searchBox">
     <div class="match_category">
-        <button id="openCategoryBtn">카테고리 열기</button>
+        <button id="openCategoryBtn" style="margin-bottom: 20px;">카테고리 열기</button>
         <div class="category_modal">
             <div class="category_content">
                 <h3>카테고리 선택</h3>
@@ -146,24 +142,38 @@
 				const targetId = tab.dataset.target; 
 				
 				document.getElementById(targetId).style.display = "block";
+				
+				checkOverflowForAll();
 			});
 		});
+		
+		// 탭 전환 후 다시 체크
+		function checkOverflowForAll() {
+		    document.querySelectorAll('.match_item').forEach(item => {
+		        const container = item.querySelector('.interest_box_container');
+		        const btn = item.querySelector('.toggle_interest_btn');
+		        if (!container || !btn) return;
+
+		        // 표시 여부 결정
+		        if (container.scrollHeight > container.clientHeight + 1) {
+		            btn.style.display = 'inline-block';
+		        } else {
+		            btn.style.display = 'none';
+		        }
+		    });
+		}
 	</script>
 	
     <form>
         <input type="hidden" id="sender_id" value="${myInfoDto.getMemberId()}">
         
-        <c:if test="${match_dtos == null}">
-		    <div class="match_noResult">😄 카테고리, 일반/튜터 선택 후 매칭버튼을 눌러주세요.</div>
+        <c:if test="${normalDtos.size() == null}">
+		    <div class="match_noResult">😄 일반/튜터, 카테고리 선택 후 매칭버튼을 눌러주세요.</div>
 		</c:if>
         
-        <c:if test="${match_dtos.size() == 0}">
-        	<div class="match_noResult">😔 매칭 결과가 없습니다.</div>
-        </c:if>
-        
         <!-- 일반 탭 -->
-        <div id="NORMAL" class="match_list">
-            <c:forEach items="${match_dtos}" var="dto">
+        <div id="NORMAL" class="match_list" style="<c:if test='${t_tab eq "TUTOR"}'>display:none;</c:if>">
+            <c:forEach items="${normalDtos}" var="dto">
                 <div class="match_item">
                     <input type="hidden" name="receiver_id" value="${dto.getMemberId()}">
                     <c:choose>
@@ -183,8 +193,27 @@
 					    </c:otherwise>
 					</c:choose>
                     <div class="profile_info">
-                        <p class="nickname"><a href="javascript:openProfilePopup('${dto.getMemberId()}')">${dto.getNickname()}</a></p>
-                        <p class="intro">${dto.getTagline()}</p>
+                        <p class="nickname">
+                        	<c:choose>
+                        		<c:when test="${dto.getCountry() eq 'KR'}">
+                        			<span class="fi fi-kr flag-frame"></span>
+                        		</c:when>
+                        		<c:otherwise>
+                        			<span class="fi fi-jp flag-frame"></span>
+                        		</c:otherwise>
+                        	</c:choose>
+                        	<a href="javascript:openProfilePopup('${dto.getMemberId()}')">${dto.getNickname()}</a>
+                        </p>
+                        <p class="intro">
+                        	<c:choose>
+                        		<c:when test="${empty dto.getTagline()}">
+                        			한 줄 소개가 없습니다.
+                        		</c:when>
+                        		<c:otherwise>
+                        			${dto.getTagline()}
+                        		</c:otherwise>
+                        	</c:choose>
+                        </p>
                         <div class="interest_box_container">
                             <c:forEach items="${dto.getInterestDto()}" var="interest">
                                 <c:choose>
@@ -218,11 +247,14 @@
 
                 </div>
             </c:forEach>
+            <c:if test="${normalDtos.size() == 0}">
+        		<div class="match_noResult">😔 매칭 결과가 없습니다.</div>
+        	</c:if>
         </div>
         
         <!-- 튜터 탭 -->
-        <div id="TUTOR" class="match_list" style="display: none;">
-            <c:forEach items="${match_dtos}" var="dto">
+        <div id="TUTOR" class="match_list" style="<c:if test='${t_tab ne "TUTOR"}'>display:none;</c:if>">
+            <c:forEach items="${tutorDtos}" var="dto">
                 <div class="match_item">
                     <input type="hidden" name="receiver_id" value="${dto.getMemberId()}">
                     <c:choose>
@@ -242,8 +274,27 @@
 					    </c:otherwise>
 					</c:choose>
                     <div class="profile_info">
-                        <p class="nickname"><a href="javascript:openProfilePopup('${dto.getMemberId()}')">${dto.getNickname()}</a></p>
-                        <p class="intro">${dto.getTagline()}</p>
+                   		<p class="nickname">
+                        	<c:choose>
+                        		<c:when test="${dto.getCountry() eq 'KR'}">
+                        			<span class="fi fi-kr flag-frame"></span>
+                        		</c:when>
+                        		<c:otherwise>
+                        			<span class="fi fi-jp flag-frame"></span>
+                        		</c:otherwise>
+                        	</c:choose>
+                        	<a href="javascript:openProfilePopup('${dto.getMemberId()}')">${dto.getNickname()}</a>
+                        </p>
+                        <p class="intro">
+                        	<c:choose>
+                        		<c:when test="${empty dto.getTagline()}">
+                        			한 줄 소개가 없습니다.
+                        		</c:when>
+                        		<c:otherwise>
+                        			${dto.getTagline()}
+                        		</c:otherwise>
+                        	</c:choose>
+                        </p>
                         <div class="interest_box_container">
                             <c:forEach items="${dto.getInterestDto()}" var="interest">
                                 <c:choose>
@@ -275,9 +326,11 @@
                             <button type="button" class="message_btn">메세지 요청</button>
                         </c:otherwise>
                     </c:choose>
-
                 </div>
             </c:forEach>
+            <c:if test="${tutorDtos.size() == 0}">
+        		<div class="match_noResult">😔 매칭 결과가 없습니다.</div>
+        	</c:if>
         </div>
         
     </form>
@@ -292,6 +345,7 @@ const selectedContainer = document.querySelector(".selected_categories");
 
 // 카테고리 선택
 openBtn.addEventListener("click", () => {
+  updateSelectedList(); // 카테고리 확정
   modal.classList.toggle("active");
   openBtn.textContent = modal.classList.contains("active") ? "카테고리 닫기" : "카테고리 열기";
 });
@@ -317,7 +371,17 @@ function updateSelectedList() {
     const tag = document.createElement("span");
     tag.classList.add("tag");
     tag.textContent = valueMap[item.value];
-    tag.addEventListener("click", () => { item.checked = false; tag.remove(); });
+    
+    const closeBtn = document.createElement("button");
+    closeBtn.textContent = "✕";
+    closeBtn.classList.add("tag-close");
+    closeBtn.addEventListener("click", (e) => {
+      e.stopPropagation(); 
+      item.checked = false; 
+      tag.remove();        
+    });
+
+    tag.appendChild(closeBtn);
     selectedContainer.appendChild(tag);
   });
 }
@@ -397,12 +461,22 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // 관심사 더보기
+ 	// 관심사 더보기 (줄이 넘어갈 때만 버튼 표시)
     document.querySelectorAll('.match_item').forEach(item => {
         const container = item.querySelector('.interest_box_container');
         const btn = item.querySelector('.toggle_interest_btn');
-        if(container.scrollHeight <= container.clientHeight) btn.style.display='none';
-        btn.addEventListener('click',()=> {
+
+        // 약간의 지연 후 실제 렌더링 완료 상태 기준으로 체크
+        requestAnimationFrame(() => {
+            // 스크롤이 생길 만큼 내용이 넘칠 때만 표시
+            if (container.scrollHeight > container.clientHeight + 1) {
+                btn.style.display = 'inline-block';
+            } else {
+                btn.style.display = 'none';
+            }
+        });
+
+        btn.addEventListener('click', () => {
             container.classList.toggle('expanded');
             btn.textContent = container.classList.contains('expanded') ? '접기 ▲' : '더보기 ▼';
         });

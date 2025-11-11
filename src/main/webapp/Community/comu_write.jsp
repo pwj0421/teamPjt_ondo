@@ -1,14 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../common_header.jsp" %>	
-<%@ include file="../quickMenu.jsp" %>
+<%@ include file="../menu/quickMenu.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>자유게시판 글쓰기</title>
- 
   <link rel="stylesheet" href="<%= request.getContextPath() %>/CSS/sub.css">
+  <script type="text/javascript">
+  	function goSave(){
+  		comu.t_gubun.value="insert";
+  		comu.method = "post";
+  		comu.action = "Community";
+		comu.submit();
+  	}
+  </script>
+
 </head>
 </head>
 <body>
@@ -17,7 +25,8 @@
   <div class="write_header">자유게시판 글쓰기</div>
 
   <!-- 글쓰기 폼 -->
-  <form class="write_form" action="comu_write_process.jsp" method="post" enctype="multipart/form-data">
+  <form name="comu" class="write_form" action="<%= request.getContextPath() %>/CommunityWrite" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="t_gubun">
     <label for="title">제목</label>
     <input type="text" name="title" id="title" required>
 
@@ -34,7 +43,7 @@
     
 
     <div class="write_btn_group">
-      <button type="submit" class="submit_btn">등록</button>
+      <button type="submit" class="submit_btn" onclick="goSave()">등록</button>
       <button type="button" class="cancel_btn" onclick="history.back()">취소</button>
     </div>
   </form>

@@ -48,17 +48,32 @@
 	}
 
 	function goIndexSearch(loc){
-		var searchTxt = "";
+		
+		const MAX_LEN = 20
+		
+		let search = "";
+		let searchTxt = "";
 		if(loc == 'header'){
-			searchTxt = document.getElementById("indexHeaderSearchTxt").value;
+			search = document.getElementById("indexHeaderSearchTxt");
+		}else if (loc == 'bar'){
+			search = document.getElementById("indexSearchTxt");
 		}else{
-			searchTxt = document.getElementById("indexSearchTxt").value;
+			alert("검색 오류!!");
+			return;
 		}
+		
+		searchTxt = search.value;
+		
+		const len = searchTxt.length;
 		
 		if(searchTxt == ""){
 			alert("검색어를 입력해주세요.");
 			return;
-		}
+		}else if (len > MAX_LEN) {
+	      alert("검색어가 너무 깁니다.\n최대 " + MAX_LEN + "자까지 입력 가능합니다.");
+	      search.focus();
+	      return;
+	    }
 		
 		indexSearch.indexHeaderSearch.value=searchTxt;
 		indexSearch.menu="list";
@@ -76,12 +91,29 @@
 			document.getElementById("indexHeaderSearchTxt").value = searchTxt;
 		}
 	}
+  
 	function goView(no) {
 		noti.t_gubun.value = "view";
 		noti.n_no.value = no;
 		noti.method="post";
 		noti.action="Notice";
 		noti.submit();
+  }
+	
+	function goComuView(no){
+		comu.t_gubun.value="view";
+		comu.post_id.value=no;
+		comu.method="post";
+		comu.action="Community";
+		comu.submit();
+	}
+	
+	function goKeywordSearch(searchTxt){
+		indexSearch.indexHeaderSearch.value=searchTxt;
+		indexSearch.menu="list";
+		indexSearch.method="post";
+		indexSearch.action="Search";
+		indexSearch.submit();
 	}
 </script>
 <body>
@@ -92,6 +124,11 @@
 <form name="indexSearch">
 	<input type="hidden" name="menu">
 	<input type="hidden" name="indexHeaderSearch">
+</form>
+
+<form name="comu">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="post_id">
 </form>
 
 <header id="mainHeader">
@@ -149,11 +186,11 @@
 	</div>
   
 	<div class="keyword_bar">
-		<div class="keyword_box">#일본워홀</div>
-		<div class="keyword_box">#도쿄맛집</div>
-		<div class="keyword_box">#홋카이도여행</div>
-		<div class="keyword_box">#11월불꽃놀이</div>
-		<div class="keyword_box">#일본친구</div>
+		<c:forEach items="${searchList }" var="dto" begin="0" end="4">
+			<a class="keyword_box_link" href="javascript:goKeywordSearch('${dto.getS_keyword() }')">
+				<div class="keyword_box">#${dto.getS_snipKeyword() }</div>
+			</a>
+		</c:forEach>
 	</div>
 	<div class="sub_bar">	
 		<div class="shortcut" onclick="goPage('Notice','list')">
@@ -168,18 +205,24 @@
 	    	</div>
     		<div class="shortcut_label" >매칭시스템</div>
 	    </div>
-	    <div class="shortcut"  onclick="goalert()"> <!-- onclick="goPage('Community','list')" -->
+	    <div class="shortcut" onclick="goPage('Community','list')">
 	    	<div class="shortcut_icon">
 	    		<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h357l-80 80H200v560h560v-278l80-80v358q0 33-23.5 56.5T760-120H200Zm280-360ZM360-360v-170l367-367q12-12 27-18t30-6q16 0 30.5 6t26.5 18l56 57q11 12 17 26.5t6 29.5q0 15-5.5 29.5T897-728L530-360H360Zm481-424-56-56 56 56ZM440-440h56l232-232-28-28-29-28-231 231v57Zm260-260-29-28 29 28 28 28-28-28Z"/></svg>
 	    	</div>
     		<div class="shortcut_label">자유커뮤니티</div>
 	    </div>
-	    <div class="shortcut" onclick="goPage('Member','myInfo')">
+	    <div class="shortcut" onclick="goPage('Chat','chatReceived')">
+    	<div class="shortcut_icon">
+   			<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-400h320v-22q0-44-44-71t-116-27q-72 0-116 27t-44 71v22Zm160-160q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/></svg>
+       	</div>
+    		<div class="shortcut_label">메세지함</div>
+	    </div>
+	    <!-- <div class="shortcut" onclick="goPage('Member','myInfo')">
 	    	<div class="shortcut_icon">
 				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z"/></svg>	    
 	    	</div>
     		<div class="shortcut_label">마이페이지</div>
-	    </div>
+	    </div> -->
 	</div>
 	
 	<!-- 하단부분 -->
@@ -191,24 +234,17 @@
     
       <h3 class="pv_card_title">🔥 인기글</h3>
       <div class="pv_popular_list">
-        <div class="pv_post_card">
-          <div class="pv_post_title">도쿄 맛집 TOP5 후기</div>
-           <div class="pv_board_label">[자유게시판]</div>
-          <div class="pv_post_content">도쿄의 숨은 맛집을 직접 돌아다니며 정리해봤어요! 라멘, 초밥, 디저트까지…</div>
-          <div class="pv_post_info">조회수 256 | 댓글 12 | 작성자: 혜민</div>
-        </div>
-        <div class="pv_post_card">
-          <div class="pv_post_title">홋카이도 여행 인기 게시글</div>
-           <div class="pv_board_label">[자유게시판]</div>
-          <div class="pv_post_content">눈 내리는 삿포로의 겨울 분위기 속에서 즐기는 온천 여행, 진짜 최고였어요...</div>
-          <div class="pv_post_info">조회수 198 | 댓글 7 | 작성자: 준호</div>
-        </div>
-        <div class="pv_post_card">
-          <div class="pv_post_title">일본 워홀 정보 공유</div>
-           <div class="pv_board_label">[자유게시판]</div>
-          <div class="pv_post_content">처음 일본에 와서 겪은 다양한 워킹홀리데이 경험을 나눠요. 일자리, 집 구하기...</div>
-          <div class="pv_post_info">조회수 176 | 댓글 9 | 작성자: 민수</div>
-        </div>
+      <c:forEach items="${comuHitList }" var="dto" begin="0" end="2">
+	      <a href="javascript:goComuView('${dto.getPost_id() }')">
+	        <div class="pv_post_card">
+	          <div class="pv_post_title">${dto.getTitle() }</div>
+	           <div class="pv_board_label">[자유게시판]</div>
+	          <div class="pv_post_content">${dto.getContent() }</div>
+	          <div class="pv_post_info">조회수 ${dto.getHit() } | 작성자: ${dto.getM_name() }</div>
+	        </div>
+	      </a>
+      </c:forEach>
+
       </div>
     </div>
 
@@ -219,16 +255,14 @@
       <div class="pv_card pv_freeboard">
         <h3 class="pv_card_title">자유게시판</h3>
         <ul class="pv_list">
-          <li><a href="#">도쿄 카페 추천 부탁해요</a><span>혜민</span><span>2025-10-22</span></li>
-          <li><a href="#">홋카이도 여행 후기</a><span>준호</span><span>2025-10-19</span></li>
-          <li><a href="#">오사카 쇼핑 정보 공유</a><span>민수</span><span>2025-10-18</span></li>
-          <li><a href="#">일본 생활 꿀팁</a><span>지연</span><span>2025-10-16</span></li>
-          <li><a href="#">워홀 필수 앱 추천</a><span>현우</span><span>2025-10-14</span></li>
+        	<c:forEach items="${comuIndexList }" var="dto" begin="0" end="4">
+          		<li><a href="javascript:goComuView('${dto.getPost_id()}')">${dto.getTitle() }</a><span>${dto.getM_name() }</span><span>${dto.getContent() }</span></li>
+        	</c:forEach>
         </ul>
       </div>
 
       <!-- 공지사항 -->
-    <form name="noti">
+  <form name="noti">
 	  <input type="hidden" name="t_gubun">
 	  <input type="hidden" name="n_no">
 	</form>
@@ -274,11 +308,13 @@
       <div class="pv_card my_profile_card">
         <h3 class="pv_card_title">👤 내 정보</h3>
         <div class="profile_box">
-          <img src="image/basic_profile.png" alt="프로필 이미지" class="profile_img">
+          <img src="image/${p_dto.getM_image()}" class="profile_img">
           <div class="profile_text">
-            <p class="nickname">혜민</p>
-            <p class="intro">“오늘도 일본어 공부 중 🇯🇵”</p>
+            <p class="nickname">${p_dto.getM_nickname()}</p>
+            <p class="intro">${p_dto.getM_tagline()}</p>
+            <p class="intro">${p_dto.getM_country()} | ${p_dto.getM_gender()} | ${p_dto.getM_age()}</p>
           </div>
+          <button type="button" class="login_btn" onclick="goPage('Member','myInfo')">내 정보 수정하기</button>
         </div>
 
         <%-- 로그인 세션 체크 (예시: userName) --%>

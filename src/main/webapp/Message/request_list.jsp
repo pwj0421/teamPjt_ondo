@@ -171,13 +171,31 @@ body {
 </style>
 </head>
 <script>
-	function updateState(requestId, state, gubun){
-		msgReqList.t_gubun.value=gubun;
-		msgReqList.state.value=state;
-		msgReqList.requestId.value=requestId;
-		msgReqList.method="post";
-		msgReqList.action="Message";
-		msgReqList.submit();
+	function updateState(requestId, senderId, state, gubun, greetingMsg){
+		if(state=="rejected"){
+			if(confirm("거절 시 해당 회원은 나에게 다시 요청을 보낼 수 없습니다. 정말 거절하시겠습니까?")){
+				msgReqList.t_gubun.value=gubun;
+				msgReqList.state.value=state;
+				msgReqList.partnerId.value=senderId;
+				msgReqList.requestId.value=requestId;
+				msgReqList.greetingMsg.value=greetingMsg;
+				msgReqList.method="post";
+				msgReqList.action="Message";
+				msgReqList.submit();
+			}else{
+				alert("취소되었습니다.");
+			}
+		}else{
+			msgReqList.t_gubun.value=gubun;
+			msgReqList.state.value=state;
+			msgReqList.partnerId.value=senderId;
+			msgReqList.requestId.value=requestId;
+			msgReqList.greetingMsg.value=greetingMsg;
+			msgReqList.method="post";
+			msgReqList.action="Message";
+			msgReqList.submit();
+		}
+		
 		
 	}
 </script>
@@ -186,6 +204,8 @@ body {
 		<input type="hidden" name="t_gubun">
 		<input type="hidden" name="state">
 		<input type="hidden" name="requestId">
+		<input type="hidden" name="partnerId">
+		<input type="hidden" name="greetingMsg">
 		<input type="hidden" name="locate" value="requestlist">
 	</form>
 	<%@ include file="../menu/quickMenu.jsp" %>
@@ -204,8 +224,8 @@ body {
 				        <div class="friend_subinfo"> ${dto.getCountry()} | ${dto.getGender()} | ${dto.getAge()}</div>
 			        	<button type="button"  onclick=""  class="friend_accept">정보자세히보기</button>
 			        	<div class="friend_button_box">
-							<button type="button"  onclick="updateState('${dto.getRequest_id()}','accepted','stateUpdate')"  class="friend_accept">수락</button>
-							<button type="button"  onclick="updateState('${dto.getRequest_id()}','rejected','stateUpdate')"  class="friend_reject">거절</button>
+							<button type="button"  onclick="updateState('${dto.getRequest_id()}','${dto.getSender_id()}','accepted','stateUpdate','${dto.getGreetingMsg()}')"  class="friend_accept">수락</button>
+							<button type="button"  onclick="updateState('${dto.getRequest_id()}','','rejected','stateUpdate','')"  class="friend_reject">거절</button>
 			        	</div>
 			      	</div>
 				</c:forEach>

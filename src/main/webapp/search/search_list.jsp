@@ -13,6 +13,14 @@
 		noti.action="Notice";
 		noti.submit();
 	}
+	
+	function goComuView(no){
+		comu.t_gubun.value="view";
+		comu.post_id.value=no;
+		comu.method="post";
+		comu.action="Community";
+		comu.submit();
+	}
 </script>
 <title>검색 결과</title>
 <style>
@@ -142,6 +150,11 @@
 	<input type="hidden" name="n_no">
 </form>
 
+<form name="comu">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="post_id">
+</form>
+
 <div class="sr_main">
   <!-- 네비게이션 메뉴 -->
   <div class="sr_mypage_nav">
@@ -149,7 +162,7 @@
     <ul>
       <li><a href="#sr_board_free">자유게시판</a></li>
       <li><a href="#sr_board_notice">공지사항</a></li>
-      <li><a href="#sr_board_photo">사진게시판</a></li>
+      <!-- <li><a href="#sr_board_photo">사진게시판</a></li> -->
     </ul>
   </div>
 
@@ -160,24 +173,35 @@
     <!-- 자유게시판 -->
     <div class="sr_section-title" id="sr_board_free">자유게시판</div>
     <div class="sr_post-list">
-      <div class="sr_post-item">
-        <div class="sr_post-left">
-          <h5>이번 <strong>여행</strong> 후기 공유해요!</h5>
-          <p>오사카로 <strong>여행</strong> 다녀왔는데 정말 즐거웠어요 😊</p>
-        </div>
-        <div class="sr_post-right">
-          <span>홍길동</span> | <span>2025-10-28</span>
-        </div>
-      </div>
-      <div class="sr_post-item">
-        <div class="sr_post-left">
-          <h5>겨울 <strong>여행</strong>지 추천받아요</h5>
-          <p>일본 내에서 겨울에 가기 좋은 <strong>여행</strong>지 있을까요?</p>
-        </div>
-        <div class="sr_post-right">
-          <span>김철수</span> | <span>2025-10-25</span>
-        </div>
-      </div>
+    	<c:forEach items="${comuDtos }" var="dto">
+	    	<a href="javascript:goComuView('${dto.getPost_id() }')">
+	    	 <div class="sr_post-item">
+		        <div class="sr_post-left">
+			          <%-- 1) 제목/검색어를 먼저 이스케이프 --%>
+					<c:set var="titleEsc" value="${fn:escapeXml(dto.getTitle())}" />
+					<c:set var="qEsc"     value="${fn:escapeXml(headerSearchTxt)}" />
+					
+					<%-- 2) 검색어가 있을 때만 <strong>으로 감싼 치환 문자열 생성 --%>
+					<c:choose>
+					  <c:when test="${not empty qEsc}">
+					    <c:set var="wrapped"><strong>${qEsc}</strong></c:set>
+					    <c:set var="highlighted" value="${fn:replace(titleEsc, qEsc, wrapped)}" />
+					    <%-- 3) 치환 결과에는 <strong> 태그가 있으니 escapeXml=false로 출력 --%>
+					    <h5><c:out value="${highlighted}" escapeXml="false" /></h5>
+					  </c:when>
+					  <c:otherwise>
+					     <h5><c:out value="${titleEsc}" />
+					  </c:otherwise>
+					</c:choose>
+				
+		          <p>${dto.getContent() }</p>
+		        </div>
+		        <div class="sr_post-right">
+		          <span>${dto.getM_name() }</span> | <span>${dto.getM_id() }</span>
+		        </div>
+		      </div>
+	      </a>
+    	</c:forEach>
     </div>
 
     <!-- 공지사항 -->
@@ -200,7 +224,7 @@
 			    <h5><c:out value="${highlighted}" escapeXml="false" /></h5>
 			  </c:when>
 			  <c:otherwise>
-			    <c:out value="${titleEsc}" />
+			     <h5><c:out value="${titleEsc}" />
 			  </c:otherwise>
 			</c:choose>
 	        
@@ -217,7 +241,7 @@
     </div>
 
     <!-- 사진게시판 -->
-    <div class="sr_section-title" id="sr_board_photo">사진게시판</div>
+    <!-- <div class="sr_section-title" id="sr_board_photo">사진게시판</div>
     <div class="sr_post-list">
       <div class="sr_post-item">
         <div class="sr_post-left">
@@ -228,7 +252,7 @@
           <span>이사쿠라</span> | <span>2025-04-10</span>
         </div>
       </div>
-    </div>
+    </div> -->
 
   </div>
 </div>

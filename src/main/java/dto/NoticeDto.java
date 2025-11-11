@@ -82,6 +82,15 @@ public class NoticeDto {
 		this.reg_date = reg_date;
 	}
 	
+	//메인 통합 검색용 
+	public NoticeDto(String no, String title, String content, String reg_name, String reg_date, int hit) {
+		this.no = no;
+		this.title = title;
+		this.content = content;
+		this.reg_name = reg_name;
+		this.reg_date = reg_date;
+		this.hit = hit;
+	}
 
 	public String getNo() {
 			return no;
