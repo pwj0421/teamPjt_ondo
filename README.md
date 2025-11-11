@@ -30,7 +30,7 @@
 ---
 ### 🖼 프로젝트 화면
 <p align="center">
-  <img src="image/portfolio/index.png" width="700" alt="메인 페이지">
+  <img src="./image/portfolio/index.png" width="700" alt="메인 페이지">
 </p>
 <p align="center">
   <img src="image/portfolio/chat_demo.png" width="700" alt="채팅 기능">
