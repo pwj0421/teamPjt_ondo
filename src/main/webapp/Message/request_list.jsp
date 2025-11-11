@@ -170,129 +170,78 @@ body {
 }
 </style>
 </head>
+<script>
+	function updateState(requestId, senderId, state, gubun, greetingMsg){
+		if(state=="rejected"){
+			if(confirm("거절 시 해당 회원은 나에게 다시 요청을 보낼 수 없습니다. 정말 거절하시겠습니까?")){
+				msgReqList.t_gubun.value=gubun;
+				msgReqList.state.value=state;
+				msgReqList.partnerId.value=senderId;
+				msgReqList.requestId.value=requestId;
+				msgReqList.greetingMsg.value=greetingMsg;
+				msgReqList.method="post";
+				msgReqList.action="Message";
+				msgReqList.submit();
+			}else{
+				alert("취소되었습니다.");
+			}
+		}else{
+			msgReqList.t_gubun.value=gubun;
+			msgReqList.state.value=state;
+			msgReqList.partnerId.value=senderId;
+			msgReqList.requestId.value=requestId;
+			msgReqList.greetingMsg.value=greetingMsg;
+			msgReqList.method="post";
+			msgReqList.action="Message";
+			msgReqList.submit();
+		}
+		
+		
+	}
+</script>
 <body>
-<%@ include file="../menu/quickMenu.jsp" %>
-<div class="mp_mypage_container">
-  <%@ include file="../menu/mypage_menu.jsp" %>
+	<form name="msgReqList">
+		<input type="hidden" name="t_gubun">
+		<input type="hidden" name="state">
+		<input type="hidden" name="requestId">
+		<input type="hidden" name="partnerId">
+		<input type="hidden" name="greetingMsg">
+		<input type="hidden" name="locate" value="requestlist">
+	</form>
+	<%@ include file="../menu/quickMenu.jsp" %>
+	<div class="mp_mypage_container">
+	  	<%@ include file="../menu/mypage_menu.jsp" %>
+	
+		<div class="mp_mypage_content">
+	    	<h3>친구 요청 목록</h3>
+	
+			<div class="friend_card_container">		<!-- 친구 카드 1 -->
+				<c:forEach items="${r_dtos}" var="dto">
+					<div class="friend_card">
+				        <img src="attach/member_profile/${dto.getProfileImg()}" alt="프로필1">
+				        <div class="friend_nickname">${dto.getNickname()}</div>
+				        <div class="friend_intro">${dto.getGreetingMsg()}</div>
+				        <div class="friend_subinfo"> ${dto.getCountry()} | ${dto.getGender()} | ${dto.getAge()}</div>
+			        	<button type="button"  onclick=""  class="friend_accept">정보자세히보기</button>
+			        	<div class="friend_button_box">
+							<button type="button"  onclick="updateState('${dto.getRequest_id()}','${dto.getSender_id()}','accepted','stateUpdate','${dto.getGreetingMsg()}')"  class="friend_accept">수락</button>
+							<button type="button"  onclick="updateState('${dto.getRequest_id()}','','rejected','stateUpdate','')"  class="friend_reject">거절</button>
+			        	</div>
+			      	</div>
+				</c:forEach>
+		  
+			</div>
+		
+		
+		    <!-- 페이징 모형 -->
+		    <div class="friend_paging">
+		      <span class="active">1</span>
+		      <span>2</span>
+		      <span>3</span>
+		    </div>
 
-  <div class="mp_mypage_content">
-    <h3>친구 요청 목록</h3>
-
-    <div class="friend_card_container">
-      <!-- 친구 카드 1 -->
-      <div class="friend_card">
-        <img src="image/basic_profile.png" alt="프로필1">
-        <div class="friend_nickname">김유리</div>
-        <div class="friend_intro">안녕하세요! 일본 문화에 관심 많아요.</div>
-        <div class="friend_subinfo"> 일본 | 여 | 25</div>
-        <div class="friend_categories">
-          <span>언어 교류</span>
-          <span>여행</span>
-          <span>문화</span>
-        </div>
-        <div class="friend_button_box">
-          <button class="friend_accept">수락</button>
-          <button class="friend_reject">거절</button>
-        </div>
-      </div>
-
-      <!-- 친구 카드 2 -->
-      <div class="friend_card">
-        <img src="image/basic_profile.png" alt="프로필2">
-        <div class="friend_nickname">박준호</div>
-        <div class="friend_intro">한국어 배우고 싶어요~</div>
-        <div class="friend_subinfo"> 한국 | 남 | 27</div>
-        <div class="friend_categories">
-          <span>언어 교류</span>
-          <span>게임</span>
-          <span>음악</span>
-        </div>
-        <div class="friend_button_box">
-          <button class="friend_accept">수락</button>
-          <button class="friend_reject">거절</button>
-        </div>
-      </div>
-
-      <!-- 친구 카드 3 -->
-      <div class="friend_card">
-        <img src="image/basic_profile.png" alt="프로필3">
-        <div class="friend_nickname">사토 루이</div>
-        <div class="friend_intro">애니와 만화 좋아합니다!</div>
-        <div class="friend_subinfo"> 일본 | 남 | 23</div>
-        <div class="friend_categories">
-          <span>애니</span>
-          <span>게임</span>
-          <span>여행</span>
-        </div>
-        <div class="friend_button_box">
-          <button class="friend_accept">수락</button>
-          <button class="friend_reject">거절</button>
-        </div>
-      </div>
-
-      <!-- 친구 카드 4 -->
-      <div class="friend_card">
-        <img src="image/basic_profile.png" alt="프로필4">
-        <div class="friend_nickname">이하나</div>
-        <div class="friend_intro">음악 콘서트 자주 다녀요!</div>
-        <div class="friend_subinfo"> 한국 | 여 | 24</div>
-        <div class="friend_categories">
-          <span>음악</span>
-          <span>문화</span>
-        </div>
-        <div class="friend_button_box">
-          <button class="friend_accept">수락</button>
-          <button class="friend_reject">거절</button>
-        </div>
-      </div>
-
-      <!-- 친구 카드 5 -->
-      <div class="friend_card">
-        <img src="image/basic_profile.png" alt="프로필5">
-        <div class="friend_nickname">오사카 히로</div>
-        <div class="friend_intro">한국어 배우고 싶어요!</div>
-        <div class="friend_subinfo"> 일본 | 남 | 28</div>
-        <div class="friend_categories">
-          <span>언어 교류</span>
-          <span>여행</span>
-          <span>언어교류</span>
-          <span>한국음식</span>
-        </div>
-        <div class="friend_button_box">
-          <button class="friend_accept">수락</button>
-          <button class="friend_reject">거절</button>
-        </div>
-      </div>
-
-      <!-- 친구 카드 6 -->
-      <div class="friend_card">
-        <img src="image/basic_profile.png" alt="프로필6">
-        <div class="friend_nickname">정민지</div>
-        <div class="friend_intro">드라마와 영화 좋아합니다!</div>
-        <div class="friend_subinfo"> 한국 | 여 | 26</div>
-        <div class="friend_categories">
-          <span>드라마</span>
-          <span>영화</span>
-          <span>여행</span>
-          <span>언어교류</span>
-          <button class="category_more_btn">더보기</button>
-        </div>
-        <div class="friend_button_box">
-          <button class="friend_accept">수락</button>
-          <button class="friend_reject">거절</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 페이징 모형 -->
-    <div class="friend_paging">
-      <span class="active">1</span>
-      <span>2</span>
-      <span>3</span>
-    </div>
-
-  </div>
-</div>
+		</div>
+	</div>
 </body>
 <%@ include file="../common_footer.jsp" %> 
 </html>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -24,20 +25,141 @@
 		index.action=svl;
 		index.submit();
 	}
+	
+
+
+	function goalert(){
+		alert("개발중입니다");
+
+	}
+	function goSearchHeader(svl, page){
+		mainSearch.t_gubun.value=page;
+		mainSearch.method="POST";
+		mainSearch.action=svl;
+		mainSearch.submit();
+	}
+	
+	function goSearchIndex(svl, page){
+		indexMainSearch.t_gubun.value=page;
+		indexMainSearch.method="POST";
+		indexMainSearch.action=svl;
+		indexMainSearch.submit();
+
+	}
+
+	function goIndexSearch(loc){
+		
+		const MAX_LEN = 20
+		
+		let search = "";
+		let searchTxt = "";
+		if(loc == 'header'){
+			search = document.getElementById("indexHeaderSearchTxt");
+		}else if (loc == 'bar'){
+			search = document.getElementById("indexSearchTxt");
+		}else{
+			alert("검색 오류!!");
+			return;
+		}
+		
+		searchTxt = search.value;
+		
+		const len = searchTxt.length;
+		
+		if(searchTxt == ""){
+			alert("검색어를 입력해주세요.");
+			return;
+		}else if (len > MAX_LEN) {
+	      alert("검색어가 너무 깁니다.\n최대 " + MAX_LEN + "자까지 입력 가능합니다.");
+	      search.focus();
+	      return;
+	    }
+		
+		indexSearch.indexHeaderSearch.value=searchTxt;
+		indexSearch.menu="list";
+		indexSearch.method="post";
+		indexSearch.action="Search";
+		indexSearch.submit();
+	}
+	
+	function goSynk(loc){
+		if(loc == 'header'){
+			searchTxt = document.getElementById("indexHeaderSearchTxt").value;
+			document.getElementById("indexSearchTxt").value = searchTxt;
+		}else{
+			searchTxt = document.getElementById("indexSearchTxt").value;
+			document.getElementById("indexHeaderSearchTxt").value = searchTxt;
+		}
+	}
+  
+	function goView(no) {
+		noti.t_gubun.value = "view";
+		noti.n_no.value = no;
+		noti.method="post";
+		noti.action="Notice";
+		noti.submit();
+  }
+	
+	function goComuView(no){
+		comu.t_gubun.value="view";
+		comu.post_id.value=no;
+		comu.method="post";
+		comu.action="Community";
+		comu.submit();
+	}
+	
+	function goKeywordSearch(searchTxt){
+		indexSearch.indexHeaderSearch.value=searchTxt;
+		indexSearch.menu="list";
+		indexSearch.method="post";
+		indexSearch.action="Search";
+		indexSearch.submit();
+	}
 </script>
 <body>
 <form name="index">
 	<input type="hidden" name="t_gubun">
 </form>
+
+<form name="indexSearch">
+	<input type="hidden" name="menu">
+	<input type="hidden" name="indexHeaderSearch">
+</form>
+
+<form name="comu">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="post_id">
+</form>
+
 <header id="mainHeader">
   <div class="logo">ONDO</div>
 
   <!-- 헤더 검색창 -->
   <div class="header_search">
-    <input type="text" placeholder="무엇이 궁금하신가요?">
-    <button><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg></button>
+    	<input type="text" id="indexHeaderSearchTxt" onkeydown="if(event.key === 'Enter'){ goIndexSearch('header'); return false; } " placeholder="무엇이 궁금하신가요?">
+ 	   <button onclick="goIndexSearch('header')"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg></button>
   </div>
 
+<!-- 검색기능 버튼 + 검색어 입력 후 엔터만으로 페이지 전환 가능하게 구현
+<form name="mainSearch">
+	<input type="hidden" name="t_gubun">
+  	<div class="header_search">
+    	<input type="text" name="s_keyword"  value="" placeholder="무엇이 궁금하신가요?"  onkeypress="if(event.key === 'Enter'){event.preventDefault(); goSearchHeader('Search','list');}">
+	    <button type ="button" onclick="goSearchHeader('Search','list')">    --> 
+	    	<!-- 돋보기 아이콘이에요 수정 ㄴㄴ  
+				      <svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 -960 960 960" width="24px" fill="#1f1f1f">
+				        <path d="M784-120 532-372q-30 24-69 38t-83 14
+				                 q-109 0-184.5-75.5T120-580q0-109 
+				                 75.5-184.5T380-840q109 0 
+				                 184.5 75.5T640-580q0 44-14 83t-38 69
+				                 l252 252-56 56ZM380-400q75 0 
+				                 127.5-52.5T560-580q0-75-52.5-127.5T380-760
+				                 q-75 0-127.5 52.5T200-580q0 75 
+				                 52.5 127.5T380-400Z"/>
+				      </svg>
+	    </button>
+	</div>
+</form>-->
   <div class="h_buttons">
   	  <!-- 로그인 전 -->
   	<c:if test="${empty sessionId}">
@@ -46,7 +168,7 @@
     </c:if>
     <!-- 로그인 후 -->
     <c:if test="${not empty sessionId}">
-        <li><a>${sessionName}님</a></li>
+         <span class="sessionName">${sessionName}님</span>
         <button onclick="goPage('Member','myInfo')">MYINFO</button>
         <button onclick="goPage('Member','logout')">LOGOUT</button>
     </c:if>
@@ -55,20 +177,20 @@
 </header>
 
 <div class="container_box">
-	<div class="logo_main">ONDO</div>
-
+	<div class="logo_main" >ONDO</div>
+	
 	<!-- 메인 검색창 -->
 	<div class="search_bar">
-		<input type="text" placeholder="무엇이 궁금하신가요?" style="padding-left: 20px;">
-		<button><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg></button>
+		<input type="text" id="indexSearchTxt" onkeydown="if(event.key === 'Enter'){ goIndexSearch('bar'); return false; }" placeholder="무엇이 궁금하신가요?" style="padding-left: 20px;">
+		<button onclick="goIndexSearch('bar')"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg></button>
 	</div>
   
 	<div class="keyword_bar">
-		<div class="keyword_box">#일본워홀</div>
-		<div class="keyword_box">#도쿄맛집</div>
-		<div class="keyword_box">#홋카이도여행</div>
-		<div class="keyword_box">#11월불꽃놀이</div>
-		<div class="keyword_box">#일본친구</div>
+		<c:forEach items="${searchList }" var="dto" begin="0" end="4">
+			<a class="keyword_box_link" href="javascript:goKeywordSearch('${dto.getS_keyword() }')">
+				<div class="keyword_box">#${dto.getS_snipKeyword() }</div>
+			</a>
+		</c:forEach>
 	</div>
 	<div class="sub_bar">	
 		<div class="shortcut" onclick="goPage('Notice','list')">
@@ -89,182 +211,128 @@
 	    	</div>
     		<div class="shortcut_label">자유커뮤니티</div>
 	    </div>
-	    <div class="shortcut" onclick="goPage('Member','myInfo')">
+	    <div class="shortcut" onclick="goPage('Chat','chatReceived')">
+    	<div class="shortcut_icon">
+   			<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M320-400h320v-22q0-44-44-71t-116-27q-72 0-116 27t-44 71v22Zm160-160q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/></svg>
+       	</div>
+    		<div class="shortcut_label">메세지함</div>
+	    </div>
+	    <!-- <div class="shortcut" onclick="goPage('Member','myInfo')">
 	    	<div class="shortcut_icon">
 				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z"/></svg>	    
 	    	</div>
     		<div class="shortcut_label">마이페이지</div>
-	    </div>
+	    </div> -->
 	</div>
 	
 	<!-- 하단부분 -->
 	<div class="pv_preview_area">
   <div class="pv_card_container">
 
-    <!-- 인기글 카드형 (최상단 하나) -->
+    <!-- 🔥 인기글 -->
     <div class="pv_card pv_popular">
+    
       <h3 class="pv_card_title">🔥 인기글</h3>
-      <div class="pv_post pv_post_large">
-        <div class="pv_post_title">도쿄 맛집 TOP5 후기</div>
-        <div class="pv_post_info">조회수 256 | 작성자: 혜민</div>
-      </div>
-      <div class="pv_post pv_post_medium">
-        <div class="pv_post_title">홋카이도 여행 인기 게시글</div>
-        <div class="pv_post_info">조회수 198 | 작성자: 준호</div>
-      </div>
-      <div class="pv_post pv_post_small">
-        <div class="pv_post_title">일본 워홀 정보 공유</div>
-        <div class="pv_post_info">조회수 176 | 작성자: 민수</div>
+      <div class="pv_popular_list">
+      <c:forEach items="${comuHitList }" var="dto" begin="0" end="2">
+	      <a href="javascript:goComuView('${dto.getPost_id() }')">
+	        <div class="pv_post_card">
+	          <div class="pv_post_title">${dto.getTitle() }</div>
+	           <div class="pv_board_label">[자유게시판]</div>
+	          <div class="pv_post_content">${dto.getContent() }</div>
+	          <div class="pv_post_info">조회수 ${dto.getHit() } | 작성자: ${dto.getM_name() }</div>
+	        </div>
+	      </a>
+      </c:forEach>
+
       </div>
     </div>
 
-    <!-- 자유게시판 테이블 -->
-    <div class="pv_card pv_freeboard">
-      <h3 class="pv_card_title">자유게시판</h3>
-      <table class="pv_table">
-        <thead>
-          <tr>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>날짜</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td><a href="#">도쿄 카페 추천 부탁해요</a></td><td>혜민</td><td>2025-10-22</td></tr>
-          <tr><td><a href="#">홋카이도 여행 후기</a></td><td>준호</td><td>2025-10-19</td></tr>
-          <tr><td><a href="#">오사카 쇼핑 정보 공유</a></td><td>민수</td><td>2025-10-18</td></tr>
-          <tr><td><a href="#">일본 생활 꿀팁</a></td><td>지연</td><td>2025-10-16</td></tr>
-          <tr><td><a href="#">워홀 필수 앱 추천</a></td><td>현우</td><td>2025-10-14</td></tr>
-          <tr><td><a href="#">일본에서 사진 잘 찍는 곳</a></td><td>하은</td><td>2025-10-12</td></tr>
-          <tr><td><a href="#">여행 준비물 체크리스트</a></td><td>수민</td><td>2025-10-10</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <!-- 📋 자유게시판 / 📢 공지사항 / 👤 내정보 -->
+    <div class="pv_bottom_row">
 
-    <!-- 공지사항 테이블 -->
-    <div class="pv_card pv_notice">
-      <h3 class="pv_card_title">📢 공지사항</h3>
-      <table class="pv_table">
-        <thead>
-          <tr>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>날짜</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td><a href="#">서버 점검 안내</a></td><td>관리자</td><td>2025-10-23</td></tr>
-          <tr><td><a href="#">10월 이벤트 안내</a></td><td>관리자</td><td>2025-10-20</td></tr>
-          <tr><td><a href="#">신규 기능 업데이트</a></td><td>관리자</td><td>2025-10-18</td></tr>
-          <tr><td><a href="#">회원 등급 안내</a></td><td>관리자</td><td>2025-10-15</td></tr>
-          <tr><td><a href="#">이용약관 변경</a></td><td>관리자</td><td>2025-10-12</td></tr>
-          <tr><td><a href="#">프리미엄 서비스 안내</a></td><td>관리자</td><td>2025-10-10</td></tr>
-          <tr><td><a href="#">연말 이벤트 계획</a></td><td>관리자</td><td>2025-10-08</td></tr>
-        </tbody>
-      </table>
-    </div>
+      <!-- 자유게시판 -->
+      <div class="pv_card pv_freeboard">
+        <h3 class="pv_card_title">자유게시판</h3>
+        <ul class="pv_list">
+        	<c:forEach items="${comuIndexList }" var="dto" begin="0" end="4">
+          		<li><a href="javascript:goComuView('${dto.getPost_id()}')">${dto.getTitle() }</a><span>${dto.getM_name() }</span><span>${dto.getContent() }</span></li>
+        	</c:forEach>
+        </ul>
+      </div>
 
+      <!-- 공지사항 -->
+  <form name="noti">
+	  <input type="hidden" name="t_gubun">
+	  <input type="hidden" name="n_no">
+	</form>
+	<div class="pv_card pv_notice">
+	  <h3 class="pv_card_title">📢 최근 공지사항</h3>
+	  <ul class="pv_list">
+	    <c:forEach items="${NoticeIndex}" var="dto">
+	      <li>
+	        <c:choose>
+	          <c:when test="${dto.getNo() eq t_dto.getNo()}">
+	            <span class="current_notice">
+	              <c:choose>
+	                <c:when test="${fn:length(dto.getTitle()) > 14}">
+	                  ${fn:substring(dto.getTitle(), 0, 14)}...
+	                </c:when>
+	                <c:otherwise>
+	                  ${dto.getTitle()}
+	                </c:otherwise>
+	              </c:choose>
+	            </span>
+	          </c:when>
+	          <c:otherwise>
+	            <a href="javascript:goView('${dto.getNo()}')">
+	              <c:choose>
+	                <c:when test="${fn:length(dto.getTitle()) > 14}">
+	                  ${fn:substring(dto.getTitle(), 0, 14)}...
+	                </c:when>
+	                <c:otherwise>
+	                  ${dto.getTitle()}
+	                </c:otherwise>
+	              </c:choose>
+	            </a>
+	          </c:otherwise>
+	        </c:choose>
+	        <span>${dto.getReg_name()}</span>
+	        <span>${dto.getReg_date()}</span>
+	      </li>
+	    </c:forEach>
+	  </ul>
+	</div>
+
+      <!-- 👤 내정보 -->
+      <div class="pv_card my_profile_card">
+        <h3 class="pv_card_title">👤 내 정보</h3>
+        <div class="profile_box">
+          <img src="image/${p_dto.getM_image()}" class="profile_img">
+          <div class="profile_text">
+            <p class="nickname">${p_dto.getM_nickname()}</p>
+            <p class="intro">${p_dto.getM_tagline()}</p>
+            <p class="intro">${p_dto.getM_country()} | ${p_dto.getM_gender()} | ${p_dto.getM_age()}</p>
+          </div>
+          <button type="button" class="login_btn" onclick="goPage('Member','myInfo')">내 정보 수정하기</button>
+        </div>
+
+        <%-- 로그인 세션 체크 (예시: userName) --%>
+        
+        <c:if test="${empty sessionId}">
+	        <div class="profile_overlay">
+	            <div class="overlay_content">
+	              <p>로그인 후에 보이는 화면입니다</p>
+	              <a href="javascript:goPage('Member','login')" class="login_btn" >로그인하러 가기</a>
+	            </div>
+	         </div>
+    	</c:if>
+   
+      </div>
+
+    </div>
   </div>
 </div>
-
-<style>
-.pv_preview_area {
-  width: 100%;
-  margin-top: 50px;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-/* 카드 컨테이너 */
-.pv_card_container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 40px; /* 카드 간격 넓힘 */
-  justify-content: center;
-  margin-top: 100px; /* 상단 마진 */
-}
-
-/* 카드 기본 스타일 */
-.pv_card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-width: 320px;
-  max-width: 380px;
-}
-
-/* 카드 타이틀 */
-.pv_card_title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #c89f6d;
-  margin-bottom: 8px;
-}
-
-/* 인기글 카드 */
-.pv_popular .pv_post {
-  background: #fef5e6;
-  border-radius: 10px;
-  padding: 10px;
-  transition: none; /* hover 효과 삭제 */
-  margin-bottom: 8px;
-}
-
-.pv_post_large { height: 120px; }
-.pv_post_medium { height: 90px; }
-.pv_post_small { height: 60px; }
-
-.pv_post_title {
-  font-weight: 500;
-  margin-bottom: 4px;
-}
-
-.pv_post_info {
-  font-size: 12px;
-  color: #777;
-}
-
-/* 인기글 hover 색상만 변경 */
-.pv_post:hover {
-  background: #ffe5b4;
-}
-
-/* 테이블 게시판 */
-.pv_table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.pv_table th, .pv_table td {
-  border: 1px solid #eee;
-  padding: 6px 10px;
-  font-size: 14px;
-  text-align: left;
-}
-
-.pv_table th {
-  background: #f7f7f7;
-  color: #333;
-}
-
-.pv_table td a {
-  text-decoration: none;
-  color: #333;
-}
-
-.pv_table td a:hover {
-  text-decoration: underline;
-  color: #c89f6d; /* 내용만 hover 색 변경 */
-}
-</style>
-	
-	
-	
 </div>
 
 <script>
@@ -272,11 +340,25 @@ window.addEventListener('scroll', () => {
   const header = document.getElementById('mainHeader');
   if (window.scrollY > 100) {
     header.classList.add('scrolled');
+    goSynk('header');
   } else {
     header.classList.remove('scrolled');
+    goSynk('main');
   }
 });
 </script>
+
+<div class="site_footer">
+    <div class="footer_container">
+        <p>&copy; 2025 TEAM ONDO</p>
+        <div class="footer_links">
+            <a href="/about.jsp">About</a>
+            <a href="/terms.jsp">Terms of Service</a>
+            <a href="/privacy.jsp">Privacy Policy</a>
+            <a href="/contact.jsp">Contact</a>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

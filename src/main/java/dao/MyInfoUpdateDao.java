@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import common.DBConnection;
 import dto.MatchDto;
@@ -29,7 +30,6 @@ public class MyInfoUpdateDao {
     			String nickName = rs.getString("m_nickname");
     			String tagline = rs.getString("m_tagline");
     			String introduction = rs.getString("M_INTRODUCTION");
-    			
     			
     			dto = new MemberDto(nickName, tagline, introduction);
     			
@@ -87,5 +87,55 @@ public class MyInfoUpdateDao {
 	    return result;
 	}
 
+	// 나의 관심사 추가
+	public int addMyInterest(String id, ArrayList<Integer> addInterests) {
+		int count = 0;
+		String sql = "";
+		
+		try {
+    		con = DBConnection.getConnection();
+    		for(int i=0; i<addInterests.size(); i++) {
+    			sql = "insert into ondo_member_interest\r\n"
+				    + "(member_id, item_id)\r\n"
+				    + "values\r\n"
+				    + "('"+id+"', "+addInterests.get(i)+")";
+    			
+    			ps = con.prepareStatement(sql);
+    			count += ps.executeUpdate();
+    		}
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    		System.out.println("addMyInterest() 오류 : "+sql);
+    	} finally {
+    		DBConnection.closeDB(con, ps, rs);
+    	}
+		
+		return count;
+	}
+
+	// 나의 관심사 삭제
+		public int delMyInterest(String id, ArrayList<Integer> delInterests) {
+			int count = 0;
+			String sql = "";
+			
+			try {
+	    		con = DBConnection.getConnection();
+	    		for(int i=0; i<delInterests.size(); i++) {
+	    			sql = "delete ondo_member_interest\r\n"
+	 					+ "where member_id = '"+id+"'\r\n"
+	 				    + "and item_id = "+delInterests.get(i)+"";
+	    			
+	    			ps = con.prepareStatement(sql);
+	    			count += ps.executeUpdate();
+	    		}
+	    	} catch(Exception e) {
+	    		e.printStackTrace();
+	    		System.out.println("delMyInterest() 오류 : "+sql);
+	    	} finally {
+	    		DBConnection.closeDB(con, ps, rs);
+	    	}
+			
+			return count;
+		}
 	
 }

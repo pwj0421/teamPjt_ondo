@@ -1,0 +1,285 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="../common_header.jsp" %>
+<%@ include file="../menu/quickMenu.jsp" %>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<script type="text/javascript">
+	function goNotiView(no){
+		noti.t_gubun.value="view";
+		noti.n_no.value=no;
+		noti.method="post";
+		noti.action="Notice";
+		noti.submit();
+	}
+	
+	function goComuView(no){
+		comu.t_gubun.value="view";
+		comu.post_id.value=no;
+		comu.method="post";
+		comu.action="Community";
+		comu.submit();
+	}
+</script>
+<title>검색 결과</title>
+<style>
+/* 전체 레이아웃 */
+.sr_main {
+  display: flex;
+  width: 100%;
+  padding-top: 0px; /* 헤더 고려 */
+  gap: 30px;
+}
+
+/* 네비게이션 메뉴 */
+.sr_mypage_nav {
+  width: 20%;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 60px; /* 헤더 높이 고려 */
+  align-self: flex-start;
+}
+
+.sr_mypage_nav h2 {
+  font-size: 20px;
+  color: #c89f6d;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.sr_mypage_nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sr_mypage_nav li {
+  margin-bottom: 10px;
+}
+
+.sr_mypage_nav a {
+  text-decoration: none;
+  color: #333;
+  display: block;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.sr_mypage_nav a:hover {
+  background: #f8f0e4;
+  color: #c89f6d;
+  font-weight: 600;
+}
+
+/* 오른쪽 콘텐츠 */
+.sr_container {
+  width: 75%;
+  padding: 40px;
+}
+
+.sr_container h3 {
+  font-size: 22px;
+  margin-bottom: 30px;
+}
+
+.sr_section-title {
+  font-size: 18px;
+  margin: 40px 0 15px;
+  color: #c89f6d;
+  font-weight: 700;
+}
+
+/* 게시글 리스트 */
+.sr_post-list {
+  border-top: 2px solid #c89f6d;
+  border-bottom: 1px solid #ddd;
+}
+
+.sr_post-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 10px;
+  border-bottom: 1px solid #eee;
+  align-items: center;
+}
+
+.sr_post-item:hover {
+  background: #fafafa;
+}
+
+.sr_post-left {
+  flex: 1;
+}
+
+.sr_post-left h5 {
+  font-size: 16px;
+  margin: 0 0 5px;
+}
+
+.sr_post-left p {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+}
+
+.sr_post-right {
+  text-align: right;
+  font-size: 13px;
+  color: #999;
+}
+
+/* 퀵메뉴 위치 */
+.sr_quick-menu {
+  position: fixed;
+  right: 30px;
+  bottom: 80px;
+  z-index: 100;
+}
+
+</style>
+</head>
+<body>
+
+<form name="noti">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="n_no">
+</form>
+
+<form name="comu">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="post_id">
+</form>
+
+<div class="sr_main">
+  <!-- 네비게이션 메뉴 -->
+  <div class="sr_mypage_nav">
+    <h2>검색된 게시판</h2>
+    <ul>
+      <li><a href="#sr_board_free">자유게시판</a></li>
+      <li><a href="#sr_board_notice">공지사항</a></li>
+      <!-- <li><a href="#sr_board_photo">사진게시판</a></li> -->
+    </ul>
+  </div>
+
+  <!-- 오른쪽 콘텐츠 -->
+  <div class="sr_container">
+    <h3>검색어 "<strong>${headerSearchTxt }</strong>"로 검색된 내용입니다.</h3>
+
+    <!-- 자유게시판 -->
+    <div class="sr_section-title" id="sr_board_free">자유게시판</div>
+    <div class="sr_post-list">
+    	<c:forEach items="${comuDtos }" var="dto">
+	    	<a href="javascript:goComuView('${dto.getPost_id() }')">
+	    	 <div class="sr_post-item">
+		        <div class="sr_post-left">
+			          <%-- 1) 제목/검색어를 먼저 이스케이프 --%>
+					<c:set var="titleEsc" value="${fn:escapeXml(dto.getTitle())}" />
+					<c:set var="qEsc"     value="${fn:escapeXml(headerSearchTxt)}" />
+					
+					<%-- 2) 검색어가 있을 때만 <strong>으로 감싼 치환 문자열 생성 --%>
+					<c:choose>
+					  <c:when test="${not empty qEsc}">
+					    <c:set var="wrapped"><strong>${qEsc}</strong></c:set>
+					    <c:set var="highlighted" value="${fn:replace(titleEsc, qEsc, wrapped)}" />
+					    <%-- 3) 치환 결과에는 <strong> 태그가 있으니 escapeXml=false로 출력 --%>
+					    <h5><c:out value="${highlighted}" escapeXml="false" /></h5>
+					  </c:when>
+					  <c:otherwise>
+					     <h5><c:out value="${titleEsc}" />
+					  </c:otherwise>
+					</c:choose>
+				
+		          <p>${dto.getContent() }</p>
+		        </div>
+		        <div class="sr_post-right">
+		          <span>${dto.getM_name() }</span> | <span>${dto.getM_id() }</span>
+		        </div>
+		      </div>
+	      </a>
+    	</c:forEach>
+    </div>
+
+    <!-- 공지사항 -->
+    <div class="sr_section-title" id="sr_board_notice">공지사항</div>
+    <div class="sr_post-list">
+    <c:forEach items="${notiDtos }" var="dto">
+     <a href="javascript:goNotiView('${dto.getNo() }')">
+	     <div class="sr_post-item">
+	        <div class="sr_post-left">
+	        <%-- 1) 제목/검색어를 먼저 이스케이프 --%>
+			<c:set var="titleEsc" value="${fn:escapeXml(dto.getTitle())}" />
+			<c:set var="qEsc"     value="${fn:escapeXml(headerSearchTxt)}" />
+			
+			<%-- 2) 검색어가 있을 때만 <strong>으로 감싼 치환 문자열 생성 --%>
+			<c:choose>
+			  <c:when test="${not empty qEsc}">
+			    <c:set var="wrapped"><strong>${qEsc}</strong></c:set>
+			    <c:set var="highlighted" value="${fn:replace(titleEsc, qEsc, wrapped)}" />
+			    <%-- 3) 치환 결과에는 <strong> 태그가 있으니 escapeXml=false로 출력 --%>
+			    <h5><c:out value="${highlighted}" escapeXml="false" /></h5>
+			  </c:when>
+			  <c:otherwise>
+			     <h5><c:out value="${titleEsc}" />
+			  </c:otherwise>
+			</c:choose>
+	        
+	          <!-- <h5>${dto.getTitle() }</h5> -->
+	          <p>${dto.getContent() }</p>
+	        </div>
+	        <div class="sr_post-right">
+	          <span>${dto.getReg_name() }</span> | <span>${dto.getReg_date()}</span>
+	        </div>
+	      </div>
+      </a>
+    </c:forEach>
+      
+    </div>
+
+    <!-- 사진게시판 -->
+    <!-- <div class="sr_section-title" id="sr_board_photo">사진게시판</div>
+    <div class="sr_post-list">
+      <div class="sr_post-item">
+        <div class="sr_post-left">
+          <h5>벚꽃 시즌 <strong>여행</strong> 사진 공유 🌸</h5>
+          <p>교토에서 찍은 벚꽃 <strong>여행</strong> 사진이에요!</p>
+        </div>
+        <div class="sr_post-right">
+          <span>이사쿠라</span> | <span>2025-04-10</span>
+        </div>
+      </div>
+    </div> -->
+
+  </div>
+</div>
+<%@ include file="../common_footer.jsp" %>
+<script>
+// 메뉴 클릭 시 해당 섹션으로 스크롤 이동 (헤더 높이 자동 계산)
+function sr_scrollToSection(sectionId) {
+  const section = document.getElementById(sectionId);
+  const header = document.querySelector('header'); // fixed 헤더 선택
+  if(section){
+    const headerHeight = header ? header.offsetHeight : 0;
+    window.scrollTo({
+      top: section.offsetTop - headerHeight - 10, // 약간 여유
+      behavior: 'smooth'
+    });
+  }
+}
+
+// 메뉴 링크 이벤트 적용
+document.querySelectorAll('.sr_mypage_nav a').forEach(link => {
+  link.addEventListener('click', function(e){
+    e.preventDefault();
+    const targetId = this.getAttribute('href').substring(1);
+    sr_scrollToSection(targetId);
+  });
+});
+</script>
+
+</body>
+</html>

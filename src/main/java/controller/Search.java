@@ -9,17 +9,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.search.SerachTotalList;
+import common.CommonExecute;
+
 /**
- * Servlet implementation class FreeComu
+ * Servlet implementation class Search
  */
-@WebServlet("/Community")
-public class Community extends HttpServlet {
+@WebServlet("/Search")
+public class Search extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Community() {
+    public Search() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,22 +31,19 @@ public class Community extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
 		String gubun = request.getParameter("t_gubun");
-		if(gubun == null) gubun = "list";
 		
-		String msg="";
-		String viewPage="";
+		if(gubun == null) gubun = "list";
+		String viewPage = "";
 		
 		if(gubun.equals("list")) {
-			viewPage = "Community/community_list.jsp";
-			
-		}else if(gubun.equals("view")){
-			viewPage = "Community/community_view.jsp";
+			CommonExecute search = new SerachTotalList();
+			search.execute(request);
+			 
+			 viewPage = "search/search_list.jsp";
 		
-		
-		}else if(gubun.equals("write")) {
-			viewPage = "Community/community_write.jsp";
-		}
+		} 	
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
 		rd.forward(request, response);

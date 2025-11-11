@@ -1,0 +1,54 @@
+@charset "UTF-8";
+.chat_main_container {
+  display: flex;
+  width: 100%;
+  min-height: 80vh;
+  background: #f8f5f0;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 20px;
+  gap: 20px;
+}
+
+/* 왼쪽 탭 */
+.chat_sidebar {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  gap: 10px;
+}
+
+.tab_btn {
+  background: #f5f1ec;
+  border: none;
+  color: #555;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 10px 15px;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.tab_btn:hover {
+  background: #e7d7c3;
+  color: #222;
+}
+
+.tab_btn.active {
+  background: #c89f6d;
+  color: #fff;
+}
+
+/* 오른쪽 컨텐츠 영역 */
+.chat_content_area {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
