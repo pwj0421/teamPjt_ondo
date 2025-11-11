@@ -20,21 +20,34 @@ public class MessageChatDao {
             con = DBConnection.getConnection();
             
             String sql = "SELECT \r\n"
-            		+ "    r.room_id, r.request_id, r.partner_id, r.my_id,\r\n"
-            		+ "    g.message_id, g.content, g.sender_id, \r\n"
-            		+ "    m.m_nickname AS partnerNickname, m.m_image AS partnerImage\r\n"
+            		+ "    r.room_id,\r\n"
+            		+ "    r.request_id,\r\n"
+            		+ "    r.partner_id,\r\n"
+            		+ "    r.my_id,\r\n"
+            		+ "    g.message_id,\r\n"
+            		+ "    g.content,\r\n"
+            		+ "    g.sender_id,\r\n"
+            		+ "    CASE \r\n"
+            		+ "        WHEN r.my_id = '"+myId+"' THEN m.m_nickname  \r\n"
+            		+ "        WHEN r.partner_id = '"+myId+"' THEN p.m_nickname  \r\n"
+            		+ "    END AS partnerNickname,\r\n"
+            		+ "    CASE \r\n"
+            		+ "        WHEN r.my_id = '"+myId+"' THEN m.m_image\r\n"
+            		+ "        WHEN r.partner_id = '"+myId+"' THEN p.m_image\r\n"
+            		+ "    END AS partnerImage\r\n"
             		+ "FROM ondo_message_room r\r\n"
-            		+ "JOIN ondo_member m ON m.m_id = r.partner_id\r\n"
+            		+ "JOIN ondo_member m ON m.m_id = r.partner_id  \r\n"
+            		+ "JOIN ondo_member p ON p.m_id = r.my_id  \r\n"
             		+ "JOIN ondo_message g ON g.room_id = r.room_id\r\n"
-            		+ "WHERE r.my_id = '"+myId+"'\r\n"
+            		+ "WHERE ('"+myId+"' IN (r.my_id, r.partner_id))\r\n"
             		+ "  AND g.sent_at = (\r\n"
             		+ "      SELECT MAX(sent_at)\r\n"
             		+ "      FROM ondo_message\r\n"
             		+ "      WHERE room_id = r.room_id\r\n"
             		+ "  )\r\n"
-            		+ "ORDER BY g.sent_at DESC ";
-            
-         
+            		+ "ORDER BY g.sent_at DESC\r\n";
+            System.out.println(sql);
+
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
@@ -69,7 +82,7 @@ public class MessageChatDao {
     	ArrayList<MessageChatDto> dtos = new ArrayList<>();
         String sql = "SELECT message_id, content, sender_id, to_char(sent_at, 'hh24:mi') as sent_At \r\n"
         		+ "        FROM ondo_message WHERE room_id = "+roomId+" ORDER BY sent_at ASC";
-        
+
         try {
 	        con = DBConnection.getConnection();
 	        ps = con.prepareStatement(sql);
