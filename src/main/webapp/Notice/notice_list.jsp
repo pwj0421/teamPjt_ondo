@@ -37,6 +37,9 @@
   font-size: 13px;
   font-weight: bold;
 }
+.notice_item {
+  padding: 10px 10px !important;
+}
 
 </style>
 
