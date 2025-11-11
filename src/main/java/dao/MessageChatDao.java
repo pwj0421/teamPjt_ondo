@@ -26,7 +26,7 @@ public class MessageChatDao {
             		+ "FROM ondo_message_room r\r\n"
             		+ "JOIN ondo_member m ON m.m_id = r.partner_id\r\n"
             		+ "JOIN ondo_message g ON g.room_id = r.room_id\r\n"
-            		+ "WHERE r.my_id = '"+myId+"'\r\n"
+            		+ "WHERE  ('"+myId+"' IN (r.my_id, r.partner_id))\r\n"
             		+ "  AND g.sent_at = (\r\n"
             		+ "      SELECT MAX(sent_at)\r\n"
             		+ "      FROM ondo_message\r\n"
@@ -34,7 +34,7 @@ public class MessageChatDao {
             		+ "  )\r\n"
             		+ "ORDER BY g.sent_at DESC ";
             
-         
+         System.out.println(sql);
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
@@ -69,7 +69,7 @@ public class MessageChatDao {
     	ArrayList<MessageChatDto> dtos = new ArrayList<>();
         String sql = "SELECT message_id, content, sender_id, to_char(sent_at, 'hh24:mi') as sent_At \r\n"
         		+ "        FROM ondo_message WHERE room_id = "+roomId+" ORDER BY sent_at ASC";
-        
+        System.out.println(sql);
         try {
 	        con = DBConnection.getConnection();
 	        ps = con.prepareStatement(sql);
