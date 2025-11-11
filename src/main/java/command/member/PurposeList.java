@@ -15,7 +15,7 @@ public class PurposeList implements CommonExecute {
 	public void execute(HttpServletRequest request) {
 		PurposeDao dao = new PurposeDao();
 		List<PurposeDto> dtos = dao.getPurposeList();
-		System.out.println("데이터 갯수: " + dtos.size());
+		//System.out.println("데이터 갯수: " + dtos.size());
 
 		request.setAttribute("purposeList", dtos);
 		

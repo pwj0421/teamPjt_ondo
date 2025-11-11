@@ -15,46 +15,122 @@ body {
   padding: 0;
 }
 
+/* 기존 스타일 유지 */
+body {
+  background: #fff;
+  font-family: 'Pretendard', sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
 
+/* ✅ 선택된 카테고리 영역 전체 박스 정리 */
+.mp_selected_categories_box {
+  display: flex;
+  flex-direction: column;  /* 한 줄 강제 정렬 방지 */
+  gap: 8px;                /* 문장과 태그 간격 */
+}
+
+/* ✅ 선택된 태그 컨테이너 */
+.mp_selected_categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-start; /* 세로 기준 위쪽 정렬 */
+}
+
+/* ✅ 각 태그 스타일 */
+.mp_selected_categories span {
+  background-color: #f3ece7;
+  border-radius: 16px;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.mp_selected_categories span:hover {
+  background-color: #e0d5cb;
+}
 </style>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const checkboxes = document.querySelectorAll('.mp_category_group input[type="checkbox"]');
-  const selectedBox = document.querySelector('.mp_selected_categories');
+	document.addEventListener("DOMContentLoaded", () => {
+	  const checkboxes = document.querySelectorAll('.mp_category_group input[type="checkbox"]');
+	  const selectedBox = document.querySelector('.mp_selected_categories');
 
-  function updateSelected() {
-    selectedBox.innerHTML = '';
-    const checked = document.querySelectorAll('.mp_category_group input:checked');
-    checked.forEach(c => {
-      const tag = document.createElement('span');
-      tag.textContent = c.value;
-      tag.addEventListener('click', () => {
-        c.checked = false;
-        updateSelected();
-      });
-      selectedBox.appendChild(tag);
-    });
-  }
+	  function updateSelected() {
+	    selectedBox.innerHTML = '';
+	    const checked = document.querySelectorAll('.mp_category_group input:checked');
+	    checked.forEach(c => {
+	      const tag = document.createElement('span');
+	      tag.textContent = c.parentNode.textContent.trim();
+	      tag.addEventListener('click', () => {
+	        c.checked = false;
+	        updateSelected();
+	      });
+	      selectedBox.appendChild(tag);
+	    });
+	  }
 
-  updateSelected();
-  checkboxes.forEach(chk => chk.addEventListener('change', updateSelected));
-});
+	  // ✅ change 이벤트: 체크 허용 8개까지, 9개부터 막기
+	  checkboxes.forEach(cb => {
+	    cb.addEventListener('change', () => {
+	      const checkedCount = Array.from(checkboxes).filter(c => c.checked).length;
+
+	      // 🔽 9개째 선택 시 차단 (즉, 8개까지 허용)
+	      if (checkedCount > 8) {
+	        cb.checked = false;
+	        alert("최대 8개까지만 선택할 수 있습니다.");
+	      }
+
+	      // UI 업데이트
+	      updateSelected();
+	    });
+	  });
+
+	  // 초기 렌더링 시 표시
+	  updateSelected();
+	});
 </script>
+
 </head>
 
 <script>
-	function goUpdateMatchInfo(){
-		if (!nickOk) {
-	        alert("닉네임 중복 확인이 필요하거나 이미 사용 중인 닉네임입니다.");
-	        return;
-	    }
-
+	function goUpdateMatchInfo() {
+		if(checkValue(matchInfoUpdate.m_nickName, "닉네임을 입력해주세요!")) return;
+		if(matchInfoUpdate.m_nickName.value != matchInfoUpdate.ori_nickname.value) {
+			if(matchInfoUpdate.checkNickName.value == "") {
+				alert("닉네임 중복 확인이 필요합니다.");
+		        return;
+			}
+			
+			if (!nickOk) {
+		        alert("이미 사용 중인 닉네임입니다.");
+		        return;
+		    }
+		}
+		if(checkLength(matchInfoUpdate.m_tagline, 0, 60, "한 줄 소개는 60자까지 입니다.")) return;
+		if(checkLength(matchInfoUpdate.m_introduction, 0, 300, "자기소개는 300자까지 입니다.")) return;
+		
 	    const form = document.forms['matchInfoUpdate'];
 		matchInfoUpdate.t_gubun.value = "matchInfoUpdate";
 		matchInfoUpdate.method="post";
 		matchInfoUpdate.action="Member";
 		matchInfoUpdate.submit();
+	}
+	
+	function goInterestUpdate() {
+		interest.t_gubun.value = "interestUpdate";
+		
+		interest.method="post";
+		interest.action="Member";
+		interest.submit();
 	}
 	
 </script>
@@ -75,13 +151,14 @@ document.addEventListener("DOMContentLoaded", () => {
 			<input type="hidden" name="t_id" value="${m_dto.getM_id()}">
 		    <div class="mp_info_row">
 		      	<label>닉네임</label>
-		      	<input type="text" id="m_nickName" placeholder="닉네임 입력" value="${m_dto.getM_nickname()}" name="m_nickName">
+		      	<input type="text" id="m_nickName" placeholder="닉네임 입력" value="${m_dto.getM_nickname()}" name="m_nickName" onInput="setEmpty()">
+		      	<input type="hidden" name="ori_nickname" value="${m_dto.getM_nickname()}">
 		    	<button type="button" class="mp_check_btn" onclick="checkNick()">중복확인</button>
-		    	<input type="text" id="nickCheckResult" name="checkNickName" class="mp_nickCheck" value="확인 필요" disabled>
-
+		    	<input type="text" id="nickCheckResult" name="checkNickName" class="mp_nickCheck" disabled>
 		    </div>
-	<!-- 닉네임 중복검사 -->	
-	<script> 
+		    
+<!-- 닉네임 중복검사 -->	
+<script> 
 	function checkNick() {
 	    const nick = document.getElementById("m_nickName").value.trim();
 	    const updateBtn = document.getElementById('updateBtn');
@@ -91,8 +168,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	        alert("닉네임을 입력해주세요.");
 	        return;
 	    }
-
-	    fetch("Member?t_gubun=checkNick&nick=" + encodeURIComponent(nick))
+	    
+	    if(matchInfoUpdate.m_nickName.value == matchInfoUpdate.ori_nickname.value) {
+	    	resultInput.value = "현재 닉네임 ✅";
+	    	nickOk = true;
+	    	updateBtn.style.opacity = "1"; // 활성화
+	    	
+	    } else {
+	    	fetch("Member?t_gubun=checkNick&nick=" + encodeURIComponent(nick))
 	        .then(response => response.json())
 	        .then(data => {
 	            if (data.result === "exist") {
@@ -106,10 +189,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	            }
 	        })
 	        .catch(err => console.error(err));
+	    }
 	}
+	
+	function setEmpty() {
+		matchInfoUpdate.checkNickName.value = "";
+	}
+	
 </script>
-		
-		
 		
 		    <div class="mp_info_row">
 		      <label>한줄소개</label>
@@ -124,90 +211,42 @@ document.addEventListener("DOMContentLoaded", () => {
 		    </div>
 		</form>
 
-
-
-<!-- 카테고리 업데이트   준영상 부탁합니다 ~~-->
 			<div class="mp_match_searchBox">
 			
 		    	<div class="mp_selected_categories_box">
-		        	<div style="display:flex; align-items:center; flex-wrap:wrap; gap:8px;">
-		          		<p style="font-weight:600;">내 카테고리:</p>
-		          			<div class="mp_selected_categories"></div>
-		        	</div>
-		        	<button class="mp_search_btn">저장</button>
-		      	</div>
-	
+				  <p style="font-weight:600; margin-bottom: 10px;">내 카테고리</p>
+				  <div class="mp_selected_categories"></div>
+				  <button onclick="goInterestUpdate()" class="mp_search_btn">저장</button>
+				</div>
+			
+				<form name="interest">
+					<input type="hidden" name="t_gubun">
 	      		<div class="mp_category_container">
 	        		<div class="mp_category_grid">
-	
+					<c:forEach var="category" items="${interestMap}">
 	          			<div class="mp_category_group">
-				            <p class="mp_category_title">💬 언어 교류</p>
-				            <label><input type="checkbox" value="한국어 배우고 싶어요"> 한국어 배우고 싶어요</label>
-				            <label><input type="checkbox" value="일본어 배우고 싶어요"> 일본어 배우고 싶어요</label>
-				            <label><input type="checkbox" value="서로 언어 교환"> 서로 언어 교환</label>
-				            <label><input type="checkbox" value="언어 스터디 모집"> 언어 스터디 모집</label>
+				            <p class="mp_category_title">
+				            	${category.value[0].category_icon} ${category.key}
+				            </p>
+				            <c:forEach var="item" items="${category.value}">
+					            <label>
+					            	<input type="checkbox" 
+						 				   name="t_interest_${item.item_id}" 
+						 				   value="${item.item_id}"
+						 				   <c:if test="${interestList.contains(item.item_id)}">checked</c:if>> 
+						 			${item.item_name}
+					            </label>
+				            </c:forEach>
 	          			</div>
-	
-	          			<div class="mp_category_group">
-				            <p class="mp_category_title">🎮 취미/관심사</p>
-				            <label><input type="checkbox" value="애니메이션 / 만화 / 게임"> 애니메이션 / 만화 / 게임</label>
-				            <label><input type="checkbox" value="음악 / 콘서트 / 아이돌"> 음악 / 콘서트 / 아이돌</label>
-				            <label><input type="checkbox" value="드라마 / 영화 / 유튜브"> 드라마 / 영화 / 유튜브</label>
-				            <label><input type="checkbox" value="스포츠"> 스포츠</label>
-				            <label><input type="checkbox" value="여행 / 사진 / 자연"> 여행 / 사진 / 자연</label>
-				            <label><input type="checkbox" value="패션 / 뷰티"> 패션 / 뷰티</label>
-				        </div>
-	
-	          			<div class="mp_category_group">
-				            <p class="mp_category_title">✈️ 문화 교류</p>
-				            <label><input type="checkbox" value="한일 문화 이야기"> 한일 문화 이야기</label>
-				            <label><input type="checkbox" value="명절 / 전통문화 공유"> 명절 / 전통문화 공유</label>
-				            <label><input type="checkbox" value="지역 추천"> 지역 추천</label>
-				            <label><input type="checkbox" value="한일 트렌드 토론"> 한일 트렌드 토론</label>
-	         			</div>
-	
-	          			<div class="mp_category_group">
-				            <p class="mp_category_title">👥 친구 찾기</p>
-				            <label><input type="checkbox" value="같은 나이대 친구"> 같은 나이대 친구</label>
-				            <label><input type="checkbox" value="학생 / 직장인"> 학생 / 직장인</label>
-				            <label><input type="checkbox" value="온라인 대화 위주"> 온라인 대화 위주</label>
-				            <label><input type="checkbox" value="오프라인 만남 가능"> 오프라인 만남 가능</label>
-	         			</div>
-	
-	          			<div class="mp_category_group">
-							<p class="mp_category_title">💼 커리어 & 학습</p>
-							<label><input type="checkbox" value="유학 정보 교류"> 유학 정보 교류</label>
-							<label><input type="checkbox" value="워킹홀리데이 / 취업 정보"> 워킹홀리데이 / 취업 정보</label>
-							<label><input type="checkbox" value="자격증 / 공부 파트너"> 자격증 / 공부 파트너</label>
-	          			</div>
-	
-	          			<div class="mp_category_group">
-				            <p class="mp_category_title">❤️ 연애 / 관계</p>
-				            <label><input type="checkbox" value="국제 연애 관심"> 국제 연애 관심</label>
-				            <label><input type="checkbox" value="장거리 연애"> 장거리 연애</label>
-				            <label><input type="checkbox" value="진지한 관계"> 진지한 관계</label>
-	          			</div>
-	
-	          			<div class="mp_category_group">
-				            <p class="mp_category_title">📍 지역 기반</p>
-				            <label><input type="checkbox" value="서울 / 경기"> 서울 / 경기</label>
-				            <label><input type="checkbox" value="부산 / 제주"> 부산 / 제주</label>
-				            <label><input type="checkbox" value="도쿄 / 오사카"> 도쿄 / 오사카</label>
-				            <label><input type="checkbox" value="후쿠오카 / 홋카이도"> 후쿠오카 / 홋카이도</label>
-	          			</div>
-	
-	          			<div class="mp_category_group">
-				            <p class="mp_category_title">🧩 기타</p>
-				            <label><input type="checkbox" value="이벤트 / 오프라인 모임"> 이벤트 / 오프라인 모임</label>
-				            <label><input type="checkbox" value="봉사활동 / 프로젝트 모집"> 봉사활동 / 프로젝트 모집</label>
-				            <label><input type="checkbox" value="자유 주제"> 자유 주제</label>
-	          			</div>
-	
+					</c:forEach>
 	        		</div>
 				</div>
-
+				</form>
+				
 			</div>
 		</div>
 	</div>
+	
+<%@ include file="../common_footer.jsp" %>	
 </body>
 </html>

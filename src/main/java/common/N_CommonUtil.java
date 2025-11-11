@@ -8,11 +8,13 @@ import javax.servlet.http.HttpSession;
 
 public class N_CommonUtil {
 	
-	//제품 이미지 첨부파일
-	public static String getProductDir(HttpServletRequest request) {
-		String dir = request.getSession().getServletContext().getRealPath("/") + "attach/product/";
-		return dir;
-	}
+	 public static String getNoticeDir(HttpServletRequest request) {
+	        // 실제 서버 경로 가져오기
+	        String attachDir = request.getServletContext().getRealPath("/attach/notice/");
+	       
+	        return attachDir;  // 경로 반환
+	    }
+
 	
 	// 오늘날짜 : yyyy-MM-dd
 	public static String getToday() {
@@ -66,33 +68,35 @@ public class N_CommonUtil {
 		//첫번째 페이지 인덱스 화면이 아닌경우
 		if(current_page > pagenumber){
 			curpage = startpage -1;  //시작페이지 번호보다 1적은 페이지로 이동
-			strList = strList +"<a href=javascript:goPageView('"+curpage+"') ><i class='fa fa-angle-double-left'></i></a>";
+			strList = strList +"<button onclick=\"goPageView('"+curpage+"')\">&lt;</button>";
+//			strList = strList +"<a href=javascript:goPageView('"+curpage+"') ><i class='fa fa-angle-double-left'></i></a>";
 		}
 						
 		//시작페이지 번호부터 마지막 페이지 번호까지 화면에 표시
 		curpage = startpage;
 		while(curpage <= endpage){
 			if(curpage == current_page){
-				strList = strList +"<a class='active'>"+current_page+"</a>";
+				strList = strList +"<button class='active'>"+current_page+"</button>";
 			} else {
-				strList = strList +"<a href=javascript:goPageView('"+curpage+"')>"+curpage+"</a>";
+				strList = strList +"<button onclick=\"goPageView('"+curpage+"')\">"+curpage+"</button>";
 			}
 			curpage++;
 		}
 		//뒤에 페이지가 더 있는 경우
 		if(total_page > endpage){
 			curpage = endpage+1;
-			strList = strList + "<a href=javascript:goPageView('"+curpage+"') ><i class='fa fa-angle-double-right'></i></a>";
+			strList = strList + "<button onclick=\"goPageView('"+curpage+"')\" >&gt;</button>";
+//			strList = strList + "<a href=javascript:goPageView('"+curpage+"') ><i class='fa fa-angle-double-right'></i></a>";
 		}
 		return strList;
 	}			
 	
-	// 항상 첨부파일의 경로명을 return 해주는 method
-	public static String getNoticeDir(HttpServletRequest request) {
-		String dir = request.getSession().getServletContext().getRealPath("/") + "attach/notice/";
-		
-		return dir;
-	}
+//	// 항상 첨부파일의 경로명을 return 해주는 method
+//	public static String getNoticeDir(HttpServletRequest request) {
+//		String dir = request.getSession().getServletContext().getRealPath("/") + "attach/notice/";
+//		
+//		return dir;
+//	}
 
 	// 항상 첨부파일의 경로명을 return 해주는 method
 	public static String getPdsDir() {
