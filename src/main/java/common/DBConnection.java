@@ -45,12 +45,7 @@ public class DBConnection {
 		}
 		//2.database 접속
 		
-		//ip
-		String db_url = "jdbc:oracle:thin:@1.245.91.227:1521:xe";
-		//local
-		//String db_url = "jdbc:oracle:thin:@jsl-704:1521:xe";
-		String db_user = "track23_pjt";
-		String db_pw = "5678";
+		
 		
 		try {
 			con = DriverManager.getConnection(db_url, db_user, db_pw);
