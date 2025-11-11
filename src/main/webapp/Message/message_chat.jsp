@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="../common_header.jsp" %>
 <%@ include file="../menu/quickMenu.jsp" %>
-
+<title>채팅방</title>
 <div class="mp_mypage_container">
 
     <!-- 왼쪽 메뉴 -->
