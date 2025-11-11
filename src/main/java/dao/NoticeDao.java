@@ -50,7 +50,7 @@ public class NoticeDao {
 				+ "(n_no, n_title, n_content, n_reg_id, n_reg_date, n_important, n_type, \r\n"
 				+ " n_attach_1, n_attach_2, n_attach_3)\r\n"
 				+ "values"
-				+ "('"+dto.getNo()+"','"+dto.getTitle()+"','"+dto.getContent()+"','user001',to_date('"+dto.getReg_date()+"','yyyy-MM-dd hh24:mi:ss'),'"+dto.getImportant()+"','"+dto.getType()+"','"+dto.getAttach_1()+"','"+dto.getAttach_2()+"','"+dto.getAttach_3()+"')";
+				+ "('"+dto.getNo()+"','"+dto.getTitle()+"','"+dto.getContent()+"','"+dto.getReg_id()+"',to_date('"+dto.getReg_date()+"','yyyy-MM-dd hh24:mi:ss'),'"+dto.getImportant()+"','"+dto.getType()+"','"+dto.getAttach_1()+"','"+dto.getAttach_2()+"','"+dto.getAttach_3()+"')";
 		
 		try {
 			con = DBConnection.getConnection();

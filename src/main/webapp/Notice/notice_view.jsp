@@ -148,7 +148,7 @@ function goDelete(){
     <a href="Notice">목록으로 돌아가기</a>
   </div>
 </div>
-
+<%@ include file="../common_footer.jsp" %>
 <script>
 function toggleAttach() {
   const list = document.getElementById('attachList');
