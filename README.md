@@ -42,10 +42,12 @@
 
 ### 🖼 プロジェクト画面
 <p align="center">
-  <img src="./image/portfolio/index.png" width="700" alt="メインページ">
+ <img width="1890" height="901" alt="index" src="https://github.com/user-attachments/assets/7384ba9b-6422-4834-a769-017576a27203" />
+
 </p>
 <p align="center">
-  <img src="image/portfolio/chat_demo.png" width="700" alt="チャット機能">
+<img width="1890" height="902" alt="chat_demo" src="https://github.com/user-attachments/assets/ef22b1fe-a985-4e35-b739-14c6c9d1cf6b" />
+
 </p>
 
 ---
