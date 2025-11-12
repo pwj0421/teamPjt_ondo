@@ -106,34 +106,34 @@
   <table>
     <tr>
       <td align="center">
-        <img src="https://avatars.githubusercontent.com/SangChul1" width="100"><br>
-        <strong>パク·サンチョル</strong><br>Backend<br>チームリーダー / 会員管理 / 言語切替<br>
+        <img src="https://avatars.githubusercontent.com/SangChul1" width="300"><br>
+        <strong>パク·サンチョル</strong><br>Backend<br>チームリーダー<br> / 会員管理 / 言語切替<br>
         <a href="https://github.com/SangChul1">GitHub</a>
       </td>
       <td align="center">
-        <img src="https://avatars.githubusercontent.com/minTann718" width="100"><br>
-        <strong>ノ·ヘミン</strong><br>Fullstack<br>メッセージリクエストリスト & チャット管理<br>
+        <img src="https://avatars.githubusercontent.com/minTann718" width="300"><br>
+        <strong>ノ·ヘミン</strong><br>Fullstack<br>メッセージリクエストリスト<br> & チャット管理<br>
         <a href="https://github.com/minTann718">GitHub</a>
       </td>
       <td align="center">
-        <img src="https://avatars.githubusercontent.com/pwj0421" width="100"><br>
+        <img src="https://avatars.githubusercontent.com/pwj0421" width="300"><br>
         <strong>パク·ウォンジュン</strong><br>PM<br>全体管理<br>
         <a href="https://github.com/pwj0421">GitHub</a>
       </td>
     </tr>
     <tr>
       <td align="center">
-        <img src="https://avatars.githubusercontent.com/jy061333-ui" width="100"><br>
+        <img src="https://avatars.githubusercontent.com/jy061333-ui" width="300"><br>
         <strong>ホ·ジュンヨン</strong><br>Backend<br>マッチング、カテゴリ編集<br>
         <a href="https://github.com/jy061333-ui">GitHub</a>
       </td>
       <td align="center">
-        <img src="https://avatars.githubusercontent.com/miinlz" width="100"><br>
+        <img src="https://avatars.githubusercontent.com/miinlz" width="300"><br>
         <strong>チ·スミン</strong><br>Backend<br>お知らせ掲示板<br>
         <a href="https://github.com/miinlz">GitHub</a>
       </td>
       <td align="center">
-        <img src="https://avatars.githubusercontent.com/staythere88" width="100"><br>
+        <img src="https://avatars.githubusercontent.com/staythere88" width="300"><br>
         <strong>ソ·ドンイン</strong><br>Backend<br>自由掲示板<br>
         <a href="https://github.com/staythere88">GitHub</a>
       </td>
@@ -147,7 +147,7 @@
 - CRUD機能実装とサーバー環境構築の経験  
 - チームメンバー間でのバックエンド協業と役割分担の経験  
 - リアルタイムメッセージ送受信の仕組み理解  
-- 今後: 例外処理の強化、セキュリティ改善、ページ翻訳システム
+- 今後: 例外処理の強化、セキュリティ改善、ページ翻訳システム, 新しい機能を試す
 
 <br><br><br><br><br><br><br><br><br>
 
@@ -243,34 +243,34 @@
   <table>
     <tr>
       <td align="center">
-        <img src="https://avatars.githubusercontent.com/SangChul1" width="100"><br>
+        <img src="https://avatars.githubusercontent.com/SangChul1" width="200"><br>
         <strong>박상철</strong><br>Backend<br>팀리더 / 회원관리 / 언어변경<br>
         <a href="https://github.com/SangChul1">GitHub</a>
       </td>
       <td align="center">
-        <img src="https://avatars.githubusercontent.com/minTann718" width="100"><br>
+        <img src="https://avatars.githubusercontent.com/minTann718" width="200"><br>
         <strong>노혜민</strong><br>Fullstack<br>메시지 요청 리스트 & 채팅 관리<br>
         <a href="https://github.com/minTann718">GitHub</a>
       </td>
       <td align="center">
-        <img src="https://avatars.githubusercontent.com/pwj0421" width="100"><br>
+        <img src="https://avatars.githubusercontent.com/pwj0421" width="200"><br>
         <strong>박원준</strong><br>PM<br>총괄<br>
         <a href="https://github.com/pwj0421">GitHub</a>
       </td>
     </tr>
     <tr>
       <td align="center">
-        <img src="https://avatars.githubusercontent.com/jy061333-ui" width="100"><br>
+        <img src="https://avatars.githubusercontent.com/jy061333-ui" width="200"><br>
         <strong>허준영</strong><br>Backend<br>매칭, 카테고리 수정<br>
         <a href="https://github.com/jy061333-ui">GitHub</a>
       </td>
       <td align="center">
-        <img src="https://avatars.githubusercontent.com/miinlz" width="100"><br>
+        <img src="https://avatars.githubusercontent.com/miinlz" width="200"><br>
         <strong>지수민</strong><br>Backend<br>공지사항 게시판<br>
         <a href="https://github.com/miinlz">GitHub</a>
       </td>
       <td align="center">
-        <img src="https://avatars.githubusercontent.com/staythere88" width="100"><br>
+        <img src="https://avatars.githubusercontent.com/staythere88" width="200"><br>
         <strong>서동인</strong><br>Backend<br>자유게시판<br>
         <a href="https://github.com/staythere88">GitHub</a>
       </td>
@@ -284,7 +284,7 @@
 - CRUD 기능 구현과 서버 환경 구축 경험  
 - 팀원 간 백엔드 협업 및 역할 분담 경험  
 - 실시간 메시지 송수신 구조 이해  
-- 향후: 예외 처리 강화, 보안 개선 계획 ,　페이지 번역 시스템
+- 향후: 예외 처리 강화, 보안 개선 계획 ,　페이지 번역 시스템, 참신한 기능의 새로운 시도
 
 ---
 
