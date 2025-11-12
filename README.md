@@ -79,6 +79,9 @@
  
 <p><img width="600" height="690" alt="Untitled" src="https://github.com/user-attachments/assets/a7cd45e9-172b-4bab-96f2-429fcf3c1b56" /></p>
 
+  **お知らせ用 TABLE 設計図**
+<p><img width="589" height="536" alt="notice_table" src="https://github.com/user-attachments/assets/f065f6b5-430c-4b1f-851b-2ba63eb065a2" /></p>
+
 
 ---
 
@@ -221,6 +224,8 @@
  
 <p><img width="400" height="690" alt="Untitled" src="https://github.com/user-attachments/assets/a7cd45e9-172b-4bab-96f2-429fcf3c1b56" /></p>
 
+**공지사항 설계도**
+<p><img width="589" height="536" alt="notice_table" src="https://github.com/user-attachments/assets/f065f6b5-430c-4b1f-851b-2ba63eb065a2" /></p>
 
 ---
 
