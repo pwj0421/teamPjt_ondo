@@ -63,7 +63,8 @@
 
 ---
 
-### 🔧 API & DB 構造
+### 🔧  DB 構造
+<!--
 | 機能 | エンドポイント | 説明 |
 |------|------------|------|
 | 会員登録 | POST /user/signup | 新規会員登録 |
@@ -72,17 +73,19 @@
 | 掲示板一覧 | GET /board/list | 掲示板一覧取得 |
 | チャットリクエスト | POST /chat/request | 特定メンバーへチャットリクエスト |
 | メッセージ送受信 | POST /chat/send | 1:1 メッセージ送信 |
+-->
 
-<p align="center">
   **メッセージ送受信用 TABLE 設計図**
-  <img src="image/portfolio/chat_db_table.png" width="700" alt="DB構造">
-</p>
+ 
+<p><img width="600" height="690" alt="Untitled" src="https://github.com/user-attachments/assets/a7cd45e9-172b-4bab-96f2-429fcf3c1b56" /></p>
+
 
 ---
 
 ## 🛠 技術スタック
 <div align="center">
-  <img src="https://skillicons.dev/icons?i=java,oracle,css,js" height="60" style="margin:10px"/>
+  <img src="https://skillicons.dev/icons?i=java,css,js" height="60" style="margin:10px"/>
+  <img src="https://skillicons.dev/icons?i=oracle" height="60" style="margin:10px"/>
 </div>
 
 | 区分 | 技術 |
@@ -104,12 +107,12 @@
     <tr>
       <td align="center">
         <img src="https://avatars.githubusercontent.com/SangChul1" width="100"><br>
-        <strong>박상철</strong><br>Backend<br>チームリーダー / 会員管理 / 言語切替<br>
+        <strong>パクサンチョル</strong><br>Backend<br>チームリーダー / 会員管理 / 言語切替<br>
         <a href="https://github.com/SangChul1">GitHub</a>
       </td>
       <td align="center">
         <img src="https://avatars.githubusercontent.com/minTann718" width="100"><br>
-        <strong>노혜민</strong><br>Fullstack<br>メッセージリクエストリスト & チャット管理<br>
+        <strong>ノヘミン</strong><br>Fullstack<br>メッセージリクエストリスト & チャット管理<br>
         <a href="https://github.com/minTann718">GitHub</a>
       </td>
       <td align="center">
@@ -180,10 +183,12 @@
 ---
 ### 🖼 프로젝트 화면
 <p align="center">
-  <img src="./image/portfolio/index.png" width="700" alt="메인 페이지">
+ <img width="1890" height="901" alt="index" src="https://github.com/user-attachments/assets/7384ba9b-6422-4834-a769-017576a27203" />
+
 </p>
 <p align="center">
-  <img src="image/portfolio/chat_demo.png" width="700" alt="채팅 기능">
+<img width="1890" height="902" alt="chat_demo" src="https://github.com/user-attachments/assets/ef22b1fe-a985-4e35-b739-14c6c9d1cf6b" />
+
 </p>
 
 ---
@@ -199,7 +204,8 @@
 
 ---
 
-### 🔧 API & DB 구조
+### 🔧 DB 구조
+<!--
 | 기능 | 엔드포인트 | 설명 |
 |------|------------|------|
 | 회원가입 | POST /user/signup | 신규 회원 등록 |
@@ -209,11 +215,12 @@
 | 채팅 요청 | POST /chat/request | 멤버에게 채팅 요청 |
 | 메시지 송수신 | POST /chat/send | 1:1 메시지 송신 |
 
+-->
 
-<p align="center">
-  **메세지 송수신용 TABLE 설계도**
-  <img src="image/portfolio/chat_db_table.png" width="700" alt="DB 구조">
-</p>
+ **메세지설계도**
+ 
+<p><img width="400" height="690" alt="Untitled" src="https://github.com/user-attachments/assets/a7cd45e9-172b-4bab-96f2-429fcf3c1b56" /></p>
+
 
 ---
 
