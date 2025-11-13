@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../common_header.jsp" %>   
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${param.lang != null ? param.lang : 'ko'}" />
+<fmt:setBundle basename="changeLang" />
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,7 +55,7 @@
 
 /* 폼 박스 */
 .form_box {
-  width: 400px;
+  width: 480px;
   padding: 30px;
   border: 1px solid #ddd;
   border-radius: 20px;
@@ -110,7 +115,7 @@
 /* ===== ID 중복확인 그룹 (디자인 통일 버전) ===== */
 .id-check-group {
   display: grid;
-  grid-template-columns: 1fr 90px 60px; /* ← 버튼·결과칸 폭 고정 */
+  grid-template-columns: 0.8fr 100px 90px; /* ← 버튼·결과칸 폭 고정 */
   gap: 10px;
  
 }
@@ -163,13 +168,6 @@
   font-size: 14px;
 }
 
-
-
-
-
-
-
-
 /* ✅ 성별 라디오 버튼 정렬 */
 .gender-group {
   display: flex;
@@ -191,7 +189,7 @@
 /* 프로필 이미지 영역 */
 .profile_upload {
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 30px;
 }
 .profile_upload img {
   width: 100px;
@@ -440,13 +438,174 @@
   border-top: 1px dashed #e0d6c8;
 }
 
+/* 공통 라인 구조 */
+.form-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
 
+/* 라벨 (왼쪽 고정폭) */
+.form-line label {
+  width: 100px;
+  text-align: left;
+  font-weight: 600;
+  color: #5f4a3d;
+  font-size: 14px;
+}
+
+/* 기본 입력/셀렉트 영역 */
+.form-line input,
+.form-line select {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: "Gothic A1";
+}
+
+/* 아이디, 닉네임 등 버튼이 포함된 줄 */
+.form-line .with-btn {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  align-items: center;
+}
+
+.form-line input,
+.form-line select {
+  margin-bottom: 0 !important;
+  height: 44px;
+  /* line-height: 44px; */
+  box-sizing: border-box;
+}
+
+.form-line .btn-idcheck {
+  height: 44px;
+  width: 90px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-line .with-btn input {
+  flex: 1;
+  min-width: 0;
+}
+
+.form-line select#nationality {
+  height: 44px;
+  margin-bottom: 0 !important;
+}
+/* 중복확인 버튼 */
+.btn-idcheck {
+  background-color: #c89f6d;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-idcheck:hover {
+  background-color: #b0804c;
+}
+.with-btn {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+}
+
+.with-btn input {
+  flex: 1;  /* ⭐ 입력창이 남은 공간 다 차지하도록 */
+  min-width: 0; /* ⭐ flexbox에서 overflow 방지 */
+}
+.with-btn input[name="m_id"] {
+  width: 40% !important;
+  flex: none !important; /* ✅ flex 규칙을 완전히 무시 */
+}
+.with-btn input[name="m_nickname"] {
+  width: 40% !important;
+  flex: none !important; /* ✅ flex 규칙을 완전히 무시 */
+}
+.with-btn button {
+  flex-shrink: 0; /* ⭐ 버튼 크기 고정 */
+  width: 90px;    /* 버튼 너비 고정 */
+}
+/* 전화번호 한 줄 정렬 */
+.tel-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.tel-row select,
+.tel-row input {
+  height: 44px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0 10px;
+  font-size: 14px;
+  font-family: "Gothic A1";
+  box-sizing: border-box;
+}
+
+.tel-row select {
+  width: 100px;   /* 국가 코드 */
+}
+
+.tel-row input[name="m_tel1"] {
+  width: 70px;
+}
+
+.tel-row input[name="m_tel2"],
+.tel-row input[name="m_tel3"] {
+  width: 80px;
+}
+
+.tel-row span {
+  font-weight: 600;
+  color: #7b5c3f;
+}
+/* 라디오 버튼 기본 크기로 복원 */
+.gender-group input[type="radio"] {
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin-right: 6px;
+  transform: scale(1); /* 혹시 커져있으면 복원 */
+}
+/* 프로필 이미지 안내문 */
+.profile_hint {
+  font-size: 13px;
+  color: #8a7b6f;
+  margin-top: 8px;
+  text-align: center;
+  font-family: "Gothic A1", sans-serif;
+}
+.m_id_result {
+  width: 100%;
+  border: none !important;        /* ✅ 테두리 완전 제거 */
+  background: transparent !important; /* ✅ 배경도 투명하게 */
+  color: #555;
+  text-align: left;
+  font-size: 14px;
+  outline: none;                  /* ✅ 클릭 시 파란 테두리 제거 */
+  box-shadow: none;               /* ✅ 그림자 효과 제거 */
+}
 </style>
 </head>
 <script type="text/javascript">
 	
 	
 	function checkId() {
+		const mem = document.forms["mem"]; // ✅ 폼 직접 참조
 	    if (checkValue(mem.m_id, "ID입력 후 검사")) return;
 	
 	    var id = mem.m_id.value.trim();
@@ -459,8 +618,11 @@
 	    
 	    $.ajax({
 	      type: "POST",
-	      url: "MemberCheckId",
-	      data: { m_id: id },
+	      url: "${pageContext.request.contextPath}/MemberCheckId",
+	      data: { 
+	    	  m_id: id,
+	    	  lang: "${param.lang != null ? param.lang : 'ko'}" // ✅ 언어 파라미터 전달  
+	      },
 	      dataType: "text",
 	      error: function () {
 	        alert("통신 실패!");
@@ -473,11 +635,7 @@
 	        mem.m_id_result.value = result;
 			
 	     	// 결과 색상 표시 추가
-	        if (result === "사용가능") {
-	          mem.m_id_result.style.color = "green";
-	        } else {
-	          mem.m_id_result.style.color = "red";
-	        }
+	        mem.m_id_result.style.color = (result === "사용가능" || result === "使用可能") ? "green" : "red";
 	     
 	        // 간단한 시각 피드백 (선택)
 	        var $idInput = $(mem.m_id);
@@ -496,30 +654,28 @@
 	function checkNick() {
 	    const nick = document.getElementById("m_nickName").value.trim();
 	    const resultInput = document.getElementById("nickCheckResult");
+	    const lang = "${param.lang != null ? param.lang : 'ko'}";
 
 	    if (!nick) {
-	        alert("닉네임을 입력해주세요.");
+	        alert(lang === "ja" ? "ニックネームを入力してください。" : "닉네임을 입력해주세요.");
 	        return;
 	    }
 
-	    fetch("Member?t_gubun=checkNick&nick=" + encodeURIComponent(nick))
+	    fetch("Member?t_gubun=checkNick&nick=" + encodeURIComponent(nick) +
+	          "&lang=" + encodeURIComponent(lang))
 	        .then(response => response.json())
 	        .then(data => {
-	            if (data.result === "exist") {
-	                resultInput.value = "사용중";
-	                resultInput.style.color = "red";
-	                nickOk = false;
-	            } else {
-	                resultInput.value = "사용가능";
-	                resultInput.style.color = "green";
-	                nickOk = true;
-	            }
+	            const result = data.result.trim(); // 서버에서 이미 한/일 문구로 옴
+	            resultInput.value = result;
+	            resultInput.style.color = (result === "사용가능" || result === "使用可能") ? "green" : "red";
+	            nickOk = (result === "사용가능" || result === "使用可能");
 	        })
 	        .catch(err => {
 	            console.error(err);
-	            alert("닉네임 중복 검사 중 오류가 발생했습니다.");
+	            alert(lang === "ja"
+	                ? "ニックネーム重複チェック中にエラーが発生しました。"
+	                : "닉네임 중복 검사 중 오류가 발생했습니다.");
 	        });
-	    
 	}
 	
 
@@ -663,99 +819,181 @@
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <body>
+
+
+
 <form name="mem" enctype="multipart/form-data">
 	<input type="hidden" name="t_gubun">
 		<div class="signup_container">
+		
 		  <!-- 단계 표시 -->
 		  <div class="step_indicator">
-		    <div class="step active">1. 기본정보</div>
-		    <div class="step">2. 주소</div>
-		    <div class="step">3. 가입목적</div>
-		    <div class="step">4. 관심사</div>
-		    <div class="step">5. 추천인</div>
-		    <div class="step">6. 가입정보확인</div>
+		    <div class="step active"><fmt:message key="signup.step1"/></div>
+		    <div class="step"><fmt:message key="signup.step2"/></div>
+		    <div class="step"><fmt:message key="signup.step3"/></div>
+		    <div class="step"><fmt:message key="signup.step4"/></div>
+		    <div class="step"><fmt:message key="signup.step5"/></div>
+		    <div class="step"><fmt:message key="signup.step6"/></div>
 		  </div>
 		
+		<!-- ✅ 언어 전환 영역 -->
+		<div style="text-align:center; margin: 0 0 15px 0; font-family:'Jua',sans-serif;">
+		  <a href="${pageContext.request.contextPath}/Member?t_gubun=join&lang=ko"
+		     style="margin-right:10px; color:#c89f6d; text-decoration:none;">한국어</a> |
+		  <a href="${pageContext.request.contextPath}/Member?t_gubun=join&lang=ja"
+		     style="margin-left:10px; color:#c89f6d; text-decoration:none;">日本語</a>
+		</div>	
 		  <!-- 1단계 -->
 		  <div class="form_box active" id="step1">
-		    <h2>기본 정보 입력</h2>
+		    <h2><fmt:message key="signup.basic_info"/></h2>
 		    <div class="profile_upload">
 		      <label for="profileImgInput">
-		        <img id="profileImgPreview" src="attach/member_profile/basic_profile.png" alt="프로필 이미지">
+		        <img id="profileImgPreview" src="${pageContext.request.contextPath}/attach/member_profile/basic_profile.png"
+		        	 alt="<fmt:message key='signup.profile_preview_alt'/>">
 		      </label>
+		      <p class="profile_hint"><fmt:message key="signup.profile_hint"/></p>
 		      <input type="file" name="m_image" id="profileImgInput" accept="image/*">
 		    </div>
 		     <!-- 국적 선택 -->
-		     <select id="nationality" name="m_country" class="custom-select">
-		       <option value="">국적 선택</option>
-		       <c:forEach var="country" items="${countryList}">
-		       		<option value="${country.country_code}">${country.country_name}</option>
-		       </c:forEach>
-		     </select>
+		     <div class="form-line">
+			  <label for="nationality"><fmt:message key="signup.country"/></label>
+			  <select id="nationality" name="m_country">
+				  <option value=""><fmt:message key="signup.country"/></option>
+				  <c:forEach var="country" items="${countryList}">
+				    <option value="${country.country_code}">${country.country_name}</option>
+				  </c:forEach>
+				</select>
+			</div>
 		    
-		    <div class="id-check-group">
-			  <input type="text" name="m_id" id="c_id" placeholder="아이디">
-			  <button type="button" class="btn-idcheck" onclick="checkId()">중복확인</button>
-			  <input type="text" name="m_id_result" class="m_id_result" disabled>
-			</div>
-
-		    <!-- 닉네임 입력 + 중복확인 -->
-			<div class="id-check-group">
-			  <input type="text" name="m_nickname" id="m_nickName" placeholder="닉네임">
-			  <button type="button" class="btn-idcheck" onclick="checkNick()">중복확인</button>
-			  <input type="text" id="nickCheckResult" name="checkNickName" class="m_id_result" disabled>
-			</div>
-
-		    <input type="password" name="m_password" placeholder="비밀번호">
-		    <input type="password" name="m_password_confirm" placeholder="비밀번호 확인">
-		    <input type="text" name="m_name" placeholder="이름">
 		    
-		    <select id="" name="m_tel_country_code" class="custom-select" style="width:30%; margin-right:13px">
-		       <option value="+82">+82(한국)</option>
-		       <option value="+81">+81</option>
-		     </select>
-		     <input type="text" name="m_tel1" placeholder="010" onkeyup="onlyNumber(this)" style="width:15%">&nbsp;-
-		     <input type="text" name="m_tel2" placeholder="1234" onkeyup="onlyNumber(this)" style="width:20%">&nbsp;-
-		     <input type="text" name="m_tel3" placeholder="5678" onkeyup="onlyNumber(this)" style="width:20%">
-		     
-		    <input type="text" name="m_email1" placeholder="이메일" style="width:53%">&nbsp;@
-		    <select id="m_email2" name="m_email2" class="custom-select" style="width:40%">
-		       <option value="">선택</option>
-		       <option value="naver.com">naver.com</option>
-		       <option value="daum.com">daum.net</option>
-		       <option value="google.com">gmail.com</option>
-		     </select>
-		    <input type="text" name="m_age" placeholder="나이" onkeyup="onlyNumber(this)">
-	
-		    <div class="gender-group">
-			  <label><input type="radio" name="m_gender" value="M"> 남</label>
-			  <label><input type="radio" name="m_gender" value="F"> 여</label>
-			</div>
-			<select name="m_type" class="custom-select">
-			  <option value="">회원 구분 선택</option>
-			  <option value="NORMAL">일반 회원</option>
-			  <option value="TUTOR">튜터</option>
-			</select>
-			
-			<input name="m_tagline" placeholder="한줄로 나를 표현해 보세요.">
-			<textarea name="m_introduction" placeholder="간단한 자기소개를 작성해주세요."></textarea>
-			
-		    <div class="nav_buttons">
-		      <button type="button" onclick="changeStep(2)" style="margin-left:180px;">다음</button>
+		  <!-- 아이디 -->
+		  <div class="form-line">
+		    <label for="c_id"><fmt:message key="signup.id"/></label>
+		    <div class="with-btn">
+		      <input type="text" name="m_id" id="c_id" placeholder="<fmt:message key='signup.placeholder.id'/>">
+		      <button type="button" class="btn-idcheck" onclick="checkId()"><fmt:message key="signup.duplicate_check"/></button>
+		      <input type="text" name="m_id_result" class="m_id_result" readonly>
 		    </div>
 		  </div>
+
+		    <!-- 닉네임 -->
+		  <div class="form-line">
+		    <label for="m_nickName"><fmt:message key="signup.nickname"/></label>
+		    <div class="with-btn">
+		      <input type="text" name="m_nickname" id="m_nickName" placeholder="<fmt:message key='signup.placeholder.nickname'/>">
+		      <button type="button" class="btn-idcheck" onclick="checkNick()"><fmt:message key="signup.duplicate_check"/></button>
+		      <input type="text" id="nickCheckResult" readonly class="m_id_result">
+		    </div>
+		  </div>
+			<!-- 비밀번호 -->
+		  <div class="form-line">
+		    <label for="m_password"><fmt:message key="signup.password"/></label>
+		    <input type="password" name="m_password" id="m_password" placeholder="<fmt:message key='signup.placeholder.password'/>">
+		  </div>
+		
+		  <!-- 비밀번호 확인 -->
+		  <div class="form-line">
+		    <label for="m_password_confirm"><fmt:message key="signup.passwordConfirm"/></label>
+		    <input type="password" name="m_password_confirm" id="m_password_confirm" placeholder="<fmt:message key='signup.placeholder.passwordConfirm'/>">
+		  </div>
+		
+		  <!-- 이름 -->
+		  <div class="form-line">
+		    <label for="m_name"><fmt:message key="signup.name"/></label>
+		    <input type="text" name="m_name" id="m_name" placeholder="<fmt:message key='signup.placeholder.name'/>">
+		  </div>
+		    
+		    <!-- 전화번호 -->
+		  <div class="form-line" style="flex-direction: column; align-items: flex-start;">
+		    <label for="m_tel1" style="margin-bottom: 6px;"><fmt:message key="signup.phone"/></label>
+		    <div class="tel-row">
+		      <select name="m_tel_country_code" class="custom-select">
+		        <option value="+82">+82(KR)</option>
+		        <option value="+81">+81(JP)</option>
+		      </select>
+		      <input type="text" name="m_tel1" placeholder="010" onkeyup="onlyNumber(this)">
+		      <span>-</span>
+		      <input type="text" name="m_tel2" placeholder="1234" onkeyup="onlyNumber(this)">
+		      <span>-</span>
+		      <input type="text" name="m_tel3" placeholder="5678" onkeyup="onlyNumber(this)">
+		    </div>
+		  </div>
+
+		 <!-- 이메일 -->
+		  <div class="form-line">
+		    <label><fmt:message key="signup.email"/></label>
+		    <div class="with-btn">
+		      <input type="text" name="m_email1" placeholder="<fmt:message key='signup.placeholder.email'/>" style="flex: 1;">
+		      @
+		      <select id="m_email2" name="m_email2" class="custom-select" style="width: 130px;">
+		        <option value=""><fmt:message key="signup.email.select"/></option>
+		        <option value="naver.com">naver.com</option>
+		        <option value="daum.net">daum.net</option>
+		        <option value="gmail.com">gmail.com</option>
+		      </select>
+		    </div>
+		  </div>
+			  
+		   <!-- 나이 -->
+		  <div class="form-line">
+		    <label for="m_age"><fmt:message key="signup.age"/></label>
+		    <input type="text" name="m_age" id="m_age" placeholder="<fmt:message key='signup.placeholder.age'/>" onkeyup="onlyNumber(this)">
+		  </div>
+	
+		    <!-- 성별 -->
+		  <div class="form-line">
+		    <label><fmt:message key="signup.gender"/></label>
+		    <div class="gender-group">
+		      <label><input type="radio" name="m_gender" value="M"> <fmt:message key="signup.male"/></label>
+		      <label><input type="radio" name="m_gender" value="F"> <fmt:message key="signup.female"/></label>
+		    </div>
+		  </div>
+
+			<!-- 회원 구분 -->
+		  <div class="form-line">
+		    <label for="m_type"><fmt:message key="signup.type"/></label>
+		    <select name="m_type" id="m_type" class="custom-select">
+		      <option value=""><fmt:message key="signup.type"/></option>
+		      <option value="NORMAL"><fmt:message key="signup.type.normal"/></option>
+		      <option value="TUTOR"><fmt:message key="signup.type.tutor"/></option>
+		    </select>
+		  </div>
+			<!-- 자기소개 -->
+		  <div class="form-line" style="flex-direction: column; align-items: flex-start;">
+		    <label for="m_introduction" style="margin-bottom: 6px;"><fmt:message key="signup.introduction"/></label>
+		    <input
+		      name="m_tagline"
+		      id="m_tagline"
+		      placeholder="<fmt:message key='signup.placeholder.tagline'/>"
+		      style="width: 100%; margin-bottom: 10px;"
+		    >
+		    <textarea
+		      name="m_introduction"
+		      id="m_introduction"
+		      placeholder="<fmt:message key='signup.placeholder.introduction'/>"
+		      style="width: 100%;"
+		    ></textarea>
+		  </div>
+
+			 <!-- 다음 버튼 -->
+		  <div class="nav_buttons">
+		    <button type="button" onclick="changeStep(2)" style="margin-left:180px;"><fmt:message key="signup.next"/></button>
+		  </div>
+		</div>
 		
 		  <!-- 2단계 -->
 			<div class="form_box" id="step2">
-			  <h2>주소입력</h2>
+			  <h2><fmt:message key="signup.address_input"/></h2>
 			
 			  <div class="address-row">
-			    <input type="text" name="m_zipcode" id="postcode" placeholder="우편번호">
-			    <button type="button" class="btn-postcode" onclick="execDaumPostcode()">주소검색</button>
+			    <input type="text" name="m_zipcode" id="postcode" placeholder="<fmt:message key='signup.placeholder.zipcode'/>">
+			    <button type="button" class="btn-postcode" onclick="execDaumPostcode()">
+			    	<fmt:message key="signup.address_search"/>
+			    </button>
 			  </div>
 			
-			  <input type="text" name="m_address" id="address" placeholder="주소">
-			  <input type="text" name="m_address_detail" id="detailAddress" placeholder="상세주소(선택)">
+			  <input type="text" name="m_address" id="address" placeholder="<fmt:message key='signup.placeholder.address'/>">
+			  <input type="text" name="m_address_detail" id="detailAddress" placeholder="<fmt:message key='signup.placeholder.address_detail'/>">
 			
 			  <div class="nav_buttons">
 			    <button type="button" onclick="changeStep(1)">이전</button>
@@ -771,8 +1009,8 @@
 			       alert('가입 목적은 최대 3개까지만 선택할 수 있습니다.');
 			       event.target.checked=false;
 			     }">
-			  <h2>가입 목적 선택</h2>
-			  <h5 class="sub-info">최대 3개 선택 가능</h5>
+			  <h2><fmt:message key="signup.purpose_select"/></h2>
+			  <h5 class="sub-info"><fmt:message key="signup.purpose_limit"/></h5>
 			
 			  <div class="purpose-container">
 			    <div class="purpose-grid">
@@ -801,8 +1039,8 @@
 		       alert('관심사는 최대 8개까지만 선택할 수 있습니다.');
 		       event.target.checked=false;
 		     }">
-			  <h2>관심사 선택</h2>
-			  <h5 class="sub-info">최대 8개 선택 가능</h5>
+			  <h2><fmt:message key="signup.interest_select"/></h2>
+			  <h5 class="sub-info"><fmt:message key="signup.interest_limit"/></h5>
 			  <div class="interest-container">
 			    <div class="interest-grid">
 					<c:forEach var="category" items="${interestMap}">
@@ -831,8 +1069,8 @@
 		  
 		<!-- 5단계 -->
 		  <div class="form_box" id="step5">
-		    <h2>추천인 입력</h2>
-		    <input type="text" name="m_recommender" placeholder="추천인 아이디 입력">
+		    <h2><fmt:message key="signup.recommender_input"/></h2>
+			<input type="text" name="m_recommender" placeholder="<fmt:message key='signup.placeholder.recommender'/>">
 		    
 		    <div class="nav_buttons">
 		      <button type="button" onclick="changeStep(4)">이전</button>
@@ -841,8 +1079,8 @@
 		  </div>
 		  <!-- 6단계 -->
 		  <div class="form_box" id="step6">
-		     <h2>가입 정보 확인</h2>
-		    <p>입력한 정보를 확인해주세요.</p>
+		    <h2><fmt:message key="signup.confirm_info"/></h2>
+			<p><fmt:message key="signup.confirm_notice"/></p>
 		    
 		    <div id="confirm-info" class="confirm-box">
 		        <!-- JS로 내용이 채워집니다 -->

@@ -8,11 +8,21 @@ public class MemberNickCheck implements CommonExecute {
     @Override
     public void execute(HttpServletRequest request) {
         String nick = request.getParameter("nick");
+        String lang = request.getParameter("lang"); // ✅ 언어 파라미터 받기
+        if (lang == null || lang.isEmpty()) lang = "ko";
+
         MyInfoUpdateDao dao = new MyInfoUpdateDao();
         boolean exist = dao.isNickExist(nick);
+     // ✅ 다국어 텍스트 지정
+        String resultText;
+        if (exist) {
+            resultText = lang.equals("ja") ? "使用中" : "사용중"; // 이미 사용 중
+        } else {
+            resultText = lang.equals("ja") ? "使用可能" : "사용가능"; // 사용 가능
+        }
 
-        // 라이브러리 없이 직접 JSON 문자열 생성
-        String json = "{\"result\":\"" + (exist ? "exist" : "available") + "\"}";
+        // ✅ JSON 응답 문자열
+        String json = "{\"result\":\"" + resultText + "\"}";
         request.setAttribute("json", json);
     }
 }
