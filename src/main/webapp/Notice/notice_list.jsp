@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../common_header.jsp" %>	
-<%@ include file="../quickMenu.jsp" %>
+<%@ include file="../menu/quickMenu.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,9 +22,28 @@
   cursor: pointer;
   transition: border-color 0.2s ease;
 }
-
 .notice_select:hover {
   border-color: #999;
+}
+
+.important_item {
+  background-color: #fff8e1;
+  border-radius: 13px;  
+}
+
+.notice_badge.important {
+  background-color: #ffa000;
+  color: white;
+}
+
+/* 강제로 값을 준다
+.notice_list {
+    gap: 11px !important;
+} 
+*/
+
+.notice_item {
+  padding: 10px 10px !important;
 }
 
 </style>
@@ -45,6 +64,13 @@
 		noti.submit();
 	}
 	function goSearch(){
+		notice.method="post";
+		notice.action="Notice";
+		notice.submit();
+	}
+	function goPageView(pageNumber) {
+		notice.t_nowPage.value = pageNumber;		
+		
 		notice.method="post";
 		notice.action="Notice";
 		notice.submit();
@@ -77,26 +103,54 @@
   
   
   <div class="notice_list">
+  <!-- 중요글 (최대 3개 고정) -->
+  <c:if test="${not empty Idtos}">
+    <c:forEach items="${Idtos}" var="dto">
+      <div class="notice_item important_item" onclick="goView('${dto.getNo()}')">
+        <div class="notice_badge important">중요</div>
+
+        <div class="notice_content">
+          <h3 class="notice_item_title">${dto.getTitle()}</h3>
+          <p class="notice_item_sub">
+            ${dto.getReg_name()} · ${dto.getReg_date()} · 조회수 ${dto.getHit()}
+          </p>
+        </div>
+
+        <c:if test="${not empty dto.getAttach_1()}">
+          <span class="notice_attach">📎</span>
+        </c:if>
+      </div>
+    </c:forEach>
+  </c:if>
+
+  <!-- 일반글 리스트 -->
   <c:forEach items="${dtos}" var="dto">
     <div class="notice_item" onclick="goView('${dto.getNo()}')">
+
+      <!-- 타입 뱃지 -->
       <c:if test="${dto.getType() eq 'notice'}">
-      	<div class="notice_badge notice">공지</div>
+        <div class="notice_badge notice">공지</div>
       </c:if>
       <c:if test="${dto.getType() eq 'update'}">
-      	<div class="notice_badge update">업데이트</div>
+        <div class="notice_badge update">업데이트</div>
       </c:if>
       <c:if test="${dto.getType() eq 'info'}">
-      	<div class="notice_badge info">안내</div>
+        <div class="notice_badge info">안내</div>
       </c:if>
+
+      <!-- 내용 -->
       <div class="notice_content">
-        <h3 class="notice_item_title" >${dto.getTitle()}</h3>
-        <p class="notice_item_sub">${dto.getReg_name()} · ${dto.getReg_date()} · 조회수 ${dto.getHit()}</p>
+        <h3 class="notice_item_title">${dto.getTitle()}</h3>
+        <p class="notice_item_sub">
+          ${dto.getReg_name()} · ${dto.getReg_date()} · 조회수 ${dto.getHit()}
+        </p>
       </div>
+
       <c:if test="${not empty dto.getAttach_1()}">
-       	<span class="notice_attach">📎</span> <!-- 첨부파일 있음 -->
-       </c:if>
+        <span class="notice_attach">📎</span>
+      </c:if>
     </div>
-   </c:forEach>
+  </c:forEach>
    
 <!--  
     <div class="notice_item">
@@ -112,16 +166,15 @@
 
 
   <div class="notice_pagination">
-    <button>&lt;</button>
-    <button class="active">1</button>
-    <button>2</button>
-    <button>3</button>
-    <button>&gt;</button>
-    
+    ${pageDisplay}
   </div>
-  <button type="button" class="notice_write_btn" onclick="goWriteForm()">글쓰기</button>
+  
+  <c:if test="${sessionScope.sessionLevel eq 'admin'}">
+    <button class="notice_write_btn" onclick="goWriteForm()">글쓰기</button>
+  </c:if>
 </div>
 
+<%@ include file="../common_footer.jsp" %>
 
 </body>
 </html>
