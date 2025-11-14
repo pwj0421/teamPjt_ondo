@@ -49,8 +49,9 @@ public class Member extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		System.out.println("[DEBUG] Member 서블릿 실행됨 → gubun=" + request.getParameter("t_gubun"));
 		request.setCharacterEncoding("utf-8");
+		System.out.println("[DEBUG] Member 서블릿 실행됨 → gubun=" + request.getParameter("t_gubun"));
+
 		String sessionId = CommonUtil.getSessionInfo(request, "id");
 		String gubun = request.getParameter("t_gubun");
 		if(gubun == null && sessionId == null) gubun="login";
@@ -98,7 +99,11 @@ public class Member extends HttpServlet {
 				country.execute(request);
 				CommonExecute purpose = new PurposeList();
 				purpose.execute(request);
-				
+				// ✅ lang 파라미터 유지 (기본 ko)
+			    String lang = request.getParameter("lang");
+			    if(lang == null || lang.isEmpty()) lang = "ko";
+			    request.setAttribute("lang", lang);
+			    
 				viewPage ="member/member_myInfo.jsp";
 			}
 			

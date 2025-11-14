@@ -378,7 +378,6 @@
 	</div>
 	
   <!-- ✅ 비밀번호 찾기 -->
-  <!-- ✅ 비밀번호 찾기 -->
 	<div class="find-box">
 	  <h3>비밀번호 찾기</h3>
 	  <form name="findPwForm" onkeydown="if(event.key==='Enter'){ findPassword(); return false; }">

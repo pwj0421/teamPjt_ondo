@@ -30,18 +30,25 @@ public class MemberCheckId extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/plain; charset=UTF-8");
 		MemberDao dao = new MemberDao();
 		String id = request.getParameter("m_id");
-		
+		String lang = request.getParameter("lang");
 		int count = dao.memberCheckId(id);
 		
-		response.setContentType("text/html; charset=utf-8");
-			PrintWriter out = response.getWriter();
-			if(count == 0) {
-				out.print("사용가능");
-			}else {
-				out.print("사용중");
-			}
+		String result;
+		if ("ja".equalsIgnoreCase(lang)) {
+			// 🇯🇵 일본어 버전
+			result = (count == 0) ? "使用可能" : "使用中";
+		} else {
+			// 🇰🇷 한국어 기본
+			result = (count == 0) ? "사용가능" : "사용중";
+		}
+		
+		PrintWriter out = response.getWriter();
+		out.print(result);
+			
 	}
 
 	/**
