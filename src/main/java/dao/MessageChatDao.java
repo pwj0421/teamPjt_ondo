@@ -80,7 +80,7 @@ public class MessageChatDao {
     // 특정 방의 전체 메시지
     public ArrayList<MessageChatDto> getMessageListByRoomId(String roomId) {
     	ArrayList<MessageChatDto> dtos = new ArrayList<>();
-        String sql = "SELECT message_id, content, sender_id, to_char(sent_at, 'hh24:mi') as sent_At \r\n"
+        String sql = "SELECT message_id, content, sender_id, to_char(sent_at, 'yy-MM-dd hh24:mi') as sent_At \r\n"
         		+ "        FROM ondo_message WHERE room_id = "+roomId+" ORDER BY sent_at ASC";
 
         try {
